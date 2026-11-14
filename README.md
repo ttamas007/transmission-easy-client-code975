@@ -10,7 +10,7 @@ A browser extension that adds a Transmission WebUI directly in your web browser.
 This version is a fork of **mthcore's Transmission Easy Client v3.4.0**,
 maintained by [ttamas007](https://github.com/ttamas007).
 It targets unpacked installation in modern Chrome. The current extension version
-is **3.4.2**, named **Transmission Easy Client code975** to distinguish this fork.
+is **3.4.3**, named **Transmission Easy Client code975** to distinguish this fork.
 
 - Hungarian/English UI selector in **Options > Main > Language**, Hungarian by default.
 - Localized common torrent errors, preserving paths, error codes and unknown server messages.
@@ -18,6 +18,8 @@ is **3.4.2**, named **Transmission Easy Client code975** to distinguish this for
 - Destination selection from the daemon's default directory and existing torrent directories.
 - Destination free-space tooltips, colorful toolbar icons and clearer light/dark panels.
 - Footer tracker summaries, paused previews/filtering, dated daemon-session counters and speed-menu hints.
+- Frontend script-path validation with explicit save/read-back confirmation.
+- Hungarian/English help for network settings, speed scheduling and all three script events.
 - SSL and authentication default to OFF; enable them when your server requires them.
   Existing saved connection settings are not overwritten.
 
@@ -28,8 +30,10 @@ guarantees. Mixed-host tracker lists are conservatively excluded.
 Cloud backup uses `chrome.storage.sync` and can include server addresses and
 passwords without additional extension-side encryption. Do not publish backups.
 
-Validation: 583 tests across 46 test files, TypeScript checks, production build,
-and simulated-browser checks. These do not replace testing against a real daemon.
+Validation: the earlier full regression run passed 583 tests across 46 files.
+Version 3.4.3 passed 22 focused tests, TypeScript and scoped lint checks,
+a production build and simulated-browser checks. These do not replace testing
+against a real daemon.
 
 ### Chrome installation and updates
 
@@ -71,7 +75,7 @@ you want to retain its stored settings. This installation has no automatic updat
 ## Supported Languages
 
 This fork's application UI supports **Hungarian and English**. All 24 inherited
-Chrome locale catalogs are retained with the same 404 keys and compatible
+Chrome locale catalogs are retained with the same 429 keys and compatible
 placeholders; new entries in legacy languages use English fallback text.
 
 ## Installation
@@ -116,6 +120,24 @@ The built extension will be in the `./dist` folder.
    - **Username/Password**: If authentication is enabled
    - **Use SSL**: Enable for HTTPS connections
 
+### Server-side scripts
+
+**Options > Server** explains network settings, the alternative-speed schedule,
+and the three script events in the selected Hungarian/English language.
+Scripts run on the Transmission server, not in Chrome.
+
+For Linux/Docker, enter an absolute script-file path as seen inside the container.
+The path field rejects empty, relative, quoted or Windows paths, control
+characters, surrounding whitespace and paths ending in `/`. Spaces inside a
+filename are allowed; no `.sh` extension is required.
+
+**Apply** saves the setting and compares the value read back from Transmission.
+Errors and mismatches are displayed, with retry available. This confirms only the
+stored setting: Transmission RPC cannot verify that the file exists or is
+executable. No script is executed for validation, no filesystem is inspected,
+and no server-side helper is required. Existing script switches are not enabled
+or changed automatically.
+
 ## Usage
 
 - **Popup**: Click the extension icon to view and manage torrents
@@ -145,6 +167,14 @@ The built extension will be in the `./dist` folder.
 ## Changelog
 
 > See [RELEASE_NOTES.md](RELEASE_NOTES.md) for the full release history.
+
+### code975 3.4.3 (November 14, 2026)
+
+- Added frontend path validation and save/read-back feedback to all three script
+  settings, without claiming file existence or execution permissions are checked.
+- Added Hungarian/English explanations for peer networking, speed scheduling
+  and script events; all 24 catalogs now contain 429 matching keys.
+- No server-side helper, script execution or automatic setting changes.
 
 ### code975 3.4.2 (November 14, 2026)
 

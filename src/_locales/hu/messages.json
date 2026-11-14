@@ -1269,5 +1269,80 @@
     },
     "scriptSettingsHint": {
         "message": "Ezek opcionális, szerveroldali parancsfájlok: a Transmission futtatja őket, nem a Chrome. Dockerben a konténeren belüli elérési utat add meg; a fájlnak léteznie kell és futtathatónak kell lennie a Transmission felhasználója számára. Ha nem használsz saját szkriptet, hagyd kikapcsolva. A seedelés befejezésének eseménye Transmission 4.0.6-ban a daemon saját arány- vagy inaktivitási korlátjához kötődik, nem a bővítmény seedidőkorlátjához vagy a kézi szüneteltetéshez."
+    },
+    "networkSettingsHint": {
+        "message": "Ezek a Transmission szerver torrentkapcsolatait szabályozzák, nem a bővítmény RPC/HTTP-kapcsolatát."
+    },
+    "peerPortHint": {
+        "message": "A bejövő peer-kapcsolatok portja, nem az RPC-port. Dockerben és a tűzfalon is elérhetővé kell tenni, szükség esetén a routeren továbbítani. A portteszt a külső elérhetőséget vizsgálja; zárt port mellett is működhetnek kimenő kapcsolatok."
+    },
+    "portForwardingHint": {
+        "message": "UPnP/NAT-PMP: automatikus portnyitást kér a kompatibilis routertől. Nem helyettesíti a Docker portkiosztását vagy a tűzfalszabályokat, és több NAT-rétegen/CGNAT mögött nem feltétlenül működik."
+    },
+    "encryptionHint": {
+        "message": "A peer-kapcsolatok protokolltitkosítása. Kötelező: csak titkosított kapcsolat; Előnyben részesített: titkosítást próbál, de elfogad titkosítatlant; Megengedett: titkosítatlant próbál, de elfogad titkosítottat. Nem VPN, nem anonimizál, és nem az RPC HTTPS-beállítása."
+    },
+    "dhtHint": {
+        "message": "DHT: elosztott hálózaton keres peereket, tracker nélkül is. A Transmission a privátként megjelölt torrenteknél nem használja. Privát oldalon mindig kövesd az oldal szabályait."
+    },
+    "pexHint": {
+        "message": "PEX: a kapcsolódó peerek egymással további peercímeket cserélnek. A Transmission a privátként megjelölt torrenteknél nem használja; a tracker szabályai ettől még érvényesek."
+    },
+    "lpdHint": {
+        "message": "LPD: a helyi hálózaton keres más torrentklienseket. Nem internetes portnyitás, és nem a helyi fájlmegosztás kapcsolója."
+    },
+    "utpHint": {
+        "message": "uTP: UDP-alapú torrentátvitel, amely igyekszik visszavenni hálózati torlódáskor. Nem feltétlenül gyorsabb; a hálózati és UDP-elérhetőségtől is függ."
+    },
+    "altSpeedScheduleHint": {
+        "message": "A megadott napokon és időszakban az alternatív (teknős) sebességkorlátokat kapcsolja be, nem állítja le a torrenteket. A Transmission szerver/konténer helyi idejét használja, ami eltérhet a Windows idejétől. A korlátok értékei a sebességbeállításoknál állíthatók."
+    },
+    "scriptDoneHint": {
+        "message": "A letöltés befejezésekor fut, például értesítéshez vagy célzott jogosultság-beállításhoz. Nem a seedelés végét jelzi."
+    },
+    "scriptAddedHint": {
+        "message": "Új torrent hozzáadásakor fut; magnetnél a metaadatok megérkezése után. Például naplózáshoz használható. Transmission 4.0+ szükséges."
+    },
+    "scriptSeedingHint": {
+        "message": "Transmission 4.0.6-ban a daemon saját seedarány- vagy inaktivitási korlátjának elérésekor fut. Nem minden szüneteltetéskor: a kézi leállítás és a code975 seedidőkorlátja nem váltja ki."
+    },
+    "scriptPathScope": {
+        "message": "Linux/Docker szkriptfájl teljes útvonala a Transmission szerverén, idézőjelek és parancssori argumentumok nélkül. Szóköz lehet a fájlnévben, .sh kiterjesztés nem kötelező. Csak az útvonal formátumát és a visszaolvasott beállítást ellenőrizzük; fájlt nem nyitunk meg és szkriptet nem futtatunk."
+    },
+    "scriptPathEmpty": {
+        "message": "Bekapcsolt szkripthez adj meg egy fájlútvonalat."
+    },
+    "scriptPathControl": {
+        "message": "Az útvonal nem tartalmazhat sortörést, tabulátort vagy vezérlőkaraktert."
+    },
+    "scriptPathQuotes": {
+        "message": "Távolítsd el az útvonal körüli idézőjeleket."
+    },
+    "scriptPathWhitespace": {
+        "message": "Távolítsd el az útvonal elejéről és végéről a szóközöket."
+    },
+    "scriptPathWindows": {
+        "message": "Ez Windows-útvonal. Linux/Docker alatt a konténerben látható, / jellel kezdődő útvonalat add meg."
+    },
+    "scriptPathAbsolute": {
+        "message": "Teljes Linux/Docker-útvonal szükséges, / jellel az elején."
+    },
+    "scriptPathFile": {
+        "message": "Szkriptfájl útvonalát add meg, ne / jellel végződő könyvtárét."
+    },
+    "scriptPathSaving": {
+        "message": "Mentés és visszaellenőrzés…"
+    },
+    "scriptPathMismatch": {
+        "message": "A visszaolvasott útvonal nem egyezik a megadottal. Frissítsd a beállításokat, és ellenőrizd a szerver kapcsolatát."
+    },
+    "scriptPathSaveError": {
+        "message": "Nem sikerült menteni vagy visszaellenőrizni az útvonalat"
+    },
+    "scriptPathSaved": {
+        "message": "Útvonal mentve, a visszaolvasott beállítás egyezik. A fájl létezése és futtathatósága RPC-n keresztül nem ellenőrizhető."
+    },
+    "scriptPathUnchecked": {
+        "message": "A formátum megfelelőnek tűnik. A fájl létezése és futtathatósága nem ellenőrzött; az Alkalmaz gomb a mentést és visszaolvasást ellenőrzi."
     }
 }

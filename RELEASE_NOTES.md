@@ -1,5 +1,32 @@
 # Release Notes - Transmission Easy Client
 
+## code975 3.4.3 (November 14, 2026)
+
+- Added frontend validation to all three script-path fields: empty, relative,
+  Windows, quoted, control-character, surrounding-whitespace and trailing-slash
+  paths are rejected. Spaces inside filenames and files without `.sh` remain
+  supported.
+- **Apply** waits for the setting to be saved and read back, then compares the
+  exact path. Pending requests disable the controls; errors and mismatches stay
+  visible and can be retried. Unsaved drafts survive incoming settings updates;
+  switching servers clears the previous field's local feedback.
+- The UI explicitly distinguishes valid syntax and matching stored settings from
+  file validation. Transmission RPC cannot check whether a script exists or is
+  executable. No filesystem access, script test-run or server-side helper is used.
+  Script switches and existing saved values are not automatically changed.
+- Added Hungarian/English explanations for the peer port, Docker/firewall/router
+  reachability, UPnP/NAT-PMP, encryption, DHT, PEX, LPD and uTP.
+- Explained alternative-speed scheduling, server/container time, and all three
+  script events, including the Transmission 4.0.6 seeding-completed limitation.
+  All 24 locale catalogs now share 429 keys; legacy languages use English
+  fallback for these additions.
+- Validation: 22 focused script-field, server-settings, translation, About and
+  footer tests; TypeScript and scoped lint checks; production build; simulated
+  browser checks of all three setters, exact read-back, mismatch, RPC error/retry,
+  HU/EN help and light/dark script-field layout. No live daemon was contacted.
+- Chrome ZIP SHA-256:
+  `fb839fceca4aecc48d6e82a277289abe4f061ff16a411af25f54e69372e47d14`
+
 ## code975 3.4.2 (November 14, 2026)
 
 - Added **About / Névjegy** to the torrent toolbar and options navigation.

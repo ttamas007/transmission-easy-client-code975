@@ -1269,5 +1269,80 @@
     },
     "scriptSettingsHint": {
         "message": "These are optional server-side scripts run by Transmission, not Chrome. In Docker, enter the path inside the container; the file must exist and be executable by the Transmission user. Leave disabled if you do not use a custom script. In Transmission 4.0.6, the seeding-completed event is triggered by the daemon’s own ratio or idle limit, not the extension’s seed-time limit or manual pausing."
+    },
+    "networkSettingsHint": {
+        "message": "These settings control the Transmission server’s torrent connections, not the extension’s RPC/HTTP connection."
+    },
+    "peerPortHint": {
+        "message": "Port for incoming peer connections, not the RPC port. Expose it through Docker and the firewall, and forward it on the router when needed. The port test checks external reachability; outgoing connections may still work with a closed port."
+    },
+    "portForwardingHint": {
+        "message": "UPnP/NAT-PMP requests automatic port forwarding from a compatible router. It does not replace Docker port publishing or firewall rules and may not work through multiple NAT layers or CGNAT."
+    },
+    "encryptionHint": {
+        "message": "Protocol encryption for peer connections. Required accepts encrypted connections only; Preferred tries encrypted connections but accepts unencrypted ones; Tolerated tries unencrypted connections but accepts encrypted ones. This is not a VPN, anonymity protection or the RPC HTTPS setting."
+    },
+    "dhtHint": {
+        "message": "DHT finds peers through a distributed network, even without a tracker. Transmission does not use it for torrents marked private. Always follow your private tracker’s rules."
+    },
+    "pexHint": {
+        "message": "PEX lets connected peers exchange addresses of additional peers. Transmission does not use it for torrents marked private; tracker rules still apply."
+    },
+    "lpdHint": {
+        "message": "LPD discovers other torrent clients on the local network. It does not open an internet port or enable local file sharing."
+    },
+    "utpHint": {
+        "message": "uTP is UDP-based torrent transport designed to back off during network congestion. It is not necessarily faster and depends on network and UDP reachability."
+    },
+    "altSpeedScheduleHint": {
+        "message": "Enables the alternative (turtle) speed limits on the selected days and time interval; it does not stop torrents. It uses the Transmission server/container’s local time, which may differ from Windows time. Configure the limit values in the speed settings."
+    },
+    "scriptDoneHint": {
+        "message": "Runs when downloading completes, for example to send a notification or adjust specific permissions. It does not mean seeding has finished."
+    },
+    "scriptAddedHint": {
+        "message": "Runs when a new torrent is added; for magnets, after metadata arrives. Useful for logging, for example. Requires Transmission 4.0+."
+    },
+    "scriptSeedingHint": {
+        "message": "In Transmission 4.0.6, runs when the daemon reaches its own seed-ratio or idle limit, not on every pause. Manual stops and the code975 seed-time limit do not trigger it."
+    },
+    "scriptPathScope": {
+        "message": "Absolute Linux/Docker script-file path on the Transmission server, without surrounding quotes or command-line arguments. Spaces in filenames are allowed; a .sh extension is not required. Only path syntax and the read-back setting are checked; no file is opened and no script is executed."
+    },
+    "scriptPathEmpty": {
+        "message": "Enter a file path for the enabled script."
+    },
+    "scriptPathControl": {
+        "message": "The path must not contain line breaks, tabs or control characters."
+    },
+    "scriptPathQuotes": {
+        "message": "Remove quotes surrounding the path."
+    },
+    "scriptPathWhitespace": {
+        "message": "Remove leading and trailing whitespace from the path."
+    },
+    "scriptPathWindows": {
+        "message": "This is a Windows path. For Linux/Docker, enter the path visible inside the container, starting with /."
+    },
+    "scriptPathAbsolute": {
+        "message": "An absolute Linux/Docker path starting with / is required."
+    },
+    "scriptPathFile": {
+        "message": "Enter a script-file path, not a directory ending with /."
+    },
+    "scriptPathSaving": {
+        "message": "Saving and checking…"
+    },
+    "scriptPathMismatch": {
+        "message": "The read-back path differs from the submitted path. Refresh settings and check the server connection."
+    },
+    "scriptPathSaveError": {
+        "message": "Could not save or read back the path"
+    },
+    "scriptPathSaved": {
+        "message": "Path saved; the read-back setting matches. File existence and executability cannot be checked through RPC."
+    },
+    "scriptPathUnchecked": {
+        "message": "The format looks valid. File existence and executability are unverified; Apply checks saving and reading back the setting."
     }
 }

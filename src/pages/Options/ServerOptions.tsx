@@ -2,6 +2,7 @@ import { getLocale, getMessage } from '../../tools/i18n';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { observer } from 'mobx-react';
 import useRootStore from '../../hooks/useRootStore';
+import ScriptPathField from './ScriptPathField';
 
 const ALT_SPEED_DAYS = [
   { bit: 1, key: 'daySunday' },
@@ -30,14 +31,6 @@ const ServerOptions = observer(() => {
   const [error, setError] = useState(false);
   const [incompleteDir, setIncompleteDirInput] = useState('');
   const [incompleteDirLoaded, setIncompleteDirLoaded] = useState<string | null>(null);
-  const [scriptFilename, setScriptFilenameInput] = useState('');
-  const [scriptFilenameLoaded, setScriptFilenameLoaded] = useState<string | null>(null);
-  const [scriptAddedFilename, setScriptAddedFilenameInput] = useState('');
-  const [scriptAddedFilenameLoaded, setScriptAddedFilenameLoaded] = useState<string | null>(null);
-  const [scriptDoneSeedingFilename, setScriptDoneSeedingFilenameInput] = useState('');
-  const [scriptDoneSeedingFilenameLoaded, setScriptDoneSeedingFilenameLoaded] = useState<
-    string | null
-  >(null);
   const [portTestResult, setPortTestResult] = useState<boolean | null>(null);
   const [portTesting, setPortTesting] = useState(false);
 
@@ -107,33 +100,6 @@ const ServerOptions = observer(() => {
   const handleApplyIncompleteDir = useCallback(() => {
     runAction(client?.setIncompleteDir(incompleteDir));
   }, [client, incompleteDir, runAction]);
-
-  const handleScriptFilenameChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setScriptFilenameInput(e.target.value);
-  }, []);
-
-  const handleApplyScriptFilename = useCallback(() => {
-    runAction(client?.setScriptTorrentDoneFilename(scriptFilename));
-  }, [client, scriptFilename, runAction]);
-
-  const handleScriptAddedFilenameChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setScriptAddedFilenameInput(e.target.value);
-  }, []);
-
-  const handleApplyScriptAddedFilename = useCallback(() => {
-    runAction(client?.setScriptTorrentAddedFilename(scriptAddedFilename));
-  }, [client, scriptAddedFilename, runAction]);
-
-  const handleScriptDoneSeedingFilenameChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setScriptDoneSeedingFilenameInput(e.target.value);
-    },
-    []
-  );
-
-  const handleApplyScriptDoneSeedingFilename = useCallback(() => {
-    runAction(client?.setScriptTorrentDoneSeedingFilename(scriptDoneSeedingFilename));
-  }, [client, scriptDoneSeedingFilename, runAction]);
 
   const handlePortTest = useCallback(() => {
     if (!client) return;
@@ -216,21 +182,6 @@ const ServerOptions = observer(() => {
   if (incompleteDirLoaded !== settings.incompleteDir) {
     setIncompleteDirInput(settings.incompleteDir);
     setIncompleteDirLoaded(settings.incompleteDir);
-  }
-
-  if (scriptFilenameLoaded !== settings.scriptTorrentDoneFilename) {
-    setScriptFilenameInput(settings.scriptTorrentDoneFilename);
-    setScriptFilenameLoaded(settings.scriptTorrentDoneFilename);
-  }
-
-  if (scriptAddedFilenameLoaded !== (settings.scriptTorrentAddedFilename || '')) {
-    setScriptAddedFilenameInput(settings.scriptTorrentAddedFilename || '');
-    setScriptAddedFilenameLoaded(settings.scriptTorrentAddedFilename || '');
-  }
-
-  if (scriptDoneSeedingFilenameLoaded !== (settings.scriptTorrentDoneSeedingFilename || '')) {
-    setScriptDoneSeedingFilenameInput(settings.scriptTorrentDoneSeedingFilename || '');
-    setScriptDoneSeedingFilenameLoaded(settings.scriptTorrentDoneSeedingFilename || '');
   }
 
   const handleToggle = (setter: (enabled: boolean) => Promise<unknown>, current: boolean) => () => {
@@ -536,6 +487,7 @@ const ServerOptions = observer(() => {
       </label>
 
       <h3>{getMessage('networkSettings')}</h3>
+      <p className="hint">{getMessage('networkSettingsHint')}</p>
 
       <label>
         <span>{getMessage('peerPort')}</span>
@@ -565,6 +517,7 @@ const ServerOptions = observer(() => {
           )}
         </span>
       </label>
+      <p className="hint">{getMessage('peerPortHint')}</p>
 
       <label>
         <span>{getMessage('portForwardingEnabled')}</span>
@@ -577,6 +530,7 @@ const ServerOptions = observer(() => {
           <span className="toggle-slider"></span>
         </span>
       </label>
+      <p className="hint">{getMessage('portForwardingHint')}</p>
 
       <label>
         <span>{getMessage('encryption')}</span>
@@ -586,6 +540,7 @@ const ServerOptions = observer(() => {
           <option value="tolerated">{getMessage('encryptionTolerated')}</option>
         </select>
       </label>
+      <p className="hint">{getMessage('encryptionHint')}</p>
 
       <label>
         <span>{getMessage('dhtEnabled')}</span>
@@ -598,6 +553,7 @@ const ServerOptions = observer(() => {
           <span className="toggle-slider"></span>
         </span>
       </label>
+      <p className="hint">{getMessage('dhtHint')}</p>
 
       <label>
         <span>{getMessage('pexEnabled')}</span>
@@ -610,6 +566,7 @@ const ServerOptions = observer(() => {
           <span className="toggle-slider"></span>
         </span>
       </label>
+      <p className="hint">{getMessage('pexHint')}</p>
 
       <label>
         <span>{getMessage('lpdEnabled')}</span>
@@ -622,6 +579,7 @@ const ServerOptions = observer(() => {
           <span className="toggle-slider"></span>
         </span>
       </label>
+      <p className="hint">{getMessage('lpdHint')}</p>
 
       <label>
         <span>{getMessage('utpEnabled')}</span>
@@ -634,8 +592,10 @@ const ServerOptions = observer(() => {
           <span className="toggle-slider"></span>
         </span>
       </label>
+      <p className="hint">{getMessage('utpHint')}</p>
 
       <h3>{getMessage('altSpeedSchedule')}</h3>
+      <p className="hint">{getMessage('altSpeedScheduleHint')}</p>
 
       <label>
         <span>{getMessage('altSpeedTimeEnabled')}</span>
@@ -704,17 +664,19 @@ const ServerOptions = observer(() => {
           <span className="toggle-slider"></span>
         </span>
       </label>
+      <p className="hint">{getMessage('scriptDoneHint')}</p>
 
       {settings.scriptTorrentDoneEnabled && (
-        <label>
-          <span>{getMessage('scriptTorrentDoneFilename')}</span>
-          <div className="blocklist-url-row">
-            <input type="text" value={scriptFilename} onChange={handleScriptFilenameChange} />
-            <button type="button" onClick={handleApplyScriptFilename}>
-              {getMessage('DLG_BTN_APPLY')}
-            </button>
-          </div>
-        </label>
+        <ScriptPathField
+          key={`${rootStore.config?.url}:done`}
+          label={getMessage('scriptTorrentDoneFilename')}
+          savedPath={settings.scriptTorrentDoneFilename}
+          onSave={async (path) => {
+            await client.setScriptTorrentDoneFilename(path);
+            if (!client.settings) throw new Error(getMessage('checkSettings'));
+            return client.settings.scriptTorrentDoneFilename;
+          }}
+        />
       )}
 
       {/* script-torrent-added / done-seeding need Transmission 4.0+ (rpc 17) */}
@@ -734,21 +696,19 @@ const ServerOptions = observer(() => {
               <span className="toggle-slider"></span>
             </span>
           </label>
+          <p className="hint">{getMessage('scriptAddedHint')}</p>
 
           {settings.scriptTorrentAddedEnabled && (
-            <label>
-              <span>{getMessage('scriptTorrentAddedFilename')}</span>
-              <div className="blocklist-url-row">
-                <input
-                  type="text"
-                  value={scriptAddedFilename}
-                  onChange={handleScriptAddedFilenameChange}
-                />
-                <button type="button" onClick={handleApplyScriptAddedFilename}>
-                  {getMessage('DLG_BTN_APPLY')}
-                </button>
-              </div>
-            </label>
+            <ScriptPathField
+              key={`${rootStore.config?.url}:added`}
+              label={getMessage('scriptTorrentAddedFilename')}
+              savedPath={settings.scriptTorrentAddedFilename}
+              onSave={async (path) => {
+                await client.setScriptTorrentAddedFilename(path);
+                if (!client.settings) throw new Error(getMessage('checkSettings'));
+                return client.settings.scriptTorrentAddedFilename;
+              }}
+            />
           )}
 
           <label>
@@ -765,21 +725,19 @@ const ServerOptions = observer(() => {
               <span className="toggle-slider"></span>
             </span>
           </label>
+          <p className="hint">{getMessage('scriptSeedingHint')}</p>
 
           {settings.scriptTorrentDoneSeedingEnabled && (
-            <label>
-              <span>{getMessage('scriptTorrentDoneSeedingFilename')}</span>
-              <div className="blocklist-url-row">
-                <input
-                  type="text"
-                  value={scriptDoneSeedingFilename}
-                  onChange={handleScriptDoneSeedingFilenameChange}
-                />
-                <button type="button" onClick={handleApplyScriptDoneSeedingFilename}>
-                  {getMessage('DLG_BTN_APPLY')}
-                </button>
-              </div>
-            </label>
+            <ScriptPathField
+              key={`${rootStore.config?.url}:seeding`}
+              label={getMessage('scriptTorrentDoneSeedingFilename')}
+              savedPath={settings.scriptTorrentDoneSeedingFilename}
+              onSave={async (path) => {
+                await client.setScriptTorrentDoneSeedingFilename(path);
+                if (!client.settings) throw new Error(getMessage('checkSettings'));
+                return client.settings.scriptTorrentDoneSeedingFilename;
+              }}
+            />
           )}
         </>
       )}

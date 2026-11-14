@@ -209,6 +209,32 @@ input[type="number"] {
   width: 100px;
 }
 
+.script-path-field {
+  label {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+
+    > span:first-child {
+      min-width: 0;
+    }
+  }
+
+  .blocklist-url-row input[type="text"] {
+    min-width: 0;
+  }
+
+  p {
+    overflow-wrap: anywhere;
+  }
+
+  [role="alert"] {
+    color: var(--text-color);
+    border-left: 3px solid var(--primary-color);
+    padding-left: 0.75rem;
+  }
+}
+
 // Toggle Switch
 .toggle-switch {
   position: relative;
