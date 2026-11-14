@@ -175,6 +175,7 @@ const config = {
     }),
     new CopyWebpackPlugin({
       patterns: [
+        { from: './LICENSE', to: 'LICENSE', toType: 'file' },
         {
           from: './src/manifest.json',
           transform: (content) => {

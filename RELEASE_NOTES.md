@@ -1,5 +1,26 @@
 # Release Notes - Transmission Easy Client
 
+## code975 3.4.1 (November 14, 2026)
+
+- Extension manifest, npm package and lockfile versions raised to **3.4.1**.
+- Extension name changed to **Transmission Easy Client code975** in all
+  24 Chrome locale catalogs; its description identifies the mthcore-based fork.
+- Public repository renamed to
+  [ttamas007/transmission-easy-client-code975](https://github.com/ttamas007/transmission-easy-client-code975).
+  The README and in-app GitHub link point to the renamed repository.
+- MIT `LICENSE` is now copied automatically into built extension packages.
+- Maintained by [ttamas007](https://github.com/ttamas007), based on
+  [mthcore's Transmission Easy Client v3.4.0](https://github.com/mthcore/Transmission-Easy-Client),
+  originally [Feverqwe/Transmission](https://github.com/Feverqwe/Transmission).
+- Includes all functionality documented in the previous fork release below.
+  Connection settings and stored preferences are unchanged. Reload the existing
+  unpacked extension after replacing its files; automatic updates remain disabled.
+- Validation: TypeScript checks, 11 focused translation/footer/error tests,
+  production build, and simulated-browser checks of the renamed UI and GitHub link.
+  All 24 locale names, package/lockfile/manifest versions and bundled license verified.
+- Chrome ZIP SHA-256:
+  `d6185ef06ea8438bbe8c553084b92f51d4d89d895f281312935cdab57d07433c`
+
 ## Chrome fork 3.4.0-fork.1 (November 14, 2026)
 
 Based on mthcore v3.4.0. The extension manifest version remains **3.4.0**;

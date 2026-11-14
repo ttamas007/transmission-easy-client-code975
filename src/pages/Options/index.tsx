@@ -99,7 +99,7 @@ const Options = observer(() => {
       </HashRouter>
       <footer className="bottom">
         <a
-          href="https://github.com/mthcore/transmission_extension"
+          href="https://github.com/ttamas007/transmission-easy-client-code975"
           target="_blank"
           rel="noopener noreferrer"
         >

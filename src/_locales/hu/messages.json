@@ -1,9 +1,9 @@
 {
     "appName": {
-        "message": "Transmission Easy Client"
+        "message": "Transmission Easy Client code975"
     },
     "appDesc": {
-        "message": "A bővítmény hozzáadja a Transmission webes felületét a böngészőhöz"
+        "message": "Az mthcore Transmission Easy Client változatának code975 forkja; karbantartó: ttamas007."
     },
     "lang": {
         "message": "hu"

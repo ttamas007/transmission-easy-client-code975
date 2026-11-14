@@ -1,4 +1,4 @@
-# Transmission Easy Client
+# Transmission Easy Client code975
 
 A browser extension that adds a Transmission WebUI directly in your web browser. Manage your torrents without leaving your browser.
 
@@ -9,8 +9,8 @@ A browser extension that adds a Transmission WebUI directly in your web browser.
 
 This version is a fork of **mthcore's Transmission Easy Client v3.4.0**,
 maintained by [ttamas007](https://github.com/ttamas007).
-It targets unpacked installation in modern Chrome. The extension manifest
-version remains 3.4.0; GitHub release tags distinguish this fork's packages.
+It targets unpacked installation in modern Chrome. The current extension version
+is **3.4.1**, named **Transmission Easy Client code975** to distinguish this fork.
 
 - Hungarian/English UI selector in **Options > Main > Language**, Hungarian by default.
 - Localized common torrent errors, preserving paths, error codes and unknown server messages.
@@ -33,7 +33,7 @@ and simulated-browser checks. These do not replace testing against a real daemon
 
 ### Chrome installation and updates
 
-1. Download the Chrome ZIP from [Releases](https://github.com/ttamas007/transmission-easy-client-forkcode975/releases).
+1. Download the Chrome ZIP from [Releases](https://github.com/ttamas007/transmission-easy-client-code975/releases).
 2. Extract it into a permanent directory.
 3. Open `chrome://extensions`, enable **Developer mode**, select **Load unpacked**,
    and choose the directory directly containing `manifest.json`.
@@ -82,15 +82,14 @@ Requires Node.js 22.22+, 24.15+, or 26+ (an Active or Maintenance LTS line).
 
 ```bash
 # Clone the repository
-git clone https://github.com/ttamas007/transmission-easy-client-forkcode975.git
-cd transmission-easy-client-forkcode975
+git clone https://github.com/ttamas007/transmission-easy-client-code975.git
+cd transmission-easy-client-code975
 
 # Install dependencies
 npm ci
 
 # Build and package Chrome
 npm run build
-cp LICENSE dist/chrome/src/LICENSE
 npm run _compress -- --BROWSER chrome
 ```
 
@@ -146,6 +145,12 @@ The built extension will be in the `./dist` folder.
 ## Changelog
 
 > See [RELEASE_NOTES.md](RELEASE_NOTES.md) for the full release history.
+
+### code975 3.4.1 (November 14, 2026)
+
+- Extension version raised to 3.4.1; name changed to Transmission Easy Client code975.
+- Repository renamed to transmission-easy-client-code975; in-app GitHub link updated.
+- MIT license copied into every built package automatically.
 
 ### Chrome fork 3.4.0-fork.1 (November 14, 2026)
 
