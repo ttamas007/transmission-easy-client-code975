@@ -1,3 +1,4 @@
+import { getMessage } from '../../tools/i18n';
 import React, { useState, useCallback, useRef, useEffect, type MouseEvent } from 'react';
 import getLogger from '../../tools/getLogger';
 import { storageGet, storageSet } from '../../tools/chromeStorage';
@@ -115,12 +116,12 @@ const BackupRestoreOptions = () => {
       if (!refData.current) {
         // The textarea only exists once the local config loaded
         setRestoreState('error');
-        setRestoreError(chrome.i18n.getMessage('clickLoadConfig'));
+        setRestoreError(getMessage('clickLoadConfig'));
         return;
       }
       if (!backup) {
         setRestoreState('error');
-        setRestoreError(chrome.i18n.getMessage('OV_FL_ERROR'));
+        setRestoreError(getMessage('OV_FL_ERROR'));
         setHasCloudData(false);
         return;
       }
@@ -139,8 +140,7 @@ const BackupRestoreOptions = () => {
   const handleClearCloud = useCallback(async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const confirmMessage =
-      chrome.i18n.getMessage('confirmClearCloud') ||
-      'Are you sure you want to clear the cloud backup?';
+      getMessage('confirmClearCloud') || 'Are you sure you want to clear the cloud backup?';
     if (!window.confirm(confirmMessage)) return;
     try {
       await clearCloudBackup();
@@ -157,7 +157,7 @@ const BackupRestoreOptions = () => {
   const handleRestore = useCallback(async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const confirmMessage =
-      chrome.i18n.getMessage('confirmRestore') ||
+      getMessage('confirmRestore') ||
       'Are you sure you want to restore this configuration? This will overwrite all current settings.';
     if (!window.confirm(confirmMessage)) return;
     setRestoreState('pending');
@@ -190,16 +190,16 @@ const BackupRestoreOptions = () => {
       const current = await storageGet({
         hostname: '',
         port: 9091,
-        ssl: true,
+        ssl: false,
         pathname: '/transmission/rpc',
         webPathname: '',
         login: '',
-        authenticationRequired: true,
+        authenticationRequired: false,
       });
       const connectionChanges = getConnectionChanges(cleanConfig, current);
       if (connectionChanges.length) {
         const changeMessage =
-          chrome.i18n.getMessage('restoreConnectionChanged', connectionChanges.join(', ')) ||
+          getMessage('restoreConnectionChanged', connectionChanges.join(', ')) ||
           `This backup changes the server connection: ${connectionChanges.join(', ')}. Continue?`;
         if (!window.confirm(changeMessage)) {
           setRestoreState('idle');
@@ -214,7 +214,7 @@ const BackupRestoreOptions = () => {
       // check while silently keeping the old values for those keys
       if (droppedKeys.length) {
         setRestoreError(
-          (chrome.i18n.getMessage('restoreSkippedKeys') || 'Ignored invalid values') +
+          (getMessage('restoreSkippedKeys') || 'Ignored invalid values') +
             ': ' +
             droppedKeys.join(', ')
         );
@@ -233,15 +233,15 @@ const BackupRestoreOptions = () => {
 
   return (
     <div ref={refPage} className="page backup-restore">
-      <h2>{chrome.i18n.getMessage('backupRestore')}</h2>
+      <h2>{getMessage('backupRestore')}</h2>
 
       <div className="backup-section">
-        <h3>{chrome.i18n.getMessage('backup')}</h3>
-        <p className="section-hint">{chrome.i18n.getMessage('backupHint')}</p>
-        <p className="section-hint">{chrome.i18n.getMessage('backupIncludesCredentials')}</p>
+        <h3>{getMessage('backup')}</h3>
+        <p className="section-hint">{getMessage('backupHint')}</p>
+        <p className="section-hint">{getMessage('backupIncludesCredentials')}</p>
         <div className="backup-actions">
           <button type="button" onClick={handleLoadConfig} disabled={loadState === 'pending'}>
-            {loadState === 'pending' ? '...' : chrome.i18n.getMessage('loadCurrentConfig')}
+            {loadState === 'pending' ? '...' : getMessage('loadCurrentConfig')}
           </button>
           <button
             type="button"
@@ -252,33 +252,33 @@ const BackupRestoreOptions = () => {
               ? '...'
               : saveState === 'done'
                 ? '✓'
-                : chrome.i18n.getMessage('optSaveInCloud')}
+                : getMessage('optSaveInCloud')}
           </button>
         </div>
         {saveState === 'error' && (
           <p className="red">
-            {chrome.i18n.getMessage('OV_FL_ERROR')}
+            {getMessage('OV_FL_ERROR')}
             {saveError ? `: ${saveError}` : ''}
           </p>
         )}
       </div>
 
       <div className="backup-section">
-        <h3>{chrome.i18n.getMessage('configData')}</h3>
+        <h3>{getMessage('configData')}</h3>
         {loadState === 'done' ? (
           <textarea ref={refData} defaultValue={storage || ''} />
         ) : loadState === 'pending' ? (
           <div className="loading-inline"></div>
         ) : loadState === 'error' ? (
-          <p className="red">{chrome.i18n.getMessage('OV_FL_ERROR')}</p>
+          <p className="red">{getMessage('OV_FL_ERROR')}</p>
         ) : (
-          <p className="section-hint">{chrome.i18n.getMessage('clickLoadConfig')}</p>
+          <p className="section-hint">{getMessage('clickLoadConfig')}</p>
         )}
       </div>
 
       <div className="backup-section">
-        <h3>{chrome.i18n.getMessage('restore')}</h3>
-        <p className="section-hint">{chrome.i18n.getMessage('restoreHint')}</p>
+        <h3>{getMessage('restore')}</h3>
+        <p className="section-hint">{getMessage('restoreHint')}</p>
         <div className="backup-actions">
           <button
             type="button"
@@ -289,18 +289,18 @@ const BackupRestoreOptions = () => {
               ? '...'
               : restoreState === 'done'
                 ? '✓'
-                : chrome.i18n.getMessage('toRestore')}
+                : getMessage('toRestore')}
           </button>
           <button type="button" onClick={handleLoadFromCloud} disabled={!hasCloudData}>
-            {chrome.i18n.getMessage('optGetFromCloud')}
+            {getMessage('optGetFromCloud')}
           </button>
           <button type="button" onClick={handleClearCloud} disabled={!hasCloudData}>
-            {chrome.i18n.getMessage('optClearCloudStorage')}
+            {getMessage('optClearCloudStorage')}
           </button>
         </div>
         {restoreState === 'error' && (
           <p className="red">
-            {chrome.i18n.getMessage('OV_FL_ERROR')}
+            {getMessage('OV_FL_ERROR')}
             {restoreError ? `: ${restoreError}` : ''}
           </p>
         )}

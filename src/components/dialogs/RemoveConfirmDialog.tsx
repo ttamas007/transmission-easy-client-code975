@@ -1,3 +1,4 @@
+import { getMessage } from '../../tools/i18n';
 import React, { useCallback, useState, FormEvent } from 'react';
 import { observer } from 'mobx-react';
 import Dialog from './Dialog';
@@ -45,7 +46,7 @@ const RemoveConfirmDialog = observer(({ dialogStore }: RemoveConfirmDialogProps)
         : client.torrentsRemoveTorrent;
 
       removeMethod(removalIds).catch((err) => {
-        showError(chrome.i18n.getMessage('OV_FL_ERROR') || 'Failed to remove torrent', err);
+        showError(getMessage('OV_FL_ERROR') || 'Failed to remove torrent', err);
       });
 
       dialogStore.close();
@@ -69,12 +70,12 @@ const RemoveConfirmDialog = observer(({ dialogStore }: RemoveConfirmDialogProps)
     }
 
     const messageKey = deleteData ? 'OV_CONFIRM_DELETE_DATA_ONE' : 'OV_CONFIRM_DELETE_ONE';
-    label = <label>{chrome.i18n.getMessage(messageKey)}</label>;
+    label = <label>{getMessage(messageKey)}</label>;
   } else {
     const messageKey = deleteData
       ? 'OV_CONFIRM_DELETE_DATA_MULTIPLE'
       : 'OV_CONFIRM_DELETE_MULTIPLE';
-    label = <label>{chrome.i18n.getMessage(messageKey).replace('%d', String(count))}</label>;
+    label = <label>{getMessage(messageKey).replace('%d', String(count))}</label>;
   }
 
   return (
@@ -86,13 +87,13 @@ const RemoveConfirmDialog = observer(({ dialogStore }: RemoveConfirmDialogProps)
             {filename}
           </div>
           <div className="nf-subItem">
-            <input type="submit" value={chrome.i18n.getMessage('DLG_BTN_YES')} />
+            <input type="submit" value={getMessage('DLG_BTN_YES')} />
             <input
               onClick={handleClose}
               autoFocus
               data-autofocus
               type="button"
-              value={chrome.i18n.getMessage('DLG_BTN_NO')}
+              value={getMessage('DLG_BTN_NO')}
             />
           </div>
         </form>

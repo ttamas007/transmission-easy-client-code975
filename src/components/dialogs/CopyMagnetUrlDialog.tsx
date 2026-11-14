@@ -1,3 +1,4 @@
+import { getMessage } from '../../tools/i18n';
 import React, { useCallback, FormEvent } from 'react';
 import { observer } from 'mobx-react';
 import Dialog from './Dialog';
@@ -30,7 +31,7 @@ const CopyMagnetUrlDialog = observer(({ dialogStore }: CopyMagnetUrlDialogProps)
       navigator.clipboard.writeText(magnetLink).then(
         () => dialogStore.close(),
         (err) => {
-          showError(chrome.i18n.getMessage('OV_FL_ERROR') || 'Copy failed', err as Error);
+          showError(getMessage('OV_FL_ERROR') || 'Copy failed', err as Error);
           magnetLinkInput.select();
         }
       );
@@ -43,16 +44,12 @@ const CopyMagnetUrlDialog = observer(({ dialogStore }: CopyMagnetUrlDialogProps)
       <div className="nf-notifi">
         <form onSubmit={handleSubmit}>
           <div className="nf-subItem">
-            <label>{chrome.i18n.getMessage('magnetUri')}</label>
+            <label>{getMessage('magnetUri')}</label>
             <input type="text" name="magnetLink" defaultValue={dialogStore.magnetLink} />
           </div>
           <div className="nf-subItem">
-            <input type="submit" value={chrome.i18n.getMessage('copy')} autoFocus />
-            <input
-              onClick={handleClose}
-              type="button"
-              value={chrome.i18n.getMessage('DLG_BTN_CLOSE')}
-            />
+            <input type="submit" value={getMessage('copy')} autoFocus />
+            <input onClick={handleClose} type="button" value={getMessage('DLG_BTN_CLOSE')} />
           </div>
         </form>
       </div>

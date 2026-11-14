@@ -1,6 +1,10 @@
+import { getMessage } from '../tools/i18n';
 import TransmissionTransport from './TransmissionTransport';
 import type { TorrentId } from '../types';
 import type { TransmissionResponse } from './TransmissionTransport';
+import SeedTimeLimitService from './SeedTimeLimitService';
+import type { SeedTimeLimitInput, SeedTimeLimitRule } from '../types/seedTimeLimit';
+import getLogger from '../tools/getLogger';
 import TorrentService, {
   type NormalizedTorrent,
   type PeerData,
@@ -12,6 +16,7 @@ import SettingsService, {
   type NormalizedSettings,
   type NormalizedSessionStats,
   type NormalizedBandwidthGroup,
+  type DownloadDirectories,
 } from './SettingsService';
 
 interface BgStore {
@@ -22,6 +27,8 @@ interface BgStore {
     password: string;
     showDownloadCompleteNotifications: boolean;
     needsTrackerStats: boolean;
+    seedTimeLimits: SeedTimeLimitRule[];
+    setKeyValue(options: Record<string, unknown>): void;
   };
   client: {
     incompleteTorrentIds: number[];
@@ -41,6 +48,8 @@ interface BgStore {
       data: { download: number; upload: number; time: number }[];
     };
     setSettings: (settings: NormalizedSettings) => void;
+    lastErrorMessage?: string;
+    setLastErrorMessage: (message: string | undefined) => void;
   };
   flushClient: () => void;
 }
@@ -55,12 +64,17 @@ interface Bg {
 }
 
 class TransmissionClient {
+  getActiveTrackerHosts(serverUrl: string) {
+    return this.settingsService.getActiveTrackerHosts(serverUrl);
+  }
   private transport: TransmissionTransport;
   private torrentService: TorrentService;
   private fileService: FileService;
   private settingsService: SettingsService;
+  private seedTimeLimitService: SeedTimeLimitService;
+  private seedTimeLimitError: string | undefined;
 
-  constructor(bg: Bg) {
+  constructor(private bg: Bg) {
     const bgStore = bg.bgStore;
 
     this.transport = new TransmissionTransport({
@@ -90,6 +104,7 @@ class TransmissionClient {
     this.settingsService = new SettingsService(this.transport, (settings) =>
       bgStore.client.setSettings(settings)
     );
+    this.seedTimeLimitService = new SeedTimeLimitService(this.transport, () => bgStore.config);
   }
 
   private versionPromise: Promise<void> | null = null;
@@ -112,7 +127,41 @@ class TransmissionClient {
 
   // Torrent operations
   updateTorrents(force?: boolean): Promise<TransmissionResponse> {
-    return this.ensureVersion().then(() => this.torrentService.updateTorrents(force));
+    return this.ensureVersion()
+      .then(() => this.torrentService.updateTorrents(force))
+      .then(async (response) => {
+        // A failed opt-in rule must not disable normal polling; report it in the footer and a notification.
+        try {
+          const result = await this.seedTimeLimitService.check();
+          if (result === 'checked' && this.seedTimeLimitError) {
+            if (this.bg.bgStore.client.lastErrorMessage === this.seedTimeLimitError) {
+              this.bg.bgStore.client.setLastErrorMessage(undefined);
+            }
+            this.seedTimeLimitError = undefined;
+          }
+        } catch (err) {
+          const message = `${getMessage('seedTimeLimit')}: ${
+            err instanceof Error ? err.message : String(err)
+          }`;
+          getLogger('SeedTimeLimit').error('Enforcement failed', err);
+          this.bg.bgStore.client.setLastErrorMessage(message);
+          if (this.seedTimeLimitError !== message) this.bg.torrentErrorNotify(message);
+          this.seedTimeLimitError = message;
+        }
+        return response;
+      });
+  }
+  getSeedTimeLimitTrackers(): Promise<string[]> {
+    return this.seedTimeLimitService.getTrackers();
+  }
+  previewSeedTimeLimit(input: SeedTimeLimitInput): Promise<number> {
+    return this.seedTimeLimitService.preview(input);
+  }
+  setSeedTimeLimit(input: SeedTimeLimitInput): Promise<SeedTimeLimitRule> {
+    return this.seedTimeLimitService.save(input);
+  }
+  removeSeedTimeLimit(tracker: string): Promise<void> {
+    return this.seedTimeLimitService.remove(tracker);
   }
   start(ids: TorrentId[]): Promise<TransmissionResponse> {
     return this.torrentService.start(ids);
@@ -240,8 +289,14 @@ class TransmissionClient {
   getSessionStats(): Promise<NormalizedSessionStats> {
     return this.settingsService.getSessionStats();
   }
-  getFreeSpace(path: string): Promise<{ path: string; sizeBytes: number; totalSize?: number }> {
-    return this.settingsService.getFreeSpace(path);
+  getDownloadDirectories(): Promise<DownloadDirectories> {
+    return this.settingsService.getDownloadDirectories();
+  }
+  getFreeSpace(
+    path: string,
+    serverUrl?: string
+  ): Promise<{ path: string; sizeBytes: number; totalSize?: number }> {
+    return this.settingsService.getFreeSpace(path, serverUrl);
   }
   getGroups(names?: string[]): Promise<NormalizedBandwidthGroup[]> {
     return this.settingsService.getGroups(names);

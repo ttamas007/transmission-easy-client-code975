@@ -1,3 +1,4 @@
+import { getMessage } from '../../tools/i18n';
 import React, { ReactNode } from 'react';
 import * as ContextMenu from '@radix-ui/react-context-menu';
 import { observer } from 'mobx-react';
@@ -11,7 +12,7 @@ import showError from '../../tools/showError';
  */
 function report(action: Promise<unknown>): void {
   action.catch((err) => {
-    showError(chrome.i18n.getMessage('OV_FL_ERROR') || 'Action failed', err as Error);
+    showError(getMessage('OV_FL_ERROR') || 'Action failed', err as Error);
   });
 }
 
@@ -208,17 +209,17 @@ const TorrentMenuContent = observer(() => {
     <ContextMenu.Content className="context-menu">
       {actions.includes('start') && (
         <ContextMenu.Item className="context-menu-item" onSelect={handleStart}>
-          {chrome.i18n.getMessage('ML_START')}
+          {getMessage('ML_START')}
         </ContextMenu.Item>
       )}
       {actions.includes('forcestart') && (
         <ContextMenu.Item className="context-menu-item" onSelect={handleForceStart}>
-          {chrome.i18n.getMessage('startNow')}
+          {getMessage('startNow')}
         </ContextMenu.Item>
       )}
       {actions.includes('stop') && (
         <ContextMenu.Item className="context-menu-item" onSelect={handleStop}>
-          {chrome.i18n.getMessage('ML_STOP')}
+          {getMessage('ML_STOP')}
         </ContextMenu.Item>
       )}
 
@@ -226,26 +227,26 @@ const TorrentMenuContent = observer(() => {
 
       {actions.includes('recheck') && (
         <ContextMenu.Item className="context-menu-item" onSelect={handleRecheck}>
-          {chrome.i18n.getMessage('ML_FORCE_RECHECK')}
+          {getMessage('ML_FORCE_RECHECK')}
         </ContextMenu.Item>
       )}
 
       <ContextMenu.Item className="context-menu-item" onSelect={handleRemove}>
-        {chrome.i18n.getMessage('ML_REMOVE')}
+        {getMessage('ML_REMOVE')}
       </ContextMenu.Item>
 
       <ContextMenu.Sub>
         <ContextMenu.SubTrigger className="context-menu-item context-menu-subtrigger">
-          {chrome.i18n.getMessage('ML_REMOVE_AND')}
+          {getMessage('ML_REMOVE_AND')}
           <span className="context-menu-arrow">&#9656;</span>
         </ContextMenu.SubTrigger>
         <ContextMenu.Portal>
           <ContextMenu.SubContent className="context-menu">
             <ContextMenu.Item className="context-menu-item" onSelect={handleRemoveTorrent}>
-              {chrome.i18n.getMessage('ML_DELETE_TORRENT')}
+              {getMessage('ML_DELETE_TORRENT')}
             </ContextMenu.Item>
             <ContextMenu.Item className="context-menu-item" onSelect={handleRemoveTorrentFiles}>
-              {chrome.i18n.getMessage('ML_DELETE_DATATORRENT')}
+              {getMessage('ML_DELETE_DATATORRENT')}
             </ContextMenu.Item>
           </ContextMenu.SubContent>
         </ContextMenu.Portal>
@@ -255,7 +256,7 @@ const TorrentMenuContent = observer(() => {
 
       <ContextMenu.Sub>
         <ContextMenu.SubTrigger className="context-menu-item context-menu-subtrigger">
-          {chrome.i18n.getMessage('extra')}
+          {getMessage('extra')}
           <span className="context-menu-arrow">&#9656;</span>
         </ContextMenu.SubTrigger>
         <ContextMenu.Portal>
@@ -263,33 +264,33 @@ const TorrentMenuContent = observer(() => {
             {selectedIds.length === 1 && (
               <>
                 <ContextMenu.Item className="context-menu-item" onSelect={handleRename}>
-                  {chrome.i18n.getMessage('rename')}
+                  {getMessage('rename')}
                 </ContextMenu.Item>
                 <ContextMenu.Item className="context-menu-item" onSelect={handleCopyName}>
-                  {chrome.i18n.getMessage('copyName')}
+                  {getMessage('copyName')}
                 </ContextMenu.Item>
                 {firstTorrent?.hash && (
                   <ContextMenu.Item className="context-menu-item" onSelect={handleCopyHash}>
-                    {chrome.i18n.getMessage('copyHash')}
+                    {getMessage('copyHash')}
                   </ContextMenu.Item>
                 )}
                 <ContextMenu.Item className="context-menu-item" onSelect={handleCopyMagnetUrl}>
-                  {chrome.i18n.getMessage('magnetUri')}
+                  {getMessage('magnetUri')}
                 </ContextMenu.Item>
               </>
             )}
             <ContextMenu.Item className="context-menu-item" onSelect={handleMove}>
-              {chrome.i18n.getMessage('move')}
+              {getMessage('move')}
             </ContextMenu.Item>
             {/* Labels need Transmission 3.0+: on older daemons the dialog
                 could open but every Apply was rejected by the bg backstop */}
             {client.settings?.features.labels && (
               <ContextMenu.Item className="context-menu-item" onSelect={handleSetLabels}>
-                {chrome.i18n.getMessage('OV_COL_LABEL')}
+                {getMessage('OV_COL_LABEL')}
               </ContextMenu.Item>
             )}
             <ContextMenu.Item className="context-menu-item" onSelect={handleReannounce}>
-              {chrome.i18n.getMessage('reannounce')}
+              {getMessage('reannounce')}
             </ContextMenu.Item>
             {client.settings?.features.sequentialDownload && (
               <ContextMenu.Item
@@ -300,8 +301,7 @@ const TorrentMenuContent = observer(() => {
                   )
                 }
               >
-                {(firstTorrent?.sequentialDownload ? '✓ ' : '') +
-                  chrome.i18n.getMessage('sequentialDownload')}
+                {(firstTorrent?.sequentialDownload ? '✓ ' : '') + getMessage('sequentialDownload')}
               </ContextMenu.Item>
             )}
           </ContextMenu.SubContent>
@@ -310,22 +310,22 @@ const TorrentMenuContent = observer(() => {
 
       <ContextMenu.Sub>
         <ContextMenu.SubTrigger className="context-menu-item context-menu-subtrigger">
-          {chrome.i18n.getMessage('OV_COL_ORDER')}
+          {getMessage('OV_COL_ORDER')}
           <span className="context-menu-arrow">&#9656;</span>
         </ContextMenu.SubTrigger>
         <ContextMenu.Portal>
           <ContextMenu.SubContent className="context-menu">
             <ContextMenu.Item className="context-menu-item" onSelect={handleQueueTop}>
-              {chrome.i18n.getMessage('queueTop')}
+              {getMessage('queueTop')}
             </ContextMenu.Item>
             <ContextMenu.Item className="context-menu-item" onSelect={handleQueueUp}>
-              {chrome.i18n.getMessage('up')}
+              {getMessage('up')}
             </ContextMenu.Item>
             <ContextMenu.Item className="context-menu-item" onSelect={handleQueueDown}>
-              {chrome.i18n.getMessage('down')}
+              {getMessage('down')}
             </ContextMenu.Item>
             <ContextMenu.Item className="context-menu-item" onSelect={handleQueueBottom}>
-              {chrome.i18n.getMessage('queueBottom')}
+              {getMessage('queueBottom')}
             </ContextMenu.Item>
           </ContextMenu.SubContent>
         </ContextMenu.Portal>
@@ -333,7 +333,7 @@ const TorrentMenuContent = observer(() => {
 
       <ContextMenu.Sub>
         <ContextMenu.SubTrigger className="context-menu-item context-menu-subtrigger">
-          {chrome.i18n.getMessage('FI_COL_PRIO')}
+          {getMessage('FI_COL_PRIO')}
           <span className="context-menu-arrow">&#9656;</span>
         </ContextMenu.SubTrigger>
         <ContextMenu.Portal>
@@ -342,19 +342,19 @@ const TorrentMenuContent = observer(() => {
               className="context-menu-item"
               onSelect={() => report(client.setBandwidthPriority(selectedIds, 1))}
             >
-              {chrome.i18n.getMessage('MF_HIGH')}
+              {getMessage('MF_HIGH')}
             </ContextMenu.Item>
             <ContextMenu.Item
               className="context-menu-item"
               onSelect={() => report(client.setBandwidthPriority(selectedIds, 0))}
             >
-              {chrome.i18n.getMessage('MF_NORMAL')}
+              {getMessage('MF_NORMAL')}
             </ContextMenu.Item>
             <ContextMenu.Item
               className="context-menu-item"
               onSelect={() => report(client.setBandwidthPriority(selectedIds, -1))}
             >
-              {chrome.i18n.getMessage('MF_LOW')}
+              {getMessage('MF_LOW')}
             </ContextMenu.Item>
           </ContextMenu.SubContent>
         </ContextMenu.Portal>
@@ -364,10 +364,10 @@ const TorrentMenuContent = observer(() => {
         <>
           <ContextMenu.Separator className="context-menu-separator" />
           <ContextMenu.Item className="context-menu-item" onSelect={handleShowFiles}>
-            {chrome.i18n.getMessage('showFileList')}
+            {getMessage('showFileList')}
           </ContextMenu.Item>
           <ContextMenu.Item className="context-menu-item" onSelect={handleShowProperties}>
-            {chrome.i18n.getMessage('properties')}
+            {getMessage('properties')}
           </ContextMenu.Item>
         </>
       )}

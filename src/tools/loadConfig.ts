@@ -1,5 +1,7 @@
+import { getMessage } from './i18n';
 import { storageGet, storageSet } from './chromeStorage';
 import getLogger from './getLogger';
+import { isSeedTimeLimitRule } from '../types/seedTimeLimit';
 
 const logger = getLogger('loadConfig');
 
@@ -57,7 +59,7 @@ const oldConfigMap: Record<string, string> = {
 const oldConfigDefaults = Object.keys(oldConfigMap);
 
 const loadConfig = (keys: string | string[] | null): Promise<Config> => {
-  return storageGet<Config>(keys)
+  return storageGet<Config>(Array.isArray(keys) ? [...keys, 'seedTimeLimit'] : keys)
     .then((config) => {
       if (config.configVersion !== 2) {
         return storageGet<Record<string, unknown>>(oldConfigDefaults)
@@ -71,7 +73,15 @@ const loadConfig = (keys: string | string[] | null): Promise<Config> => {
       }
       return config;
     })
-    .then((config) => {
+    .then(async (config) => {
+      if (config.seedTimeLimits === undefined && config.seedTimeLimit !== undefined) {
+        if (!isSeedTimeLimitRule(config.seedTimeLimit)) {
+          throw new Error(getMessage('seedTimeLimitInvalid'));
+        }
+        config.seedTimeLimits = [config.seedTimeLimit];
+        await storageSet({ seedTimeLimits: config.seedTimeLimits });
+      }
+      delete config.seedTimeLimit;
       if (config.selectedLabel) {
         if (typeof config.selectedLabel.custom === 'number') {
           config.selectedLabel.custom = !!config.selectedLabel.custom;

@@ -1,7 +1,11 @@
+import { getMessage } from '../tools/i18n';
 import type TransmissionTransport from './TransmissionTransport';
 import { readKey, assertRpcVersion, RPC_VERSION_4, RPC_VERSION_4_1 } from '../tools/rpcCompat';
 import { BLOCKLIST_UPDATE_TIMEOUT } from '../constants';
 import type { SessionStatistics, BandwidthGroup } from '../types/transmission';
+import trackerHosts from '../tools/trackerHosts';
+import type { ActiveTrackerHosts } from '../types/footer';
+import getLogger from '../tools/getLogger';
 
 /** Map a missing field or Transmission's -1 'unknown' sentinel to undefined */
 function normalizeFreeSpace(value: number | undefined): number | undefined {
@@ -23,6 +27,7 @@ export interface NormalizedSettings {
   // From session-stats current-stats; undefined when that call failed
   sessionDownloaded?: number;
   sessionUploaded?: number;
+  sessionStartedAt?: number;
   blocklistEnabled: boolean;
   blocklistUrl: string;
   blocklistSize: number;
@@ -68,6 +73,7 @@ export interface NormalizedSettings {
 }
 
 export interface NormalizedSessionStats {
+  sessionStartedAt?: number;
   activeTorrentCount: number;
   downloadSpeed: number;
   pausedTorrentCount: number;
@@ -86,10 +92,19 @@ export interface NormalizedBandwidthGroup {
   speedLimitUpEnabled: boolean;
 }
 
+export interface DownloadDirectories {
+  defaultDirectory: string;
+  directories: string[];
+}
+
 class SettingsService {
   private transport: TransmissionTransport;
   private applySettings: (settings: NormalizedSettings) => void;
-  private _lastSessionStats: { sessionDownloaded?: number; sessionUploaded?: number } = {};
+  private _lastSessionStats: {
+    sessionDownloaded?: number;
+    sessionUploaded?: number;
+    sessionStartedAt?: number;
+  } = {};
 
   constructor(
     transport: TransmissionTransport,
@@ -121,6 +136,7 @@ class SettingsService {
           this._lastSessionStats = {
             sessionDownloaded: stats.currentStats.downloadedBytes,
             sessionUploaded: stats.currentStats.uploadedBytes,
+            sessionStartedAt: stats.sessionStartedAt,
           };
           this.applySettings({ ...normalized, ...this._lastSessionStats });
         },
@@ -145,7 +161,13 @@ class SettingsService {
         string,
         unknown
       >;
+      const uptime = current.seconds_active ?? current.secondsActive;
+      const startedAt =
+        typeof uptime === 'number' && Number.isFinite(uptime) && uptime >= 0
+          ? Date.now() - uptime * 1000
+          : undefined;
       return {
+        sessionStartedAt: startedAt !== undefined && startedAt >= 0 ? startedAt : undefined,
         activeTorrentCount: (args['active_torrent_count'] ??
           args['activeTorrentCount'] ??
           0) as number,
@@ -161,7 +183,97 @@ class SettingsService {
     });
   }
 
-  getFreeSpace(path: string): Promise<{ path: string; sizeBytes: number; totalSize?: number }> {
+  async getDownloadDirectories(): Promise<DownloadDirectories> {
+    const [session, listing] = await Promise.all([
+      this.transport.sendAction({
+        method: 'session-get',
+        arguments: { fields: ['download-dir'] },
+      }),
+      this.transport.sendAction({
+        method: 'torrent-get',
+        arguments: { fields: ['downloadDir'] },
+      }),
+    ]);
+    const defaultPath = readKey<unknown>(session.arguments, 'download-dir', undefined);
+    const torrents: unknown = listing.arguments.torrents;
+    if (typeof defaultPath !== 'string' || !defaultPath || !Array.isArray(torrents)) {
+      throw new Error('Invalid download directory response from Transmission');
+    }
+
+    const normalizePath = (path: string) => path.replace(/[/\\]+$/, '') || path;
+    const defaultDirectory = normalizePath(defaultPath);
+    const directories = new Set<string>();
+    const entries: unknown[] = torrents;
+    for (const torrent of entries) {
+      if (typeof torrent !== 'object' || torrent === null) {
+        throw new Error('Invalid torrent directory response from Transmission');
+      }
+      const path =
+        ('download_dir' in torrent ? torrent.download_dir : undefined) ??
+        ('downloadDir' in torrent ? torrent.downloadDir : undefined);
+      if (typeof path !== 'string' || !path) {
+        throw new Error('Missing torrent download directory in Transmission response');
+      }
+      directories.add(normalizePath(path));
+    }
+    directories.delete(defaultDirectory);
+    return {
+      defaultDirectory,
+      directories: [
+        defaultDirectory,
+        ...Array.from(directories).sort((a, b) => a.localeCompare(b)),
+      ],
+    };
+  }
+
+  async getActiveTrackerHosts(serverUrl: string): Promise<ActiveTrackerHosts> {
+    if (serverUrl !== this.transport.url) throw new Error(getMessage('connectionChanged'));
+    const response = await this.transport.sendAction({
+      method: 'torrent-get',
+      arguments: { fields: ['status', 'trackers'] },
+    });
+    const torrents: unknown = response.arguments.torrents;
+    if (!Array.isArray(torrents)) throw new Error(getMessage('activeTrackersInvalid'));
+    const counts = new Map<string, number>();
+    let withoutTracker = 0;
+    const entries: unknown[] = torrents;
+    for (const torrent of entries) {
+      if (
+        typeof torrent !== 'object' ||
+        torrent === null ||
+        !('status' in torrent) ||
+        typeof torrent.status !== 'number' ||
+        !Number.isInteger(torrent.status) ||
+        torrent.status < 0 ||
+        torrent.status > 6
+      ) {
+        throw new Error(getMessage('activeTrackersInvalid'));
+      }
+      if (torrent.status === 0) continue;
+      const hosts = trackerHosts('trackers' in torrent ? torrent.trackers : undefined);
+      if (!hosts?.length) {
+        withoutTracker++;
+        if (hosts === null)
+          getLogger('SettingsService').warn('Malformed tracker data in active host summary');
+      } else {
+        for (const host of hosts) counts.set(host, (counts.get(host) ?? 0) + 1);
+      }
+    }
+    return {
+      hosts: Array.from(counts, ([host, count]) => ({ host, count })).sort((a, b) =>
+        a.host.localeCompare(b.host)
+      ),
+      withoutTracker,
+    };
+  }
+
+  getFreeSpace(
+    path: string,
+    serverUrl?: string
+  ): Promise<{ path: string; sizeBytes: number; totalSize?: number }> {
+    if (serverUrl !== undefined && serverUrl !== this.transport.url) {
+      return Promise.reject(new Error(getMessage('freeSpaceConnectionChanged')));
+    }
     return this.transport
       .sendAction({
         method: 'free-space',
@@ -169,10 +281,24 @@ class SettingsService {
       })
       .then((response) => {
         const args = response.arguments as Record<string, unknown>;
+        const sizeBytes = readKey<unknown>(args, 'size-bytes', undefined);
+        const totalSize = readKey<unknown>(args, 'total-size', undefined);
+        if (
+          typeof args.path !== 'string' ||
+          !args.path ||
+          typeof sizeBytes !== 'number' ||
+          !Number.isFinite(sizeBytes) ||
+          sizeBytes < 0
+        ) {
+          throw new Error(getMessage('invalidFreeSpaceResponse'));
+        }
         return {
-          path: args.path as string,
-          sizeBytes: readKey<number>(args, 'size-bytes', 0),
-          totalSize: readKey<number>(args, 'total-size', 0) || undefined,
+          path: args.path,
+          sizeBytes,
+          totalSize:
+            typeof totalSize === 'number' && Number.isFinite(totalSize) && totalSize > 0
+              ? totalSize
+              : undefined,
         };
       });
   }

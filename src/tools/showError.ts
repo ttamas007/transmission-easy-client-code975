@@ -1,3 +1,4 @@
+import { getMessage } from './i18n';
 import getLogger from './getLogger';
 
 const logger = getLogger('showError');
@@ -35,7 +36,7 @@ function showError(message: string, error?: Error): void {
   chrome.notifications.create({
     type: 'basic',
     iconUrl: 'assets/icons/icon_48.png',
-    title: chrome.i18n.getMessage('unexpectedError') || 'Error',
+    title: getMessage('unexpectedError') || 'Error',
     message: body,
   });
 }

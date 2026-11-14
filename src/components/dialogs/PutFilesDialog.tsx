@@ -1,3 +1,4 @@
+import { getMessage } from '../../tools/i18n';
 import React, { useCallback, useEffect, useRef, useState, FormEvent } from 'react';
 import { observer } from 'mobx-react';
 import Dialog from './Dialog';
@@ -49,10 +50,7 @@ const PutFilesDialog = observer(({ dialogStore }: PutFilesDialogProps) => {
       // fully into memory before upload
       const files = dialogStore.files.filter((file: File) => file.size <= MAX_FETCH_SIZE);
       if (files.length < dialogStore.files.length) {
-        showError(
-          chrome.i18n.getMessage('OV_FL_ERROR') || 'File too large',
-          new Error('FILE_SIZE_EXCEEDED')
-        );
+        showError(getMessage('OV_FL_ERROR') || 'File too large', new Error('FILE_SIZE_EXCEEDED'));
         if (!files.length) {
           dialogStore.close();
           return;
@@ -69,7 +67,7 @@ const PutFilesDialog = observer(({ dialogStore }: PutFilesDialogProps) => {
         // Blob URLs were created but nothing will consume them
         revokeAll();
         showError(
-          chrome.i18n.getMessage('OV_FL_ERROR') || 'Failed to send files',
+          getMessage('OV_FL_ERROR') || 'Failed to send files',
           new Error('Client not ready')
         );
         dialogStore.close();
@@ -89,7 +87,7 @@ const PutFilesDialog = observer(({ dialogStore }: PutFilesDialogProps) => {
           },
           (err) => {
             revokeAll();
-            showError(chrome.i18n.getMessage('OV_FL_ERROR') || 'Failed to send files', err);
+            showError(getMessage('OV_FL_ERROR') || 'Failed to send files', err);
             dialogStore.close();
           }
         )
@@ -121,7 +119,7 @@ const PutFilesDialog = observer(({ dialogStore }: PutFilesDialogProps) => {
           <div className="nf-subItem">
             <input
               type="submit"
-              value={sending ? '...' : chrome.i18n.getMessage('DLG_BTN_OK')}
+              value={sending ? '...' : getMessage('DLG_BTN_OK')}
               disabled={sending}
               autoFocus
             />
@@ -130,11 +128,7 @@ const PutFilesDialog = observer(({ dialogStore }: PutFilesDialogProps) => {
                 behind the modal) and Escape closed the dialog anyway — the
                 transfer itself completes either way, the blobs belong to the
                 document, not the dialog */}
-            <input
-              onClick={handleClose}
-              type="button"
-              value={chrome.i18n.getMessage('DLG_BTN_CANCEL')}
-            />
+            <input onClick={handleClose} type="button" value={getMessage('DLG_BTN_CANCEL')} />
           </div>
         </form>
       </div>

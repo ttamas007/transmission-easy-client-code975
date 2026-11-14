@@ -117,7 +117,7 @@
         "message": "Nincs címke"
     },
     "OV_FL_CHECKED": {
-        "message": "Ellenőrizve"
+        "message": "Ellenőrzés"
     },
     "OV_FL_DOWNLOADING": {
         "message": "Letöltés"
@@ -126,22 +126,22 @@
         "message": "Hiba"
     },
     "OV_FL_FINISHED": {
-        "message": "Kész"
+        "message": "Kész, szüneteltetve"
     },
     "OV_FL_PAUSED": {
         "message": "Szüneteltetve"
     },
     "OV_FL_QUEUED": {
-        "message": "Sorban"
+        "message": "Letöltésre vár"
     },
     "OV_FL_QUEUED_SEED": {
-        "message": "Seed sor"
+        "message": "Seedelésre vár"
     },
     "OV_FL_STOPPED": {
-        "message": "Leállítva"
+        "message": "Szüneteltetve"
     },
     "OV_FL_STALLED": {
-        "message": "Elakadt"
+        "message": "nincs adatforgalom"
     },
     "MF_DONT": {
         "message": "Ne töltsd le"
@@ -370,6 +370,127 @@
     },
     "dirListHint": {
         "message": "Jobb klikk a torrent linkre a célhely kiválasztásához"
+    },
+    "loadKnownDirectories": {
+        "message": "Ismert mappák lekérése / frissítése"
+    },
+    "chooseKnownDirectory": {
+        "message": "Válassz Transmission-mappát"
+    },
+    "knownDirectoriesHint": {
+        "message": "A szerver alapértelmezett mappája és a meglévő torrentek célmappái, a Transmission által Dockerben látott útvonalakkal. A még nem használt almappákat nem listázza. Válassz útvonalat, adj hozzá nevet, majd kattints a Hozzáadás gombra."
+    },
+    "torrentFreeSpace": {
+        "message": "Szabad hely ezen a célhelyen"
+    },
+    "torrentFreeSpaceLoading": {
+        "message": "Szabad hely lekérése..."
+    },
+    "torrentFreeSpaceError": {
+        "message": "A szabad hely nem kérdezhető le"
+    },
+    "torrentFreeSpaceHint": {
+        "message": "Legfeljebb 1 perces adat a célmappa fájlrendszeréről. Azonos meghajtón lévő mappák ugyanazon a szabad helyen osztoznak."
+    },
+    "freeSpaceDefault": {
+        "message": "Az alapértelmezett célmappa szabad helye"
+    },
+    "freeSpaceOtherDestinations": {
+        "message": "Másik célmappa szabad helyéhez mutass a torrent nevére."
+    },
+    "invalidFreeSpaceResponse": {
+        "message": "A Transmission érvénytelen szabadhely-adatot küldött."
+    },
+    "freeSpaceConnectionChanged": {
+        "message": "A Transmission-kapcsolat megváltozott. Mutass újra a torrent nevére."
+    },
+    "seedTimeLimit": {
+        "message": "Seedidőkorlát"
+    },
+    "seedTimeLimitHint": {
+        "message": "Opcionális böngészőoldali szabályok, trackerenként külön órakorláttal. Másik tracker mentése nem írja felül a meglévő szabályokat. A Transmission összesített seedidejét számolja, feltöltési forgalom nélkül is, nem a hozzáadás óta eltelt időt. A tracker által jóváírt idő ettől eltérhet. A Chrome-nak futnia kell, a felugró ablak bezárható. Alapból kikapcsolva."
+    },
+    "seedTimeLimitEnabled": {
+        "message": "Seedidőkorlát a kiválasztott trackerre"
+    },
+    "seedTimeLimitTracker": {
+        "message": "Tracker gépneve"
+    },
+    "seedTimeLimitChooseTracker": {
+        "message": "Válassz trackert a meglévő torrentekből"
+    },
+    "seedTimeLimitRefreshTrackers": {
+        "message": "Trackerlista frissítése"
+    },
+    "seedTimeLimitHours": {
+        "message": "Összesített seedidő órában"
+    },
+    "seedTimeLimitIncludeExisting": {
+        "message": "Meglévő torrentekre is (alapból kikapcsolva)"
+    },
+    "seedTimeLimitSafety": {
+        "message": "Csak kész, seedelő vagy seedre várakozó torrenteket állít meg, semmit nem töröl. A torrent összes trackerének a kiválasztott gépnévhez kell tartoznia; a hibás vagy több gépneves trackerlistákat kihagyja. A meglévő torrentek külön engedély nélkül kimaradnak. Legfeljebb percenként, a szokásos frissítések során ellenőriz; alvás vagy háttérütemezés késleltetheti a leállítást. A kézi újraindítás nem ad kivételt. Mentés visszaállítása után újra aktiválni kell."
+    },
+    "seedTimeLimitConfirm": {
+        "message": "Bekapcsolod a(z) $host$ tracker szabályát $hours$ óra összesített seedidővel? A jelenlegi előnézet $count$ torrentet állítana meg. Ez a szám a következő ellenőrzésig változhat. Adatot nem törlünk.",
+        "placeholders": {
+            "host": {
+                "content": "$1"
+            },
+            "hours": {
+                "content": "$2"
+            },
+            "count": {
+                "content": "$3"
+            }
+        }
+    },
+    "seedTimeLimitInvalid": {
+        "message": "Válassz trackert, és adj meg pozitív egész óraszámot."
+    },
+    "seedTimeLimitNoTracker": {
+        "message": "A kiválasztott tracker már nem található. Frissítsd a trackerlistát."
+    },
+    "seedTimeLimitChanged": {
+        "message": "A kapcsolat vagy a seedszabály közben megváltozott. Nyisd újra ezeket a beállításokat."
+    },
+    "seedTimeLimitReactivate": {
+        "message": "Az alábbi trackerek szabályaihoz nincs érvényes aktiválás ezen a szerveren, ezért ezek kimaradnak. Mentsd újra őket a Seedidőkorlát oldalon"
+    },
+    "seedTimeLimitActiveRules": {
+        "message": "Aktív szabályok"
+    },
+    "seedTimeLimitNoRules": {
+        "message": "Nincs aktív seedidőkorlát."
+    },
+    "seedTimeLimitConfigure": {
+        "message": "Szabály hozzáadása vagy módosítása"
+    },
+    "seedTimeLimitHourUnit": {
+        "message": "óra"
+    },
+    "seedTimeLimitExistingIncluded": {
+        "message": "Meglévő torrentekre is"
+    },
+    "seedTimeLimitNewOnly": {
+        "message": "Csak az aktiválás után hozzáadott torrentekre"
+    },
+    "seedTimeLimitEdit": {
+        "message": "Módosítás"
+    },
+    "seedTimeLimitRemove": {
+        "message": "Törlés"
+    },
+    "seedTimeLimitRuleMissing": {
+        "message": "Ez a szabály már nem szerepel a listában. Frissítsd a beállításokat."
+    },
+    "seedTimeLimitRemoveConfirm": {
+        "message": "Törlöd a(z) $host$ tracker seedidőkorlátját? Csak a szabály törlődik, torrentet, adatot vagy trackert nem törlünk, és a már leállított torrenteket sem indítjuk újra.",
+        "placeholders": {
+            "host": {
+                "content": "$1"
+            }
+        }
     },
     "options": {
         "message": "Beállítások"
@@ -884,5 +1005,245 @@
                 "content": "$1"
             }
         }
+    },
+    "language": {
+        "message": "Nyelv"
+    },
+    "folderAlreadyExists": {
+        "message": "Ez a mappa már szerepel a listában."
+    },
+    "restoreSkippedKeys": {
+        "message": "Kihagyott, érvénytelen beállítások"
+    },
+    "OV_COL_DOWNSPD_SHORT": {
+        "message": "Le"
+    },
+    "OV_COL_UPSPD_SHORT": {
+        "message": "Fel"
+    },
+    "OV_COL_SHARED_SHORT": {
+        "message": "Arány"
+    },
+    "OV_CAT_PAUSED": {
+        "message": "Szüneteltetett"
+    },
+    "OV_FL_QUEUED_CHECK": {
+        "message": "Ellenőrzésre vár"
+    },
+    "OV_FL_UNKNOWN": {
+        "message": "Ismeretlen állapot ($code$)",
+        "placeholders": {
+            "code": {
+                "content": "$1"
+            }
+        }
+    },
+    "footerActive": {
+        "message": "$count$ aktív",
+        "placeholders": {
+            "count": {
+                "content": "$1"
+            }
+        }
+    },
+    "footerPaused": {
+        "message": "$count$ szüneteltetve",
+        "placeholders": {
+            "count": {
+                "content": "$1"
+            }
+        }
+    },
+    "footerPausedHint": {
+        "message": "Az első 5 név ábécérendben. Kattints a szüneteltetett torrentek megjelenítéséhez."
+    },
+    "footerPausedEmpty": {
+        "message": "Nincs szüneteltetett torrent."
+    },
+    "footerMore": {
+        "message": "…és még $count$ torrent.",
+        "placeholders": {
+            "count": {
+                "content": "$1"
+            }
+        }
+    },
+    "footerTrackerTitle": {
+        "message": "Az aktív torrentek trackeroldalai"
+    },
+    "footerTrackersNone": {
+        "message": "Nincs trackeroldal az aktív torrentekhez."
+    },
+    "footerTrackersUnknown": {
+        "message": "Tracker nélkül / nem elérhető: $count$ torrent.",
+        "placeholders": {
+            "count": {
+                "content": "$1"
+            }
+        }
+    },
+    "footerTrackerHint": {
+        "message": "Csak gépnevek, passkey nélkül. A többtrackeres torrent több sorban is szerepelhet. Legfeljebb 1 percig gyorsítótárazva."
+    },
+    "footerTrackersLoading": {
+        "message": "Trackeroldalak lekérdezése…"
+    },
+    "footerTrackersError": {
+        "message": "A trackeroldalak nem kérdezhetők le"
+    },
+    "footerSessionDownloaded": {
+        "message": "Letöltött adatmennyiség"
+    },
+    "footerSessionUploaded": {
+        "message": "Feltöltött adatmennyiség"
+    },
+    "footerSessionSince": {
+        "message": "A Transmission jelenlegi futásának kezdete: kb. $date$",
+        "placeholders": {
+            "date": {
+                "content": "$1"
+            }
+        }
+    },
+    "footerSessionDateUnknown": {
+        "message": "A futás kezdete nem érhető el."
+    },
+    "footerSessionNote": {
+        "message": "A Transmission munkamenet-számlálója; újraindításkor nullázódik. RPC-n keresztül külön nem nullázható."
+    },
+    "footerSessionMissing": {
+        "message": "A munkamenet-számláló nem érhető el; nem a torrentek teljes forgalmának összege."
+    },
+    "footerSpeedHint": {
+        "message": "Jobb kattintás: sebességkorlát beállítása."
+    },
+    "footerLimitClickHint": {
+        "message": "Bal kattintás a jelvényen: korlát kikapcsolása."
+    },
+    "statusStalledSeedHint": {
+        "message": "Seedelésre engedélyezett, de az inaktivitási küszöb óta nincs adatforgalom. Ez önmagában nem hiba: lehet, hogy nincs letöltő peer. A seedidő ettől még növekedhet."
+    },
+    "statusStalledDownloadHint": {
+        "message": "Letöltésre engedélyezett, de az inaktivitási küszöb óta nincs adatforgalom. Ez önmagában nem bizonyít hibát; a peerek és a tracker állapota segíthet az ok megkeresésében."
+    },
+    "activeTrackersInvalid": {
+        "message": "Érvénytelen trackerlista-válasz a Transmissiontől."
+    },
+    "connectionChanged": {
+        "message": "A szerverkapcsolat megváltozott. Nyisd meg újra a buborékot."
+    },
+    "torrentErrorPermission": {
+        "message": "Hozzáférés megtagadva"
+    },
+    "torrentErrorMissingFile": {
+        "message": "Nincs ilyen fájl vagy mappa"
+    },
+    "torrentErrorNoSpace": {
+        "message": "Nincs szabad hely a meghajtón"
+    },
+    "torrentErrorReadOnly": {
+        "message": "A fájlrendszer csak olvasható"
+    },
+    "torrentErrorIo": {
+        "message": "Fájlolvasási vagy -írási hiba"
+    },
+    "torrentErrorOpenFiles": {
+        "message": "Túl sok megnyitott fájl"
+    },
+    "torrentErrorFileLarge": {
+        "message": "A fájl túl nagy"
+    },
+    "torrentErrorRefused": {
+        "message": "A kiszolgáló elutasította a kapcsolatot"
+    },
+    "torrentErrorTimeout": {
+        "message": "A kapcsolat időtúllépés miatt megszakadt"
+    },
+    "torrentErrorReset": {
+        "message": "A másik fél megszakította a kapcsolatot"
+    },
+    "torrentErrorTrackerConnect": {
+        "message": "Nem sikerült kapcsolódni a trackerhez"
+    },
+    "torrentErrorTrackerTimeout": {
+        "message": "A tracker nem válaszolt"
+    },
+    "torrentErrorUnregistered": {
+        "message": "A torrent nincs regisztrálva a trackeren"
+    },
+    "torrentErrorTorrentMissing": {
+        "message": "A tracker nem találja a torrentet"
+    },
+    "torrentErrorPasskey": {
+        "message": "Érvénytelen tracker-passkey"
+    },
+    "torrentErrorAuth": {
+        "message": "A tracker elutasította a hitelesítést"
+    },
+    "torrentErrorUnknown": {
+        "message": "Ismeretlen hiba"
+    },
+    "torrentErrorConnection": {
+        "message": "Sikertelen kapcsolódás"
+    },
+    "torrentErrorCorrupt": {
+        "message": "Sérült adatblokk vagy hibás ellenőrzőösszeg"
+    },
+    "torrentErrorMissingData": {
+        "message": "Nem találhatók a torrent korábban meglévő adatfájljai. Ellenőrizd a meghajtót, a Docker-kötet csatolását és a célmappát; szükség esetén állítsd be újra a torrent helyét, majd ellenőriztesd az adatokat."
+    },
+    "torrentErrorCorruptPiece": {
+        "message": "A(z) $1. adatblokk sérült vagy hibás az ellenőrzőösszege."
+    },
+    "torrentErrorMove": {
+        "message": "Nem sikerült áthelyezni: '$1' → '$2': $3 ($4)"
+    },
+    "torrentErrorSave": {
+        "message": "Nem sikerült menteni: '$1': $2 ($3)"
+    },
+    "torrentErrorOpen": {
+        "message": "Nem sikerült megnyitni: '$1': $2 ($3)"
+    },
+    "torrentErrorRead": {
+        "message": "Nem sikerült olvasni: '$1': $2 ($3)"
+    },
+    "torrentErrorWrite": {
+        "message": "Nem sikerült írni: '$1': $2 ($3)"
+    },
+    "torrentErrorHttpUnauthorized": {
+        "message": "Hitelesítés szükséges"
+    },
+    "torrentErrorHttpForbidden": {
+        "message": "Hozzáférés tiltva"
+    },
+    "torrentErrorHttpMissing": {
+        "message": "Nem található"
+    },
+    "torrentErrorHttpRate": {
+        "message": "Túl sok kérés"
+    },
+    "torrentErrorHttpInternal": {
+        "message": "Belső szerverhiba"
+    },
+    "torrentErrorHttpGateway": {
+        "message": "Átjáróhiba"
+    },
+    "torrentErrorHttpUnavailable": {
+        "message": "A szolgáltatás nem érhető el"
+    },
+    "torrentErrorHttpTimeout": {
+        "message": "Az átjáró válaszideje lejárt"
+    },
+    "torrentErrorHttp": {
+        "message": "A tracker HTTP-válasza: $1 ($2)"
+    },
+    "torrentErrorMetainfo": {
+        "message": "Nem sikerült használni a torrentmetaadatokat: '$1', magnet: '$2': $3 ($4)"
+    },
+    "torrentErrorTrackerParse": {
+        "message": "A tracker $1 válasza nem értelmezhető: $2 ($3)"
+    },
+    "torrentErrorLookup": {
+        "message": "Nem sikerült feloldani a címet: '$1': $2 ($3)"
     }
 }

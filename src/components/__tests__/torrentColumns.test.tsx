@@ -84,6 +84,7 @@ function createTorrent(overrides: Partial<Torrent> = {}): Torrent {
     startDateStr: '-',
     editDateStr: '-',
     stateText: 'OV_FL_DOWNLOADING',
+    stateTooltip: 'OV_FL_DOWNLOADING',
     errorMessage: '',
     hasError: snapshot.errorCode > 1,
     selected: false,

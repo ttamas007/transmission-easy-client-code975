@@ -1,3 +1,4 @@
+import { getMessage } from './i18n';
 import copyData from './copyData';
 import ErrorWithCode from './ErrorWithCode';
 import type { ChromeMessage, ChromeResponse } from '../types';
@@ -24,7 +25,7 @@ const callApi = <T = unknown>(message: ChromeMessage): Promise<T> => {
     });
   }).then((response) => {
     if (!response) {
-      throw new Error(chrome.i18n.getMessage('responseEmpty') || 'Response is empty');
+      throw new Error(getMessage('responseEmpty') || 'Response is empty');
     }
     if (response.error) {
       const err = new ErrorWithCode(response.error.message || 'Unknown error', response.error.code);

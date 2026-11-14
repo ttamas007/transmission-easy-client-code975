@@ -561,6 +561,25 @@ ol.help li {
   font-style: italic;
 }
 
+.seed-rule-list {
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  strong {
+    flex: 1;
+    overflow-wrap: anywhere;
+  }
+}
+
 // Directory Manager
 .dir-manager {
   .dir-form {
@@ -579,6 +598,16 @@ ol.help li {
 
     button {
       white-space: nowrap;
+    }
+  }
+
+  .known-directories {
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+
+    select {
+      flex: 1;
+      min-width: 0;
     }
   }
 

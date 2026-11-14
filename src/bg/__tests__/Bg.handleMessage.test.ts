@@ -47,6 +47,12 @@ const CLIENT_METHODS = [
   'updateSettings',
   'sendFiles',
   'getFreeSpace',
+  'getDownloadDirectories',
+  'getActiveTrackerHosts',
+  'getSeedTimeLimitTrackers',
+  'previewSeedTimeLimit',
+  'setSeedTimeLimit',
+  'removeSeedTimeLimit',
   'getFileList',
   'getPeers',
   'setPriority',
@@ -164,6 +170,47 @@ describe('Bg.handleMessage — sender trust boundary', () => {
 });
 
 describe('Bg.handleMessage — id actions', () => {
+  it('loads tracker choices and routes seed preview and activation through the client', async () => {
+    const rule = {
+      enabled: true,
+      tracker: 'tracker.example.org',
+      hours: 48,
+      includeExisting: false,
+    };
+    await dispatch({ action: 'getSeedTimeLimitTrackers' }).responded;
+    expect(client.getSeedTimeLimitTrackers).toHaveBeenCalledWith();
+    await dispatch({ action: 'previewSeedTimeLimit', rule }).responded;
+    expect(client.previewSeedTimeLimit).toHaveBeenCalledWith(rule);
+    await dispatch({ action: 'setSeedTimeLimit', rule }).responded;
+    expect(client.setSeedTimeLimit).toHaveBeenCalledWith(rule);
+    await dispatch({ action: 'removeSeedTimeLimit', tracker: rule.tracker }).responded;
+    expect(client.removeSeedTimeLimit).toHaveBeenCalledWith(rule.tracker);
+  });
+
+  it('returns the known download directories from the client', async () => {
+    const directories = { defaultDirectory: '/downloads', directories: ['/downloads', '/media'] };
+    client.getDownloadDirectories.mockResolvedValue(directories);
+    const { returned, responded } = dispatch({ action: 'getDownloadDirectories' });
+    expect(returned).toBe(true);
+    await expect(responded).resolves.toEqual({ result: directories });
+    expect(client.getDownloadDirectories).toHaveBeenCalledWith();
+  });
+
+  it('forwards the destination and expected connection for a free-space hover request', async () => {
+    await dispatch({
+      action: 'getFreeSpace',
+      path: '/media/series',
+      serverUrl: 'http://nas.local/rpc',
+    }).responded;
+    expect(client.getFreeSpace).toHaveBeenCalledWith('/media/series', 'http://nas.local/rpc');
+  });
+
+  it('forwards the expected server for the running tracker-host summary', async () => {
+    await dispatch({ action: 'getActiveTrackerHosts', serverUrl: 'http://nas.local/rpc' })
+      .responded;
+    expect(client.getActiveTrackerHosts).toHaveBeenCalledWith('http://nas.local/rpc');
+  });
+
   it('forwards ids to the same-named client method and answers {result}', async () => {
     const { returned, responded } = dispatch({ action: 'start', ids: [1, 2] });
 

@@ -371,6 +371,127 @@
     "dirListHint": {
         "message": "לחץ לחיצה ימנית על קישור טורנט כדי לבחור יעד"
     },
+    "loadKnownDirectories": {
+        "message": "Load / refresh known directories"
+    },
+    "chooseKnownDirectory": {
+        "message": "Choose a Transmission directory"
+    },
+    "knownDirectoriesHint": {
+        "message": "Lists the server's default directory and existing torrents' destinations, using paths seen by Transmission inside Docker. Unused subdirectories are not listed. Choose a path, optionally name it, then click Add."
+    },
+    "torrentFreeSpace": {
+        "message": "Free space at this destination"
+    },
+    "torrentFreeSpaceLoading": {
+        "message": "Fetching free space..."
+    },
+    "torrentFreeSpaceError": {
+        "message": "Could not fetch free space"
+    },
+    "torrentFreeSpaceHint": {
+        "message": "Up to 1 minute old, for the destination's filesystem. Directories on the same drive share its free space."
+    },
+    "freeSpaceDefault": {
+        "message": "Free space in the default destination"
+    },
+    "freeSpaceOtherDestinations": {
+        "message": "Hover over a torrent name for another destination's free space."
+    },
+    "invalidFreeSpaceResponse": {
+        "message": "Transmission returned invalid free-space data."
+    },
+    "freeSpaceConnectionChanged": {
+        "message": "The Transmission connection changed. Hover over the torrent name again."
+    },
+    "seedTimeLimit": {
+        "message": "Seed time limit"
+    },
+    "seedTimeLimitHint": {
+        "message": "Optional browser-side rules with a separate hour limit per tracker hostname. Saving another tracker does not replace existing rules. Counts Transmission's cumulative seeding time, including seeding without upload traffic, not time since adding the torrent. The tracker's credited time may differ. Chrome must be running; the popup may be closed. Disabled by default."
+    },
+    "seedTimeLimitEnabled": {
+        "message": "Enable seed time limit for the selected tracker"
+    },
+    "seedTimeLimitTracker": {
+        "message": "Tracker hostname"
+    },
+    "seedTimeLimitChooseTracker": {
+        "message": "Choose a tracker from existing torrents"
+    },
+    "seedTimeLimitRefreshTrackers": {
+        "message": "Refresh tracker list"
+    },
+    "seedTimeLimitHours": {
+        "message": "Cumulative seeding hours"
+    },
+    "seedTimeLimitIncludeExisting": {
+        "message": "Also apply to existing torrents (off by default)"
+    },
+    "seedTimeLimitSafety": {
+        "message": "Only completed seeding or seed-queued torrents are stopped; nothing is deleted. Every tracker on a torrent must have the selected hostname. Malformed or mixed-host tracker lists are skipped. Existing torrents are excluded unless explicitly included. Checks run at most once per minute, on normal polling; sleep and background scheduling may delay stopping. Manually restarting a limited torrent does not exempt it. Restored backups require reactivation."
+    },
+    "seedTimeLimitConfirm": {
+        "message": "Enable the rule for $host$ after $hours$ cumulative seeding hours? The current preview would stop $count$ torrent(s). This count can change before the next check. No data will be deleted.",
+        "placeholders": {
+            "host": {
+                "content": "$1"
+            },
+            "hours": {
+                "content": "$2"
+            },
+            "count": {
+                "content": "$3"
+            }
+        }
+    },
+    "seedTimeLimitInvalid": {
+        "message": "Choose a tracker and enter a positive whole number of hours."
+    },
+    "seedTimeLimitNoTracker": {
+        "message": "The selected tracker is no longer present. Refresh the tracker list."
+    },
+    "seedTimeLimitChanged": {
+        "message": "The connection or seed rule changed during this operation. Reload these settings."
+    },
+    "seedTimeLimitReactivate": {
+        "message": "The following trackers have no matching activation for this server and are skipped. Save their rules again in Seed time limit"
+    },
+    "seedTimeLimitActiveRules": {
+        "message": "Active rules"
+    },
+    "seedTimeLimitNoRules": {
+        "message": "No active seed time limits."
+    },
+    "seedTimeLimitConfigure": {
+        "message": "Add or edit a rule"
+    },
+    "seedTimeLimitHourUnit": {
+        "message": "hours"
+    },
+    "seedTimeLimitExistingIncluded": {
+        "message": "Includes existing torrents"
+    },
+    "seedTimeLimitNewOnly": {
+        "message": "Only torrents added after activation"
+    },
+    "seedTimeLimitEdit": {
+        "message": "Edit"
+    },
+    "seedTimeLimitRemove": {
+        "message": "Delete"
+    },
+    "seedTimeLimitRuleMissing": {
+        "message": "This rule is no longer in the list. Reload these settings."
+    },
+    "seedTimeLimitRemoveConfirm": {
+        "message": "Delete the seed time limit for $host$? Only the rule is removed, never torrents, data, or trackers. Previously stopped torrents are not restarted.",
+        "placeholders": {
+            "host": {
+                "content": "$1"
+            }
+        }
+    },
     "options": {
         "message": "אפשרויות"
     },
@@ -884,5 +1005,245 @@
                 "content": "$1"
             }
         }
+    },
+    "language": {
+        "message": "Language"
+    },
+    "folderAlreadyExists": {
+        "message": "This folder is already listed."
+    },
+    "restoreSkippedKeys": {
+        "message": "Skipped invalid settings"
+    },
+    "OV_COL_DOWNSPD_SHORT": {
+        "message": "Down"
+    },
+    "OV_COL_UPSPD_SHORT": {
+        "message": "Up"
+    },
+    "OV_COL_SHARED_SHORT": {
+        "message": "Ratio"
+    },
+    "OV_CAT_PAUSED": {
+        "message": "Paused"
+    },
+    "OV_FL_QUEUED_CHECK": {
+        "message": "Queued for verification"
+    },
+    "OV_FL_UNKNOWN": {
+        "message": "Unknown state ($code$)",
+        "placeholders": {
+            "code": {
+                "content": "$1"
+            }
+        }
+    },
+    "footerActive": {
+        "message": "$count$ active",
+        "placeholders": {
+            "count": {
+                "content": "$1"
+            }
+        }
+    },
+    "footerPaused": {
+        "message": "$count$ paused",
+        "placeholders": {
+            "count": {
+                "content": "$1"
+            }
+        }
+    },
+    "footerPausedHint": {
+        "message": "First 5 names alphabetically. Click to show paused torrents."
+    },
+    "footerPausedEmpty": {
+        "message": "No paused torrents."
+    },
+    "footerMore": {
+        "message": "…and $count$ more torrents.",
+        "placeholders": {
+            "count": {
+                "content": "$1"
+            }
+        }
+    },
+    "footerTrackerTitle": {
+        "message": "Tracker hosts of running torrents"
+    },
+    "footerTrackersNone": {
+        "message": "No tracker hosts for running torrents."
+    },
+    "footerTrackersUnknown": {
+        "message": "No tracker / unavailable: $count$ torrents.",
+        "placeholders": {
+            "count": {
+                "content": "$1"
+            }
+        }
+    },
+    "footerTrackerHint": {
+        "message": "Hostnames only, no passkeys. A multi-tracker torrent can appear under multiple hosts. Cached for up to one minute."
+    },
+    "footerTrackersLoading": {
+        "message": "Loading tracker hosts…"
+    },
+    "footerTrackersError": {
+        "message": "Could not load tracker hosts"
+    },
+    "footerSessionDownloaded": {
+        "message": "Downloaded data"
+    },
+    "footerSessionUploaded": {
+        "message": "Uploaded data"
+    },
+    "footerSessionSince": {
+        "message": "Current Transmission session started approximately: $date$",
+        "placeholders": {
+            "date": {
+                "content": "$1"
+            }
+        }
+    },
+    "footerSessionDateUnknown": {
+        "message": "The session start time is unavailable."
+    },
+    "footerSessionNote": {
+        "message": "Transmission session counter; resets on daemon restart. Cannot be reset separately through RPC."
+    },
+    "footerSessionMissing": {
+        "message": "Session counter unavailable; not a sum of torrent lifetime traffic."
+    },
+    "footerSpeedHint": {
+        "message": "Right-click to change the speed limit."
+    },
+    "footerLimitClickHint": {
+        "message": "Left-click the badge to disable the limit."
+    },
+    "statusStalledSeedHint": {
+        "message": "Seeding is enabled, but there has been no transfer for the inactivity threshold. This is not necessarily an error: there may be no downloading peers. Seeding time can still increase."
+    },
+    "statusStalledDownloadHint": {
+        "message": "Downloading is enabled, but there has been no transfer for the inactivity threshold. This alone does not establish an error; check peers and tracker status for the cause."
+    },
+    "activeTrackersInvalid": {
+        "message": "Invalid tracker list response from Transmission."
+    },
+    "connectionChanged": {
+        "message": "The server connection changed. Reopen the tooltip."
+    },
+    "torrentErrorPermission": {
+        "message": "Permission denied"
+    },
+    "torrentErrorMissingFile": {
+        "message": "No such file or directory"
+    },
+    "torrentErrorNoSpace": {
+        "message": "No space left on device"
+    },
+    "torrentErrorReadOnly": {
+        "message": "Read-only file system"
+    },
+    "torrentErrorIo": {
+        "message": "Input/output error"
+    },
+    "torrentErrorOpenFiles": {
+        "message": "Too many open files"
+    },
+    "torrentErrorFileLarge": {
+        "message": "File too large"
+    },
+    "torrentErrorRefused": {
+        "message": "Connection refused"
+    },
+    "torrentErrorTimeout": {
+        "message": "Connection timed out"
+    },
+    "torrentErrorReset": {
+        "message": "Connection reset by peer"
+    },
+    "torrentErrorTrackerConnect": {
+        "message": "Could not connect to tracker"
+    },
+    "torrentErrorTrackerTimeout": {
+        "message": "Tracker did not respond"
+    },
+    "torrentErrorUnregistered": {
+        "message": "Torrent is not registered with the tracker"
+    },
+    "torrentErrorTorrentMissing": {
+        "message": "The tracker could not find the torrent"
+    },
+    "torrentErrorPasskey": {
+        "message": "Invalid tracker passkey"
+    },
+    "torrentErrorAuth": {
+        "message": "Tracker authentication rejected"
+    },
+    "torrentErrorUnknown": {
+        "message": "Unknown error"
+    },
+    "torrentErrorConnection": {
+        "message": "Connection failed"
+    },
+    "torrentErrorCorrupt": {
+        "message": "Corrupt data or failed piece checksum"
+    },
+    "torrentErrorMissingData": {
+        "message": "No data found for previously downloaded files. Check the drive, Docker volume mount and destination; if necessary, set the torrent location again and verify the data."
+    },
+    "torrentErrorCorruptPiece": {
+        "message": "Corrupt piece or failed checksum: $1."
+    },
+    "torrentErrorMove": {
+        "message": "Couldn't move '$1' to '$2': $3 ($4)"
+    },
+    "torrentErrorSave": {
+        "message": "Couldn't save '$1': $2 ($3)"
+    },
+    "torrentErrorOpen": {
+        "message": "Couldn't open '$1': $2 ($3)"
+    },
+    "torrentErrorRead": {
+        "message": "Couldn't read '$1': $2 ($3)"
+    },
+    "torrentErrorWrite": {
+        "message": "Couldn't write '$1': $2 ($3)"
+    },
+    "torrentErrorHttpUnauthorized": {
+        "message": "Unauthorized"
+    },
+    "torrentErrorHttpForbidden": {
+        "message": "Forbidden"
+    },
+    "torrentErrorHttpMissing": {
+        "message": "Not Found"
+    },
+    "torrentErrorHttpRate": {
+        "message": "Too Many Requests"
+    },
+    "torrentErrorHttpInternal": {
+        "message": "Internal Server Error"
+    },
+    "torrentErrorHttpGateway": {
+        "message": "Bad Gateway"
+    },
+    "torrentErrorHttpUnavailable": {
+        "message": "Service Unavailable"
+    },
+    "torrentErrorHttpTimeout": {
+        "message": "Gateway Timeout"
+    },
+    "torrentErrorHttp": {
+        "message": "Tracker HTTP response $1 ($2)"
+    },
+    "torrentErrorMetainfo": {
+        "message": "Couldn't use metainfo from '$1' for '$2': $3 ($4)"
+    },
+    "torrentErrorTrackerParse": {
+        "message": "Couldn't parse $1 response: $2 ($3)"
+    },
+    "torrentErrorLookup": {
+        "message": "Couldn't look up '$1': $2 ($3)"
     }
 }

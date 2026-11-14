@@ -1,3 +1,4 @@
+import { getMessage } from '../tools/i18n';
 import { observer } from 'mobx-react';
 import React, { useEffect, useCallback, MouseEvent } from 'react';
 import Interval from './Interval';
@@ -32,17 +33,18 @@ const SpaceWatcher = observer(() => {
   let body: React.ReactNode = null;
 
   if (spaceWatcherStore.state === 'pending') {
-    title = 'Loading...';
+    title = getMessage('torrentFreeSpaceLoading');
     body = '...';
   } else if (spaceWatcherStore.state === 'error') {
     title = spaceWatcherStore.errorMessage;
     body = '-';
   } else if (spaceWatcherStore.state === 'done') {
-    const status = [`${chrome.i18n.getMessage('freeSpace')}:`];
+    const status = [`${getMessage('freeSpaceDefault')}:`];
     body = spaceWatcherStore.downloadDirs.map((directory) => {
       status.push(`${directory.availableStr} (${directory.path})`);
       return <span key={directory.path}>{directory.availableStr} </span>;
     });
+    status.push(getMessage('freeSpaceOtherDestinations'));
     title = status.join('\n');
   }
 

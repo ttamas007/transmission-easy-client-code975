@@ -1,3 +1,4 @@
+import { getMessage } from '../tools/i18n';
 import React, {
   useState,
   useRef,
@@ -8,6 +9,7 @@ import React, {
 } from 'react';
 import { observer } from 'mobx-react';
 import useRootStore from '../hooks/useRootStore';
+import ToolbarIcon from './ToolbarIcon';
 
 const SearchBox = observer(() => {
   const rootStore = useRootStore();
@@ -71,24 +73,28 @@ const SearchBox = observer(() => {
           value={query}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
-          placeholder={chrome.i18n.getMessage('search')}
-          aria-label={chrome.i18n.getMessage('search')}
+          placeholder={getMessage('search')}
+          aria-label={getMessage('search')}
         />
       )}
       <a
         onClick={handleToggle}
-        title={chrome.i18n.getMessage('search')}
-        aria-label={chrome.i18n.getMessage('search')}
+        title={getMessage('search')}
+        aria-label={getMessage('search')}
         className="btn search-icon"
         href="#search"
-      />
+      >
+        <ToolbarIcon name="search" />
+      </a>
       {expanded && query && (
         <a
           onClick={handleClear}
           className="btn clear-icon"
-          aria-label={chrome.i18n.getMessage('clearSearch')}
+          aria-label={getMessage('clearSearch')}
           href="#clear"
-        />
+        >
+          <ToolbarIcon name="clear" />
+        </a>
       )}
     </li>
   );

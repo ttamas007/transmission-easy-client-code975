@@ -1,3 +1,4 @@
+import { getMessage } from '../../tools/i18n';
 import React, { useState, useCallback, useRef } from 'react';
 import { observer } from 'mobx-react';
 import { RgbColorPicker, RgbColor } from 'react-colorful';
@@ -66,9 +67,9 @@ const NotifyOptions = observer(() => {
 
   return (
     <div className="page notify">
-      <h2>{chrome.i18n.getMessage('optNotify')}</h2>
+      <h2>{getMessage('optNotify')}</h2>
       <label>
-        <span>{chrome.i18n.getMessage('showNotificationOnDownloadComplete')}</span>
+        <span>{getMessage('showNotificationOnDownloadComplete')}</span>
         <span className="toggle-switch">
           <input
             defaultChecked={configStore.showDownloadCompleteNotifications}
@@ -80,7 +81,7 @@ const NotifyOptions = observer(() => {
         </span>
       </label>
       <label>
-        <span>{chrome.i18n.getMessage('displayActiveTorrentCountIcon')}</span>
+        <span>{getMessage('displayActiveTorrentCountIcon')}</span>
         <span className="toggle-switch">
           <input
             defaultChecked={configStore.showActiveCountBadge}
@@ -92,7 +93,7 @@ const NotifyOptions = observer(() => {
         </span>
       </label>
       <label>
-        <span>{chrome.i18n.getMessage('badgeColor')}</span>
+        <span>{getMessage('badgeColor')}</span>
         <Popover
           isOpen={colorPickerOpened}
           onClickOutside={handleCloseColorPicker}
@@ -107,7 +108,7 @@ const NotifyOptions = observer(() => {
         </Popover>
       </label>
       <label>
-        <span>{chrome.i18n.getMessage('backgroundUpdateInterval')}</span>
+        <span>{getMessage('backgroundUpdateInterval')}</span>
         {/* MV3 alarms floor at one minute: offering 1000ms promised a
             granularity the platform cannot deliver — every value from 1000 to
             59999 silently behaved as 60000 */}
@@ -120,7 +121,7 @@ const NotifyOptions = observer(() => {
           min="60000"
           step="60000"
         />{' '}
-        <span>{chrome.i18n.getMessage('ms')}</span>
+        <span>{getMessage('ms')}</span>
       </label>
     </div>
   );

@@ -1,3 +1,4 @@
+import { getMessage } from '../tools/i18n';
 import React, { useCallback } from 'react';
 import { observer } from 'mobx-react';
 import Select, { Option } from 'rc-select';
@@ -40,9 +41,9 @@ const LabelSelect = observer(() => {
     let text: string | null = null;
     if (isCustom) {
       if (label === 'SEEDING') {
-        text = chrome.i18n.getMessage('OV_FL_' + label);
+        text = getMessage('OV_FL_' + label);
       } else {
-        text = chrome.i18n.getMessage('OV_CAT_' + label);
+        text = getMessage(label === 'NO_LABEL' ? 'OV_CAT_NOLABEL' : 'OV_CAT_' + label);
       }
     } else {
       text = label;
@@ -79,7 +80,7 @@ const LabelSelect = observer(() => {
         optionLabelProp="children"
         virtual={false}
         listHeight={500}
-        aria-label={chrome.i18n.getMessage('OV_CAT_ALL')}
+        aria-label={getMessage('OV_CAT_ALL')}
       >
         {options}
       </Select>

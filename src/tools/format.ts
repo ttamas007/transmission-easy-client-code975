@@ -1,13 +1,13 @@
+import { getMessage } from './i18n';
 import { filesize } from 'filesize';
 
-const sizeList: string[] = JSON.parse(chrome.i18n.getMessage('sizeList'));
-const sizePsList: string[] = JSON.parse(chrome.i18n.getMessage('sizePsList'));
-
 export const formatBytes = (bytes: number): string => {
+  const sizeList: string[] = JSON.parse(getMessage('sizeList'));
   return filesize(bytes, { fullform: true, fullforms: sizeList }) as string;
 };
 
 export const formatSpeed = (bytes: number): string => {
+  const sizePsList: string[] = JSON.parse(getMessage('sizePsList'));
   return filesize(bytes, { fullform: true, fullforms: sizePsList }) as string;
 };
 

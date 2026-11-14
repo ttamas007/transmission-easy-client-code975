@@ -9,6 +9,9 @@ import {
 import { storageSet } from '../tools/chromeStorage';
 import getLogger from '../tools/getLogger';
 import { BG_UPDATE_INTERVAL, UI_UPDATE_INTERVAL } from '../constants';
+import type { SeedTimeLimitRule } from '../types/seedTimeLimit';
+import { autorun } from 'mobx';
+import { setLanguage, type Language } from '../tools/i18n';
 
 const logger = getLogger('ConfigStore');
 
@@ -147,14 +150,15 @@ const SelectedLabelStore = types
 const ConfigStore = types
   .model('ConfigStore', {
     hostname: types.optional(types.string, ''),
-    ssl: types.optional(types.boolean, true),
+    ssl: types.optional(types.boolean, false),
     port: types.optional(types.number, 9091),
     pathname: types.optional(types.string, '/transmission/rpc'),
     webPathname: types.optional(types.string, ''),
 
-    authenticationRequired: types.optional(types.boolean, true),
+    authenticationRequired: types.optional(types.boolean, false),
     login: types.optional(types.string, ''),
     password: types.optional(types.string, ''),
+    seedTimeLimits: types.optional(types.frozen<SeedTimeLimitRule[]>(), []),
 
     showActiveCountBadge: types.optional(types.boolean, true),
     showDownloadCompleteNotifications: types.optional(types.boolean, true),
@@ -175,6 +179,7 @@ const ConfigStore = types
 
     searchQuery: types.optional(types.string, ''),
     theme: types.optional(types.enumeration(['light', 'dark', 'system']), 'system'),
+    language: types.optional(types.enumeration<Language>(['hu', 'en']), 'hu'),
 
     folders: types.array(FolderStore),
 
@@ -399,6 +404,7 @@ const ConfigStore = types
   })
   .actions((self) => {
     // Keeps both extension contexts (service worker and pages) in sync
+    let disposeLanguage: (() => void) | undefined;
     const storageChangeListener = (
       changes: Record<string, chrome.storage.StorageChange>,
       namespace: string
@@ -416,9 +422,11 @@ const ConfigStore = types
 
     return {
       afterCreate() {
+        disposeLanguage = autorun(() => setLanguage(self.language));
         chrome.storage.onChanged.addListener(storageChangeListener);
       },
       beforeDestroy() {
+        disposeLanguage?.();
         chrome.storage.onChanged.removeListener(storageChangeListener);
       },
     };

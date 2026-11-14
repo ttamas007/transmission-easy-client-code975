@@ -1,3 +1,4 @@
+import { getMessage } from '../../tools/i18n';
 import React, { ReactNode } from 'react';
 import * as ContextMenu from '@radix-ui/react-context-menu';
 import { observer } from 'mobx-react';
@@ -112,7 +113,7 @@ const FileMenuContent = observer(() => {
       />
 
       <ContextMenu.Item className="context-menu-item" onSelect={handleRename}>
-        {chrome.i18n.getMessage('rename')}
+        {getMessage('rename')}
       </ContextMenu.Item>
     </ContextMenu.Content>
   );
@@ -128,16 +129,16 @@ const PriorityItem = ({ level, selected, onSelect }: PriorityItemProps) => {
   let name: string;
   switch (level) {
     case 3:
-      name = chrome.i18n.getMessage('MF_HIGH');
+      name = getMessage('MF_HIGH');
       break;
     case 2:
-      name = chrome.i18n.getMessage('MF_NORMAL');
+      name = getMessage('MF_NORMAL');
       break;
     case 1:
-      name = chrome.i18n.getMessage('MF_LOW');
+      name = getMessage('MF_LOW');
       break;
     case 0:
-      name = chrome.i18n.getMessage('MF_DONT');
+      name = getMessage('MF_DONT');
       break;
     default:
       name = '';

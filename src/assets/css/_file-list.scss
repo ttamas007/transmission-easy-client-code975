@@ -12,7 +12,7 @@ div.file-list-layer-temp {
   left: 0;
   height: 100%;
   width: 100%;
-  background-color: rgba(#000, 0.3);
+  background-color: rgba(#000, 0.45);
 }
 
 .file-list-warpper {
@@ -29,8 +29,10 @@ div.fl-layer {
   position: relative;
   overflow: auto;
   flex-grow: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
+  background-color: var(--card-bg);
 
   @each $col in $file-columns {
     th.#{$col},
@@ -44,6 +46,8 @@ div.fl-layer {
 div.file-list {
   z-index: 4;
   @include card;
+  color: var(--text-color);
+  border: 1px solid var(--panel-border);
   border-radius: $radius;
   display: flex;
   flex-direction: column;
@@ -98,14 +102,17 @@ div.file-list div.bottom-menu {
   flex-shrink: 0;
   align-items: center;
   padding: 8px 12px;
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid var(--panel-border);
+  background-color: var(--panel-bg);
   gap: 8px;
 
   input {
     font-size: $font-size-base;
     border: none;
-    color: var(--text-secondary);
+    color: var(--text-color);
     flex-grow: 99;
+    min-width: 0;
+    text-overflow: ellipsis;
     background: transparent;
   }
 

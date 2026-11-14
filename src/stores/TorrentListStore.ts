@@ -8,7 +8,7 @@ import {
 import type { ITorrentStore } from './TorrentStore';
 import searchNormalize from '../tools/searchNormalize';
 
-const customLabels = ['ALL', 'DL', 'SEEDING', 'COMPL', 'ACTIVE', 'INACTIVE'] as const;
+const customLabels = ['ALL', 'DL', 'SEEDING', 'COMPL', 'ACTIVE', 'INACTIVE', 'PAUSED'] as const;
 
 const NO_LABEL = 'NO_LABEL';
 
@@ -112,6 +112,10 @@ const TorrentListStore = types
                 }
                 break;
               }
+              case 'PAUSED': {
+                if (torrent.isStopped) result.push(torrent);
+                break;
+              }
               case NO_LABEL: {
                 if (!torrent.labels || torrent.labels.length === 0) {
                   result.push(torrent);
@@ -130,7 +134,10 @@ const TorrentListStore = types
         const { hideSeedingTorrents, hideFinishedTorrents, searchQuery } = rootStore.config;
         let filtered = result;
 
-        if (hideSeedingTorrents || hideFinishedTorrents) {
+        if (
+          !(filter.custom && filter.label === 'PAUSED') &&
+          (hideSeedingTorrents || hideFinishedTorrents)
+        ) {
           filtered = filtered.filter((torrent) => {
             if (hideSeedingTorrents && torrent.isSeeding) {
               return false;

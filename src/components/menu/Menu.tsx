@@ -1,3 +1,4 @@
+import { getMessage } from '../../tools/i18n';
 import React, { useCallback, useState, useRef, useEffect, DragEvent, ChangeEvent } from 'react';
 import { observer } from 'mobx-react';
 import ComponentLoader from '../ComponentLoader';
@@ -6,6 +7,7 @@ import VisiblePage from '../VisiblePage';
 import useRootStore from '../../hooks/useRootStore';
 import SearchBox from '../SearchBox';
 import LabelSelect from '../LabelSelect';
+import ToolbarIcon from '../ToolbarIcon';
 
 const Menu = observer(() => {
   const rootStore = useRootStore();
@@ -85,10 +87,10 @@ const Menu = observer(() => {
     try {
       await Promise.all([
         client?.updateTorrentList(true).catch((err) => {
-          showError(chrome.i18n.getMessage('OV_FL_ERROR') || 'Failed to refresh', err);
+          showError(getMessage('OV_FL_ERROR') || 'Failed to refresh', err);
         }),
         client?.updateSettings().catch((err) => {
-          showError(chrome.i18n.getMessage('OV_FL_ERROR') || 'Failed to update settings', err);
+          showError(getMessage('OV_FL_ERROR') || 'Failed to update settings', err);
         }),
       ]);
     } finally {
@@ -188,32 +190,38 @@ const Menu = observer(() => {
         <li>
           <button
             onClick={handleRefresh}
-            title={chrome.i18n.getMessage('refresh')}
+            title={getMessage('refresh')}
             className="btn refresh"
-            aria-label={chrome.i18n.getMessage('refresh')}
+            aria-label={getMessage('refresh')}
             type="button"
             disabled={isRefreshing}
-          />
+          >
+            <ToolbarIcon name="refresh" />
+          </button>
         </li>
         <li>
           <a
             href={config.webUiUrl}
             target="_blank"
             rel="noopener noreferrer"
-            title={chrome.i18n.getMessage('ST_CAPT_WEBUI')}
-            aria-label={chrome.i18n.getMessage('ST_CAPT_WEBUI')}
+            title={getMessage('ST_CAPT_WEBUI')}
+            aria-label={getMessage('ST_CAPT_WEBUI')}
             className="btn wui"
-          />
+          >
+            <ToolbarIcon name="web" />
+          </a>
         </li>
         <li className="separate" />
         <li>
           <button
             onClick={handleAddFile}
-            title={chrome.i18n.getMessage('Open_file')}
+            title={getMessage('Open_file')}
             className="btn add_file"
-            aria-label={chrome.i18n.getMessage('Open_file')}
+            aria-label={getMessage('Open_file')}
             type="button"
-          />
+          >
+            <ToolbarIcon name="file" />
+          </button>
           {/* The .torrent fallback in accept matters: without a desktop
               torrent client, Windows has no MIME registration for .torrent
               and a MIME-only filter hid every torrent file in the picker */}
@@ -229,40 +237,49 @@ const Menu = observer(() => {
         <li>
           <button
             onClick={handleAddUrl}
-            title={chrome.i18n.getMessage('MM_FILE_ADD_URL')}
-            aria-label={chrome.i18n.getMessage('MM_FILE_ADD_URL')}
+            title={getMessage('MM_FILE_ADD_URL')}
+            aria-label={getMessage('MM_FILE_ADD_URL')}
             className="btn add_magnet"
             type="button"
-          />
+          >
+            <ToolbarIcon name="magnet" />
+          </button>
         </li>
         <li className="separate" />
         <li>
           <button
             onClick={handleToggleAltSpeed}
-            title={chrome.i18n.getMessage('altSpeedEnable')}
-            aria-label={chrome.i18n.getMessage('altSpeedEnable')}
+            title={getMessage('altSpeedEnable')}
+            aria-label={getMessage('altSpeedEnable')}
             className={altSpeedClassList.join(' ')}
+            aria-pressed={client?.settings?.altSpeedEnabled ?? false}
             type="button"
-          />
+          >
+            <ToolbarIcon name="speed" />
+          </button>
         </li>
         <li className="separate" />
         <li>
           <button
             onClick={handleStartAll}
-            title={chrome.i18n.getMessage('STM_TORRENTS_RESUMEALL')}
-            aria-label={chrome.i18n.getMessage('STM_TORRENTS_RESUMEALL')}
+            title={getMessage('STM_TORRENTS_RESUMEALL')}
+            aria-label={getMessage('STM_TORRENTS_RESUMEALL')}
             className="btn start_all"
             type="button"
-          />
+          >
+            <ToolbarIcon name="start" />
+          </button>
         </li>
         <li>
           <button
             onClick={handleStopAll}
-            title={chrome.i18n.getMessage('STM_TORRENTS_PAUSEALL')}
-            aria-label={chrome.i18n.getMessage('STM_TORRENTS_PAUSEALL')}
+            title={getMessage('STM_TORRENTS_PAUSEALL')}
+            aria-label={getMessage('STM_TORRENTS_PAUSEALL')}
             className="btn pause_all"
             type="button"
-          />
+          >
+            <ToolbarIcon name="pause" />
+          </button>
         </li>
         <li className="graph">{graph}</li>
         <SearchBox />

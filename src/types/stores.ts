@@ -69,6 +69,7 @@ export interface TorrentViews {
   readonly startDateStr: string;
   readonly editDateStr: string;
   readonly stateText: string;
+  readonly stateTooltip: string;
   readonly errorMessage: string;
   /** True only for real errors (codes 2/3), not a tracker warning (1) */
   readonly hasError: boolean;

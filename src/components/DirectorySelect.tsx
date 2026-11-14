@@ -1,3 +1,4 @@
+import { getMessage } from '../tools/i18n';
 import React, { ChangeEvent } from 'react';
 import { CUSTOM_PATH_INDEX, DEFAULT_PATH_INDEX } from '../constants';
 import type { Folder } from '../types/bg';
@@ -25,15 +26,13 @@ const DirectorySelect = ({
 
   return (
     <div className="nf-subItem">
-      <label>{label || chrome.i18n.getMessage('path')}</label>
+      <label>{label || getMessage('path')}</label>
       <select name={name} defaultValue={defaultValue} onChange={onChange}>
         {/* This option was rendered with no text at all, and it is the
             pre-selected one in the Move dialog: the user saw a blank line
             with nothing saying it means "type a path below". */}
-        {showCustomOption && (
-          <option value={CUSTOM_PATH_INDEX}>{chrome.i18n.getMessage('DT_CUSTOM')}</option>
-        )}
-        <option value={DEFAULT_PATH_INDEX}>{chrome.i18n.getMessage('defaultPath')}</option>
+        {showCustomOption && <option value={CUSTOM_PATH_INDEX}>{getMessage('DT_CUSTOM')}</option>}
+        <option value={DEFAULT_PATH_INDEX}>{getMessage('defaultPath')}</option>
         {folders.map((folder, index) => (
           <option key={`option-${index}`} value={index}>
             {folder.name || folder.path}

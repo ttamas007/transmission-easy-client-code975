@@ -94,6 +94,7 @@ describe('TorrentListStore', () => {
         'COMPL',
         'ACTIVE',
         'INACTIVE',
+        'PAUSED',
       ]);
       expect(filters.every((f) => f.custom)).toBe(true);
     });

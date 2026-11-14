@@ -1,3 +1,4 @@
+import { getMessage } from '../tools/i18n';
 import getLogger from '../tools/getLogger';
 import Daemon, { ALARM_NAME } from './Daemon';
 import ContextMenu from './ContextMenu';
@@ -155,6 +156,7 @@ class Bg {
           config.folders.length,
           config.treeViewContextMenu,
           config.putDefaultPathInContextMenu,
+          config.language,
         ];
 
         if (dep.length) {
@@ -298,9 +300,39 @@ class Bg {
         });
         break;
       }
+      case 'getDownloadDirectories': {
+        promise = this.whenReady().then(() => this.requireClient().getDownloadDirectories());
+        break;
+      }
+      case 'getSeedTimeLimitTrackers': {
+        promise = this.whenReady().then(() => this.requireClient().getSeedTimeLimitTrackers());
+        break;
+      }
+      case 'getActiveTrackerHosts': {
+        promise = this.whenReady().then(() =>
+          this.requireClient().getActiveTrackerHosts(message.serverUrl)
+        );
+        break;
+      }
+      case 'previewSeedTimeLimit': {
+        promise = this.whenReady().then(() =>
+          this.requireClient().previewSeedTimeLimit(message.rule)
+        );
+        break;
+      }
+      case 'setSeedTimeLimit': {
+        promise = this.whenReady().then(() => this.requireClient().setSeedTimeLimit(message.rule));
+        break;
+      }
+      case 'removeSeedTimeLimit': {
+        promise = this.whenReady().then(() =>
+          this.requireClient().removeSeedTimeLimit(message.tracker)
+        );
+        break;
+      }
       case 'getFreeSpace': {
         promise = this.whenReady().then(() => {
-          return this.requireClient().getFreeSpace(message.path);
+          return this.requireClient().getFreeSpace(message.path, message.serverUrl);
         });
         break;
       }
@@ -456,25 +488,25 @@ class Bg {
 
   torrentAddedNotify(torrent: TorrentInfo): void {
     const icon = notificationIcons.add;
-    const statusText = chrome.i18n.getMessage('torrentAdded');
+    const statusText = getMessage('torrentAdded');
     showNotification('added-' + torrent.id, icon, torrent.name, statusText);
   }
 
   torrentIsExistsNotify(torrent: TorrentInfo): void {
     const icon = notificationIcons.error;
-    const title = chrome.i18n.getMessage('torrentFileIsExists');
+    const title = getMessage('torrentFileIsExists');
     showNotification('exists-' + torrent.id, icon, torrent.name, title);
   }
 
   torrentExistsNotify(): void {
     const icon = notificationIcons.error;
-    const title = chrome.i18n.getMessage('torrentFileExists');
+    const title = getMessage('torrentFileExists');
     showNotification('exists-' + Date.now(), icon, title);
   }
 
   torrentCompleteNotify(torrent: TorrentInfo): void {
     const icon = notificationIcons.complete;
-    const statusText = chrome.i18n.getMessage('OV_COL_STATUS') + ': ' + torrent.stateText;
+    const statusText = getMessage('OV_COL_STATUS') + ': ' + torrent.stateText;
     // OS notifications render the raw title: a bidi override in the torrent
     // name spoofs the displayed extension right on the user's desktop
     showNotification('complete-' + torrent.id, icon, stripBidiControls(torrent.name), statusText);
@@ -482,7 +514,7 @@ class Bg {
 
   torrentErrorNotify(message: string): void {
     const icon = notificationIcons.error;
-    const title = chrome.i18n.getMessage('OV_FL_ERROR');
+    const title = getMessage('OV_FL_ERROR');
     showNotification('error-' + Date.now(), icon, title, message);
   }
 }

@@ -36,6 +36,29 @@ function createTorrent(overrides: Partial<Record<string, unknown>> = {}) {
 }
 
 describe('TorrentStore computed views', () => {
+  it('does not mistake queued magnets for active metadata downloading', () => {
+    expect(createTorrent({ statusCode: 1, metadataPercentComplete: 0 }).stateText).toBe(
+      'OV_FL_QUEUED_CHECK'
+    );
+    expect(createTorrent({ statusCode: 3, metadataPercentComplete: 0 }).stateText).toBe(
+      'OV_FL_QUEUED'
+    );
+    expect(createTorrent({ statusCode: 5, metadataPercentComplete: 0 }).stateText).toBe(
+      'OV_FL_QUEUED_SEED'
+    );
+  });
+
+  it('explains stalled seeding and includes tracker warnings in the status tooltip', () => {
+    const t = createTorrent({
+      statusCode: 6,
+      isStalled: true,
+      errorCode: 1,
+      errorString: 'Tracker warning',
+    });
+    expect(t.stateTooltip).toContain('statusStalledSeedHint');
+    expect(t.stateTooltip).toContain('Tracker warning');
+    expect(t.hasError).toBe(false);
+  });
   describe('remaining / remainingStr', () => {
     it('derives remaining bytes from percentDone', () => {
       const t = createTorrent({ size: 1000, sizeWhenDone: 1000, percentDone: 0.7 });
@@ -136,9 +159,9 @@ describe('TorrentStore computed views', () => {
       expect(t.stateText).toBe('OV_FL_STOPPED');
     });
 
-    it('returns OV_FL_QUEUED for status 1 (queue to check)', () => {
+    it('distinguishes queue-to-check from the download queue', () => {
       const t = createTorrent({ statusCode: 1 });
-      expect(t.stateText).toBe('OV_FL_QUEUED');
+      expect(t.stateText).toBe('OV_FL_QUEUED_CHECK');
     });
 
     it('returns OV_FL_CHECKED with progress for status 2', () => {

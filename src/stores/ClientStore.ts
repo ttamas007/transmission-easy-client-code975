@@ -1,3 +1,4 @@
+import { getMessage } from '../tools/i18n';
 import { getRoot, types, Instance, cast } from 'mobx-state-tree';
 import SpeedRollStore from './SpeedRollStore';
 import { speedToStr, formatBytes } from '../tools/format';
@@ -38,6 +39,7 @@ const SettingsStore = types
     downloadDirFreeSpace: types.maybe(types.number),
     sessionDownloaded: types.maybe(types.number),
     sessionUploaded: types.maybe(types.number),
+    sessionStartedAt: types.maybe(types.number),
     blocklistEnabled: types.optional(types.boolean, false),
     blocklistUrl: types.optional(types.string, ''),
     blocklistSize: types.optional(types.number, 0),
@@ -283,10 +285,7 @@ const ClientStore = types
         const total = self.torrents.size;
         if (total === 0) return '';
         // "active"/"paused" are about the run state, not about completion
-        return chrome.i18n.getMessage('sessionStats', [
-          String(this.activeCount),
-          String(this.pausedCount),
-        ]);
+        return getMessage('sessionStats', [String(this.activeCount), String(this.pausedCount)]);
       },
     };
   })

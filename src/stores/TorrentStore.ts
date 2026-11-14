@@ -1,6 +1,9 @@
+import { getMessage } from '../tools/i18n';
 import { getRoot, types, Instance } from 'mobx-state-tree';
 import { speedToStr, formatBytes } from '../tools/format';
 import getEta from '../tools/getEta';
+import { getLocale } from '../tools/i18n';
+import translateTorrentError from '../tools/torrentError';
 
 const TorrentStore = types
   .model('TorrentStore', {
@@ -138,35 +141,35 @@ const TorrentStore = types
         if (!self.addedTime) {
           return '-';
         } else {
-          return new Date(self.addedTime * 1000).toLocaleString();
+          return new Date(self.addedTime * 1000).toLocaleString(getLocale());
         }
       },
       get completedTimeStr(): string {
         if (!self.completedTime) {
           return '-';
         } else {
-          return new Date(self.completedTime * 1000).toLocaleString();
+          return new Date(self.completedTime * 1000).toLocaleString(getLocale());
         }
       },
       get activityDateStr(): string {
         if (!self.activityDate) {
           return '-';
         } else {
-          return new Date(self.activityDate * 1000).toLocaleString();
+          return new Date(self.activityDate * 1000).toLocaleString(getLocale());
         }
       },
       get startDateStr(): string {
         if (!self.startDate) {
           return '-';
         } else {
-          return new Date(self.startDate * 1000).toLocaleString();
+          return new Date(self.startDate * 1000).toLocaleString(getLocale());
         }
       },
       get editDateStr(): string {
         if (!self.editDate) {
           return '-';
         } else {
-          return new Date(self.editDate * 1000).toLocaleString();
+          return new Date(self.editDate * 1000).toLocaleString(getLocale());
         }
       },
       get metadataStatusStr(): string {
@@ -176,40 +179,53 @@ const TorrentStore = types
       get stateText(): string {
         // Metadata progress for magnets, but only while the torrent is
         // actually running — a stopped magnet used to read "Downloading"
-        if (self.metadataPercentComplete < 1 && self.statusCode !== 0) {
+        if (self.metadataPercentComplete < 1 && self.statusCode === 4) {
           const pct = (self.metadataPercentComplete * 100).toFixed(0);
-          return `${chrome.i18n.getMessage('OV_FL_DOWNLOADING')} (${chrome.i18n.getMessage('DT_METADATA')} ${pct}%)`;
+          return `${getMessage('OV_FL_DOWNLOADING')} (${getMessage('DT_METADATA')} ${pct}%)`;
         }
         switch (self.statusCode) {
           case 0: {
             if (self.isFinished || self.percentDone === 1) {
-              return chrome.i18n.getMessage('OV_FL_FINISHED');
+              return getMessage('OV_FL_FINISHED');
             } else {
-              return chrome.i18n.getMessage('OV_FL_STOPPED');
+              return getMessage('OV_FL_STOPPED');
             }
           }
           case 1:
+            return getMessage('OV_FL_QUEUED_CHECK');
           case 3: {
-            return chrome.i18n.getMessage('OV_FL_QUEUED');
+            return getMessage('OV_FL_QUEUED');
           }
           case 2: {
-            return chrome.i18n.getMessage('OV_FL_CHECKED') + ' ' + this.recheckProgressStr;
+            return getMessage('OV_FL_CHECKED') + ' ' + this.recheckProgressStr;
           }
           case 4: {
-            const label = chrome.i18n.getMessage('OV_FL_DOWNLOADING');
-            return self.isStalled ? `${label} (${chrome.i18n.getMessage('OV_FL_STALLED')})` : label;
+            const label = getMessage('OV_FL_DOWNLOADING');
+            return self.isStalled ? `${label} (${getMessage('OV_FL_STALLED')})` : label;
           }
           case 5: {
-            return chrome.i18n.getMessage('OV_FL_QUEUED_SEED');
+            return getMessage('OV_FL_QUEUED_SEED');
           }
           case 6: {
-            const label = chrome.i18n.getMessage('OV_FL_SEEDING');
-            return self.isStalled ? `${label} (${chrome.i18n.getMessage('OV_FL_STALLED')})` : label;
+            const label = getMessage('OV_FL_SEEDING');
+            return self.isStalled ? `${label} (${getMessage('OV_FL_STALLED')})` : label;
           }
           default: {
-            return `Unknown (${self.statusCode})`;
+            return getMessage('OV_FL_UNKNOWN', String(self.statusCode));
           }
         }
+      },
+      get stateTooltip(): string {
+        const parts = [this.stateText];
+        if (self.isStalled && (self.statusCode === 4 || self.statusCode === 6)) {
+          parts.push(
+            getMessage(
+              self.statusCode === 6 ? 'statusStalledSeedHint' : 'statusStalledDownloadHint'
+            )
+          );
+        }
+        if (this.errorMessage) parts.push(this.errorMessage);
+        return parts.join('\n');
       },
       get errorMessage(): string {
         // Code 1 is TR_STAT_TRACKER_WARNING: the torrent is healthy and a
@@ -217,17 +233,17 @@ const TorrentStore = types
         // and an "Error:" prefix made it indistinguishable from a real
         // tracker/local error (codes 2/3).
         if (self.errorCode === 1) {
-          return self.errorString;
+          return translateTorrentError(self.errorString);
         }
         if (self.errorCode > 1) {
-          let errorString = self.errorString;
+          let errorString = translateTorrentError(self.errorString);
           if (/^Error: /.test(errorString)) {
             errorString = errorString.substring(7);
           }
           if (errorString) {
-            return chrome.i18n.getMessage('OV_FL_ERROR') + ': ' + errorString;
+            return getMessage('OV_FL_ERROR') + ': ' + errorString;
           }
-          return chrome.i18n.getMessage('OV_FL_ERROR');
+          return getMessage('OV_FL_ERROR');
         }
         return '';
       },
@@ -295,11 +311,11 @@ const TorrentStore = types
       get bandwidthPriorityStr(): string {
         switch (self.bandwidthPriority) {
           case -1:
-            return chrome.i18n.getMessage('MF_LOW');
+            return getMessage('MF_LOW');
           case 1:
-            return chrome.i18n.getMessage('MF_HIGH');
+            return getMessage('MF_HIGH');
           default:
-            return chrome.i18n.getMessage('MF_NORMAL');
+            return getMessage('MF_NORMAL');
         }
       },
       get hash(): string | null {

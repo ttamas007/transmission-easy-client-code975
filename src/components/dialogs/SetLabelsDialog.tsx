@@ -1,3 +1,4 @@
+import { getMessage } from '../../tools/i18n';
 import React, { useCallback, FormEvent } from 'react';
 import { observer } from 'mobx-react';
 import Dialog from './Dialog';
@@ -40,7 +41,7 @@ const SetLabelsDialog = observer(({ dialogStore }: SetLabelsDialogProps) => {
         : [];
 
       client?.setLabels(dialogStore.torrentIds, labels).catch((err: Error) => {
-        showError(chrome.i18n.getMessage('OV_FL_ERROR') || 'Failed to set labels', err);
+        showError(getMessage('OV_FL_ERROR') || 'Failed to set labels', err);
       });
 
       dialogStore.close();
@@ -53,16 +54,12 @@ const SetLabelsDialog = observer(({ dialogStore }: SetLabelsDialogProps) => {
       <div className="nf-notifi">
         <form onSubmit={handleSubmit}>
           <div className="nf-subItem">
-            <label>{chrome.i18n.getMessage('enterNewLabel')}</label>
+            <label>{getMessage('enterNewLabel')}</label>
             <input type="text" name="labels" defaultValue={dialogStore.currentLabels} autoFocus />
           </div>
           <div className="nf-subItem">
-            <input type="submit" value={chrome.i18n.getMessage('DLG_BTN_APPLY')} />
-            <input
-              onClick={handleClose}
-              type="button"
-              value={chrome.i18n.getMessage('DLG_BTN_CANCEL')}
-            />
+            <input type="submit" value={getMessage('DLG_BTN_APPLY')} />
+            <input onClick={handleClose} type="button" value={getMessage('DLG_BTN_CANCEL')} />
           </div>
         </form>
       </div>

@@ -2,7 +2,44 @@
 
 A browser extension that adds a Transmission WebUI directly in your web browser. Manage your torrents without leaving your browser.
 
-> **Forked from [Feverqwe/Transmission](https://github.com/Feverqwe/Transmission)**
+> Based on [mthcore/Transmission-Easy-Client](https://github.com/mthcore/Transmission-Easy-Client)
+> v3.4.0, itself forked from [Feverqwe/Transmission](https://github.com/Feverqwe/Transmission).
+
+## This fork
+
+This fork targets unpacked installation in modern Chrome. The extension manifest
+version remains 3.4.0; GitHub release tags distinguish this fork's packages.
+
+- Hungarian/English UI selector in **Options > Main > Language**, Hungarian by default.
+- Localized common torrent errors, preserving paths, error codes and unknown server messages.
+- Independent, opt-in tracker seed-time rules with editable hours, exclusions and stop-only behavior.
+- Destination selection from the daemon's default directory and existing torrent directories.
+- Destination free-space tooltips, colorful toolbar icons and clearer light/dark panels.
+- Footer tracker summaries, paused previews/filtering, dated daemon-session counters and speed-menu hints.
+- SSL and authentication default to OFF; enable them when your server requires them.
+  Existing saved connection settings are not overwritten.
+
+The tracker seed-time feature uses Transmission's `secondsSeeding`, not elapsed
+time since adding a torrent. Browser uptime is required; checks are not exact-time
+guarantees. Mixed-host tracker lists are conservatively excluded.
+
+Cloud backup uses `chrome.storage.sync` and can include server addresses and
+passwords without additional extension-side encryption. Do not publish backups.
+
+Validation: 583 tests across 46 test files, TypeScript checks, production build,
+and simulated-browser checks. These do not replace testing against a real daemon.
+
+### Chrome installation and updates
+
+1. Download the Chrome ZIP from [Releases](https://github.com/ttamas007/transmission-easy-client-forkcode975/releases).
+2. Extract it into a permanent directory.
+3. Open `chrome://extensions`, enable **Developer mode**, select **Load unpacked**,
+   and choose the directory directly containing `manifest.json`.
+4. Configure your Transmission connection in the extension options.
+
+For updates, replace the files in the same directory, click **Reload** on the
+extension's card, and reopen the popup. Do not remove/reinstall the extension if
+you want to retain its stored settings. This installation has no automatic updates.
 
 ## Features
 
@@ -31,10 +68,9 @@ A browser extension that adds a Transmission WebUI directly in your web browser.
 
 ## Supported Languages
 
-All 24 languages are fully translated: Czech, Danish, Dutch, English, French,
-German, Greek, Hebrew, Hungarian, Indonesian, Italian, Norwegian Bokmål,
-Polish, Portuguese (Brazil), Romanian, Russian, Simplified Chinese, Spanish,
-Swedish, Thai, Traditional Chinese, Turkish, Ukrainian, Vietnamese.
+This fork's application UI supports **Hungarian and English**. All 24 inherited
+Chrome locale catalogs are retained with the same 396 keys and compatible
+placeholders; new entries in legacy languages use English fallback text.
 
 ## Installation
 
@@ -44,14 +80,16 @@ Requires Node.js 22.22+, 24.15+, or 26+ (an Active or Maintenance LTS line).
 
 ```bash
 # Clone the repository
-git clone https://github.com/mthcore/Transmission-Easy-Client.git
-cd Transmission-Easy-Client
+git clone https://github.com/ttamas007/transmission-easy-client-forkcode975.git
+cd transmission-easy-client-forkcode975
 
 # Install dependencies
-npm install
+npm ci
 
-# Build for all browsers
-npm run release
+# Build and package Chrome
+npm run build
+cp LICENSE dist/chrome/src/LICENSE
+npm run _compress -- --BROWSER chrome
 ```
 
 The built extension will be in the `./dist` folder.

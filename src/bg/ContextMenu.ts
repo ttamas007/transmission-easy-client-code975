@@ -1,3 +1,4 @@
+import { getMessage } from '../tools/i18n';
 import getLogger from '../tools/getLogger';
 import downloadFileFromTab from '../tools/downloadFileFromTab';
 import downloadFileFromUrl from '../tools/downloadFileFromUrl';
@@ -78,8 +79,8 @@ class ContextMenu {
         logger.error('onSendLink: download error', err);
         this.bg.torrentErrorNotify(
           error.code === 'FILE_SIZE_EXCEEDED'
-            ? chrome.i18n.getMessage('fileSizeError')
-            : error.message || chrome.i18n.getMessage('unexpectedError')
+            ? getMessage('fileSizeError')
+            : error.message || getMessage('unexpectedError')
         );
         return;
       }
@@ -88,7 +89,7 @@ class ContextMenu {
     // Add phase: putTorrent's own catch already notifies on failure, so
     // notifying here too would report every failed add twice.
     if (!this.bg.client) {
-      this.bg.torrentErrorNotify(chrome.i18n.getMessage('unexpectedError'));
+      this.bg.torrentErrorNotify(getMessage('unexpectedError'));
       return;
     }
     try {
@@ -149,7 +150,7 @@ class ContextMenu {
             // The folder list changed after this menu was built: sending the
             // torrent to the daemon's default directory would be silent and
             // wrong, so report it instead
-            this.bg.torrentErrorNotify(chrome.i18n.getMessage('unexpectedError'));
+            this.bg.torrentErrorNotify(getMessage('unexpectedError'));
             return;
           }
           await this.onSendLink(linkUrl, tab.id, frameId, folder.path);
@@ -167,7 +168,7 @@ class ContextMenu {
       const menuId = JSON.stringify({ type: 'action', name: 'default', source: 'main' });
       await contextMenusCreate({
         id: menuId,
-        title: chrome.i18n.getMessage('addInTorrentClient'),
+        title: getMessage('addInTorrentClient'),
         contexts: ['link'],
       });
       await this.createFolderMenu(menuId);
@@ -181,7 +182,7 @@ class ContextMenu {
         transformFoldersToTree(folders).map((menuItem) => {
           let name = menuItem.name;
           if (name === './') {
-            name = chrome.i18n.getMessage('currentDirectory');
+            name = getMessage('currentDirectory');
           }
           return contextMenusCreate({
             id: menuItem.id,
@@ -209,7 +210,7 @@ class ContextMenu {
         await contextMenusCreate({
           id: JSON.stringify({ type: 'action', name: 'default', source: 'folder' }),
           parentId: parentId,
-          title: chrome.i18n.getMessage('defaultPath'),
+          title: getMessage('defaultPath'),
           contexts: ['link'],
         });
       }
@@ -217,7 +218,7 @@ class ContextMenu {
       await contextMenusCreate({
         id: JSON.stringify({ type: 'action', name: 'createFolder' }),
         parentId: parentId,
-        title: chrome.i18n.getMessage('add') + '...',
+        title: getMessage('add') + '...',
         contexts: ['link'],
       });
     }

@@ -70,6 +70,7 @@ const TorrentListTableItem = observer(({ torrent, even }: TorrentListTableItemPr
     handleStop,
     isStarting,
     isStopping,
+    serverUrl: config.url,
   };
 
   const columns = visibleTorrentColumns.map((column) => {

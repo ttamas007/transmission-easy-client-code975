@@ -1,3 +1,4 @@
+import { getMessage } from '../../tools/i18n';
 import React, {
   useRef,
   useState,
@@ -9,6 +10,8 @@ import React, {
 import { observer } from 'mobx-react';
 import { useOptionsPage } from '../../hooks/useOptionsPage';
 import type { Folder } from '../../types/bg';
+import type { DownloadDirectories } from '../../bg/SettingsService';
+import callApi from '../../tools/callApi';
 
 interface ConfigStore {
   folders: Folder[];
@@ -37,6 +40,26 @@ interface CtxOptionsDirsProps {
 
 const CtxOptionsDirs = observer(({ configStore, handleChange }: CtxOptionsDirsProps) => {
   const refDirectorySelect = useRef<HTMLSelectElement>(null);
+  const refPath = useRef<HTMLInputElement>(null);
+  const [knownDirectories, setKnownDirectories] = useState<DownloadDirectories | null>(null);
+  const [directoriesLoading, setDirectoriesLoading] = useState(false);
+  const [directoriesError, setDirectoriesError] = useState('');
+
+  const handleLoadDirectories = useCallback(async () => {
+    setDirectoriesLoading(true);
+    setDirectoriesError('');
+    setKnownDirectories(null);
+    try {
+      const result = await callApi<DownloadDirectories>({ action: 'getDownloadDirectories' });
+      if (!refPath.current) return;
+      setKnownDirectories(result);
+    } catch (err) {
+      if (!refPath.current) return;
+      setDirectoriesError(err instanceof Error ? err.message : String(err));
+    } finally {
+      if (refPath.current) setDirectoriesLoading(false);
+    }
+  }, []);
 
   const getSelectedDirectories = useCallback(() => {
     if (!refDirectorySelect.current) return [];
@@ -64,9 +87,7 @@ const CtxOptionsDirs = observer(({ configStore, handleChange }: CtxOptionsDirsPr
 
       if (configStore.hasFolder(path)) {
         // A silent no-op looked like a broken Add button
-        setAddError(
-          chrome.i18n.getMessage('folderAlreadyExists') || 'This folder is already in the list'
-        );
+        setAddError(getMessage('folderAlreadyExists') || 'This folder is already in the list');
         return;
       }
       setAddError('');
@@ -115,13 +136,51 @@ const CtxOptionsDirs = observer(({ configStore, handleChange }: CtxOptionsDirsPr
 
   return (
     <div className="dir-manager">
-      <h3>{chrome.i18n.getMessage('dirList')}</h3>
-      <p className="section-hint">{chrome.i18n.getMessage('dirListHint')}</p>
+      <h3>{getMessage('dirList')}</h3>
+      <p className="section-hint">{getMessage('dirListHint')}</p>
       <form onSubmit={handleSubmit} autoComplete="off" className="dir-form">
+        <p className="section-hint">{getMessage('knownDirectoriesHint')}</p>
+        <div className="dir-form-row known-directories">
+          <button type="button" onClick={handleLoadDirectories} disabled={directoriesLoading}>
+            {directoriesLoading ? '...' : getMessage('loadKnownDirectories')}
+          </button>
+          {knownDirectories && (
+            <select
+              aria-label={getMessage('chooseKnownDirectory')}
+              value=""
+              onChange={(e) => {
+                if (refPath.current) refPath.current.value = e.target.value;
+              }}
+            >
+              <option value="" disabled>
+                {getMessage('chooseKnownDirectory')}
+              </option>
+              {knownDirectories.directories.map((path) => (
+                <option key={path} value={path}>
+                  {path}
+                  {path === knownDirectories.defaultDirectory
+                    ? ` (${getMessage('defaultPath')})`
+                    : ''}
+                </option>
+              ))}
+            </select>
+          )}
+        </div>
+        {directoriesError && (
+          <p className="red" role="alert">
+            {directoriesError}
+          </p>
+        )}
         <div className="dir-form-row">
-          <input name="path" type="text" required placeholder={chrome.i18n.getMessage('subPath')} />
-          <input name="name" type="text" placeholder={chrome.i18n.getMessage('shortName')} />
-          <button type="submit">{chrome.i18n.getMessage('add')}</button>
+          <input
+            ref={refPath}
+            name="path"
+            type="text"
+            required
+            placeholder={getMessage('subPath')}
+          />
+          <input name="name" type="text" placeholder={getMessage('shortName')} />
+          <button type="submit">{getMessage('add')}</button>
         </div>
         {addError && <p className="red">{addError}</p>}
       </form>
@@ -130,24 +189,20 @@ const CtxOptionsDirs = observer(({ configStore, handleChange }: CtxOptionsDirsPr
           {directories}
         </select>
         <div className="dir-list-actions">
-          <button type="button" onClick={handleMoveUp} title={chrome.i18n.getMessage('up')}>
+          <button type="button" onClick={handleMoveUp} title={getMessage('up')}>
             ▲
           </button>
-          <button type="button" onClick={handleMoveDown} title={chrome.i18n.getMessage('down')}>
+          <button type="button" onClick={handleMoveDown} title={getMessage('down')}>
             ▼
           </button>
-          <button
-            type="button"
-            onClick={handleRemove}
-            title={chrome.i18n.getMessage('deleteSelected')}
-          >
+          <button type="button" onClick={handleRemove} title={getMessage('deleteSelected')}>
             ✕
           </button>
         </div>
       </div>
-      <h3>{chrome.i18n.getMessage('options')}</h3>
+      <h3>{getMessage('options')}</h3>
       <label>
-        <span>{chrome.i18n.getMessage('treeViewContextMenu')}</span>
+        <span>{getMessage('treeViewContextMenu')}</span>
         <span className="toggle-switch">
           <input
             onChange={handleChange}
@@ -159,7 +214,7 @@ const CtxOptionsDirs = observer(({ configStore, handleChange }: CtxOptionsDirsPr
         </span>
       </label>
       <label>
-        <span>{chrome.i18n.getMessage('showDefaultFolderContextMenuItem')}</span>
+        <span>{getMessage('showDefaultFolderContextMenuItem')}</span>
         <span className="toggle-switch">
           <input
             onChange={handleChange}
@@ -171,7 +226,7 @@ const CtxOptionsDirs = observer(({ configStore, handleChange }: CtxOptionsDirsPr
         </span>
       </label>
       <label>
-        <span>{chrome.i18n.getMessage('selectDownloadCategoryOnAddItemFromContextMenu')}</span>
+        <span>{getMessage('selectDownloadCategoryOnAddItemFromContextMenu')}</span>
         <span className="toggle-switch">
           <input
             onChange={handleChange}
@@ -191,7 +246,7 @@ const CtxOptions = observer(() => {
 
   return (
     <div className="page ctx">
-      <h2>{chrome.i18n.getMessage('optCtx')}</h2>
+      <h2>{getMessage('optCtx')}</h2>
       <CtxOptionsDirs configStore={configStore} handleChange={handleChange} />
     </div>
   );

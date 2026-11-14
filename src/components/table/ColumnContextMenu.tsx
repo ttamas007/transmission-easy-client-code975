@@ -1,3 +1,4 @@
+import { getMessage } from '../../tools/i18n';
 import React, { ReactNode } from 'react';
 import * as ContextMenu from '@radix-ui/react-context-menu';
 import { observer } from 'mobx-react';
@@ -38,7 +39,7 @@ const ColumnContextMenuContent = observer(({ columns, onSave }: ColumnContextMen
           onSelect={() => handleToggleColumn(column)}
         >
           {column.display ? <span className="context-menu-check">●</span> : null}
-          {chrome.i18n.getMessage(column.lang)}
+          {getMessage(column.lang)}
         </ContextMenu.Item>
       ))}
     </ContextMenu.Content>

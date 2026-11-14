@@ -29,6 +29,26 @@ function create(snapshot: Record<string, unknown> = {}): IConfigStore {
 }
 
 describe('ConfigStore', () => {
+  describe('connection defaults', () => {
+    it('uses HTTP without authentication when connection settings have not been saved', () => {
+      const c = create({ hostname: 'nas.local' });
+      expect(c.url).toBe('http://nas.local:9091/transmission/rpc');
+      expect(c.ssl).toBe(false);
+      expect(c.authenticationRequired).toBe(false);
+    });
+
+    it('preserves previously saved HTTPS and authentication settings', () => {
+      const c = create({
+        hostname: 'nas.local',
+        ssl: true,
+        authenticationRequired: true,
+      });
+      expect(c.url).toBe('https://nas.local:9091/transmission/rpc');
+      expect(c.ssl).toBe(true);
+      expect(c.authenticationRequired).toBe(true);
+    });
+  });
+
   describe('visibleTorrentColumns / activeTorrentColumns', () => {
     it('only returns columns with display=1 by default', () => {
       const c = create();

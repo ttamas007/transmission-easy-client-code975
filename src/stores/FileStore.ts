@@ -1,3 +1,4 @@
+import { getMessage } from '../tools/i18n';
 import { getRoot, types, Instance } from 'mobx-state-tree';
 import { formatBytes } from '../tools/format';
 
@@ -38,7 +39,7 @@ const FileStore = types
         return formatBytes(self.downloaded);
       },
       get priorityStr(): string {
-        return chrome.i18n.getMessage(priorityLocaleMap[self.priority]);
+        return getMessage(priorityLocaleMap[self.priority]);
       },
       get selected(): boolean {
         const rootStore = getRoot<{

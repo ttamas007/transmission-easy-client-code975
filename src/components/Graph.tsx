@@ -1,3 +1,4 @@
+import { getMessage } from '../tools/i18n';
 import React, { useRef } from 'react';
 import { observer } from 'mobx-react';
 import useRootStore from '../hooks/useRootStore';
@@ -15,7 +16,7 @@ const Graph = observer(() => {
       ref={refChart}
       style={{ width: '100%', height: '30px' }}
       role="img"
-      aria-label={chrome.i18n.getMessage('speedGraph') || 'Speed graph'}
+      aria-label={getMessage('speedGraph') || 'Speed graph'}
     />
   );
 });

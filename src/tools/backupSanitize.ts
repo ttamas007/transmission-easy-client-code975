@@ -1,5 +1,6 @@
 import ConfigStore, { configKeys } from '../stores/ConfigStore';
 import { getSnapshot } from 'mobx-state-tree';
+import { isSeedTimeLimitRule, isSeedTimeLimitRules } from '../types/seedTimeLimit';
 
 /**
  * Transient/local-only keys that never belong in a backup blob.
@@ -62,6 +63,11 @@ export function sanitizeRestoreConfig(config: Record<string, unknown>): {
 } {
   const result: Record<string, unknown> = {};
   const droppedKeys: string[] = [];
+  config = { ...config };
+  if ('seedTimeLimit' in config && isSeedTimeLimitRule(config.seedTimeLimit)) {
+    if (config.seedTimeLimits === undefined) config.seedTimeLimits = [config.seedTimeLimit];
+    delete config.seedTimeLimit;
+  }
   const types = getDefaultTypes();
   for (const [key, value] of Object.entries(config)) {
     if (
@@ -73,9 +79,26 @@ export function sanitizeRestoreConfig(config: Record<string, unknown>): {
       continue;
     }
     const expected = types.get(key);
+    if (key === 'language' && value !== 'hu' && value !== 'en') {
+      droppedKeys.push(key);
+      continue;
+    }
     const actual = Array.isArray(value) ? 'array' : typeof value;
     if (expected !== undefined && actual !== expected) {
       droppedKeys.push(key);
+      continue;
+    }
+    if (key === 'seedTimeLimits') {
+      if (!isSeedTimeLimitRules(value)) {
+        droppedKeys.push(key);
+        continue;
+      }
+      result[key] = value.map((rule) => ({
+        ...rule,
+        enabled: false,
+        includeExisting: false,
+        revision: '',
+      }));
       continue;
     }
     result[key] = value;

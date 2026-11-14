@@ -1,3 +1,4 @@
+import { getMessage } from '../tools/i18n';
 import 'rc-select/assets/index.css';
 import '../assets/css/stylesheet.scss';
 import React, { useEffect, useCallback, memo, type ReactNode } from 'react';
@@ -18,6 +19,7 @@ import { useTheme } from '../hooks/useTheme';
 import DialogLoader from '../components/dialogs/DialogLoader';
 import ErrorBoundary from '../components/ErrorBoundary';
 import applyStoredTheme, { applyLocaleDirection } from '../tools/applyStoredTheme';
+import { getLanguage } from '../tools/i18n';
 
 // Before React renders, so an explicit theme doesn't flash the OS one first
 applyStoredTheme();
@@ -254,9 +256,9 @@ const Index = observer(() => {
     // the user on a dead screen until they reopen the popup
     return (
       <div className="startup-error" role="alert">
-        <p>{chrome.i18n.getMessage('OV_FL_ERROR')}</p>
+        <p>{getMessage('OV_FL_ERROR')}</p>
         <button type="button" onClick={() => rootStore.retryInit()}>
-          {chrome.i18n.getMessage('errorRetry')}
+          {getMessage('errorRetry')}
         </button>
       </div>
     );
@@ -281,12 +283,14 @@ const Index = observer(() => {
       <VisiblePage>
         <Interval onFire={onIntervalFire} interval={uiUpdateInterval} />
       </VisiblePage>
-      <Menu />
-      <TorrentListTable />
-      <Footer />
-      {fileList}
-      <Dialogs />
-      {goInOptions}
+      <React.Fragment key={getLanguage()}>
+        <Menu />
+        <TorrentListTable />
+        <Footer />
+        {fileList}
+        <Dialogs />
+        {goInOptions}
+      </React.Fragment>
     </>
   );
 });
@@ -328,9 +332,9 @@ const GoInOptions = memo<GoInOptionsProps>(({ isPopup }) => {
     return (
       <div className="go-in-options">
         <div className="go-in-options-content">
-          <h2>{chrome.i18n.getMessage('configureClient')}</h2>
-          <p>{chrome.i18n.getMessage('configureClientHint')}</p>
-          <button onClick={handleOpenOptions}>{chrome.i18n.getMessage('openOptions')}</button>
+          <h2>{getMessage('configureClient')}</h2>
+          <p>{getMessage('configureClientHint')}</p>
+          <button onClick={handleOpenOptions}>{getMessage('openOptions')}</button>
         </div>
       </div>
     );

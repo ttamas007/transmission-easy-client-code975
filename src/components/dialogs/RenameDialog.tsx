@@ -1,3 +1,4 @@
+import { getMessage } from '../../tools/i18n';
 import React, { useCallback, FormEvent } from 'react';
 import { observer } from 'mobx-react';
 import Dialog from './Dialog';
@@ -40,7 +41,7 @@ const RenameDialog = observer(({ dialogStore }: RenameDialogProps) => {
       }
 
       client?.rename(dialogStore.torrentIds, dialogStore.path, name).catch((err) => {
-        showError(chrome.i18n.getMessage('OV_FL_ERROR') || 'Failed to rename', err);
+        showError(getMessage('OV_FL_ERROR') || 'Failed to rename', err);
       });
 
       dialogStore.close();
@@ -53,16 +54,12 @@ const RenameDialog = observer(({ dialogStore }: RenameDialogProps) => {
       <div className="nf-notifi">
         <form onSubmit={handleSubmit}>
           <div className="nf-subItem">
-            <label>{chrome.i18n.getMessage('renameText')}</label>
+            <label>{getMessage('renameText')}</label>
             <input type="text" name="name" defaultValue={dialogStore.name} autoFocus />
           </div>
           <div className="nf-subItem">
-            <input type="submit" value={chrome.i18n.getMessage('DLG_BTN_APPLY')} />
-            <input
-              onClick={handleClose}
-              type="button"
-              value={chrome.i18n.getMessage('DLG_BTN_CANCEL')}
-            />
+            <input type="submit" value={getMessage('DLG_BTN_APPLY')} />
+            <input onClick={handleClose} type="button" value={getMessage('DLG_BTN_CANCEL')} />
           </div>
         </form>
       </div>

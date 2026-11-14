@@ -1,3 +1,4 @@
+import { getMessage } from '../../tools/i18n';
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { observer } from 'mobx-react';
 import Dialog from './Dialog';
@@ -187,7 +188,7 @@ const TorrentDetailsDialog = observer(({ dialogStore }: TorrentDetailsDialogProp
       },
       (err) => {
         setTrackerSaving(false);
-        showError(chrome.i18n.getMessage('OV_FL_ERROR') || 'Apply failed', err as Error);
+        showError(getMessage('OV_FL_ERROR') || 'Apply failed', err as Error);
       }
     );
   }, [torrentId, trackerListText, rootStore.client, fetchDetails]);
@@ -201,7 +202,7 @@ const TorrentDetailsDialog = observer(({ dialogStore }: TorrentDetailsDialogProp
         () => setSeedSaving(false),
         (err) => {
           setSeedSaving(false);
-          showError(chrome.i18n.getMessage('OV_FL_ERROR') || 'Apply failed', err as Error);
+          showError(getMessage('OV_FL_ERROR') || 'Apply failed', err as Error);
         }
       );
   }, [torrentId, seedRatioMode, seedRatioLimit, seedIdleMode, seedIdleLimit, rootStore.client]);
@@ -222,19 +223,19 @@ const TorrentDetailsDialog = observer(({ dialogStore }: TorrentDetailsDialogProp
             className={activeTab === 'info' ? 'active' : ''}
             onClick={() => setActiveTab('info')}
           >
-            {chrome.i18n.getMessage('DT_TAB_INFO')}
+            {getMessage('DT_TAB_INFO')}
           </button>
           <button
             className={activeTab === 'trackers' ? 'active' : ''}
             onClick={() => setActiveTab('trackers')}
           >
-            {chrome.i18n.getMessage('DT_TAB_TRACKERS')}
+            {getMessage('DT_TAB_TRACKERS')}
           </button>
           <button
             className={activeTab === 'seedLimits' ? 'active' : ''}
             onClick={() => setActiveTab('seedLimits')}
           >
-            {chrome.i18n.getMessage('DT_TAB_SEED_LIMITS')}
+            {getMessage('DT_TAB_SEED_LIMITS')}
           </button>
         </div>
 
@@ -243,9 +244,9 @@ const TorrentDetailsDialog = observer(({ dialogStore }: TorrentDetailsDialogProp
               tabs permanently blank with no explanation */}
           {detailsError && !detailsLoading && (
             <div className="dialog-error-inline" role="alert">
-              <span>{chrome.i18n.getMessage('OV_FL_ERROR')}</span>{' '}
+              <span>{getMessage('OV_FL_ERROR')}</span>{' '}
               <button type="button" onClick={() => fetchDetails(true)}>
-                {chrome.i18n.getMessage('errorRetry')}
+                {getMessage('errorRetry')}
               </button>
             </div>
           )}
@@ -294,11 +295,7 @@ const TorrentDetailsDialog = observer(({ dialogStore }: TorrentDetailsDialogProp
         </div>
 
         <div className="nf-subItem">
-          <input
-            onClick={handleClose}
-            type="button"
-            value={chrome.i18n.getMessage('DLG_BTN_CLOSE')}
-          />
+          <input onClick={handleClose} type="button" value={getMessage('DLG_BTN_CLOSE')} />
         </div>
       </div>
     </Dialog>

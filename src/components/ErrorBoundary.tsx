@@ -1,3 +1,4 @@
+import { getMessage } from '../tools/i18n';
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 
 interface ErrorBoundaryProps {
@@ -41,16 +42,16 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
       return (
         <div className="error-boundary" role="alert">
           <p className="error-boundary__message">
-            {chrome.i18n.getMessage('OV_FL_ERROR') || 'An error occurred'}
+            {getMessage('OV_FL_ERROR') || 'An error occurred'}
           </p>
           {this.state.error && (
             <details className="error-boundary__details">
-              <summary>{chrome.i18n.getMessage('errorDetails') || 'Details'}</summary>
+              <summary>{getMessage('errorDetails') || 'Details'}</summary>
               <pre>{this.state.error.message}</pre>
             </details>
           )}
           <button className="error-boundary__retry" onClick={this.handleRetry} type="button">
-            {chrome.i18n.getMessage('errorRetry') || 'Retry'}
+            {getMessage('errorRetry') || 'Retry'}
           </button>
         </div>
       );

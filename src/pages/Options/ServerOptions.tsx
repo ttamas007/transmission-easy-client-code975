@@ -1,3 +1,4 @@
+import { getLocale, getMessage } from '../../tools/i18n';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { observer } from 'mobx-react';
 import useRootStore from '../../hooks/useRootStore';
@@ -188,13 +189,13 @@ const ServerOptions = observer(() => {
   if (!client || !settings) {
     return (
       <div className="page server">
-        <h2>{chrome.i18n.getMessage('optServer')}</h2>
+        <h2>{getMessage('optServer')}</h2>
         {loading && <div className="loading-inline" />}
         {error && (
           <div>
-            <p>{chrome.i18n.getMessage('checkSettings')}</p>
+            <p>{getMessage('checkSettings')}</p>
             <button type="button" onClick={fetchSettings}>
-              {chrome.i18n.getMessage('errorRetry')}
+              {getMessage('errorRetry')}
             </button>
           </div>
         )}
@@ -290,7 +291,7 @@ const ServerOptions = observer(() => {
 
   return (
     <div className="page server">
-      <h2>{chrome.i18n.getMessage('optServer')}</h2>
+      <h2>{getMessage('optServer')}</h2>
 
       {settings.daemonVersionStr && <p className="daemon-version">{settings.daemonVersionStr}</p>}
 
@@ -301,17 +302,17 @@ const ServerOptions = observer(() => {
           the daemon was never reached */}
       {error && !loading && (
         <p className="red">
-          {chrome.i18n.getMessage('checkSettings')}{' '}
+          {getMessage('checkSettings')}{' '}
           <button type="button" onClick={fetchSettings}>
-            {chrome.i18n.getMessage('errorRetry')}
+            {getMessage('errorRetry')}
           </button>
         </p>
       )}
 
-      <h3>{chrome.i18n.getMessage('generalSettings')}</h3>
+      <h3>{getMessage('generalSettings')}</h3>
 
       <label>
-        <span>{chrome.i18n.getMessage('startAddedTorrents')}</span>
+        <span>{getMessage('startAddedTorrents')}</span>
         <span className="toggle-switch">
           <input
             onChange={handleToggle(client.setStartAddedTorrents, settings.startAddedTorrents)}
@@ -323,7 +324,7 @@ const ServerOptions = observer(() => {
       </label>
 
       <label>
-        <span>{chrome.i18n.getMessage('trashOriginalTorrentFiles')}</span>
+        <span>{getMessage('trashOriginalTorrentFiles')}</span>
         <span className="toggle-switch">
           <input
             onChange={handleToggle(
@@ -337,10 +338,10 @@ const ServerOptions = observer(() => {
         </span>
       </label>
 
-      <h3>{chrome.i18n.getMessage('peerSettings')}</h3>
+      <h3>{getMessage('peerSettings')}</h3>
 
       <label>
-        <span>{chrome.i18n.getMessage('peerLimitGlobal')}</span>
+        <span>{getMessage('peerLimitGlobal')}</span>
         <input
           type="number"
           min="1"
@@ -351,7 +352,7 @@ const ServerOptions = observer(() => {
       </label>
 
       <label>
-        <span>{chrome.i18n.getMessage('peerLimitPerTorrent')}</span>
+        <span>{getMessage('peerLimitPerTorrent')}</span>
         <input
           type="number"
           min="1"
@@ -361,10 +362,10 @@ const ServerOptions = observer(() => {
         />
       </label>
 
-      <h3>{chrome.i18n.getMessage('seedingSettings')}</h3>
+      <h3>{getMessage('seedingSettings')}</h3>
 
       <label>
-        <span>{chrome.i18n.getMessage('seedRatioLimited')}</span>
+        <span>{getMessage('seedRatioLimited')}</span>
         <span className="toggle-switch">
           <input
             onChange={handleToggle(client.setSeedRatioLimited, settings.seedRatioLimited)}
@@ -377,7 +378,7 @@ const ServerOptions = observer(() => {
 
       {settings.seedRatioLimited && (
         <label>
-          <span>{chrome.i18n.getMessage('seedRatioLimit')}</span>
+          <span>{getMessage('seedRatioLimit')}</span>
           <input
             type="number"
             min="0"
@@ -390,7 +391,7 @@ const ServerOptions = observer(() => {
       )}
 
       <label>
-        <span>{chrome.i18n.getMessage('idleSeedingLimitEnabled')}</span>
+        <span>{getMessage('idleSeedingLimitEnabled')}</span>
         <span className="toggle-switch">
           <input
             onChange={handleToggle(
@@ -406,7 +407,7 @@ const ServerOptions = observer(() => {
 
       {settings.idleSeedingLimitEnabled && (
         <label>
-          <span>{chrome.i18n.getMessage('idleSeedingLimit')}</span>
+          <span>{getMessage('idleSeedingLimit')}</span>
           <input
             type="number"
             min="1"
@@ -414,14 +415,14 @@ const ServerOptions = observer(() => {
             defaultValue={settings.idleSeedingLimit}
             onBlur={handleIntBlur(client.setIdleSeedingLimit)}
           />{' '}
-          <span>{chrome.i18n.getMessage('minutes')}</span>
+          <span>{getMessage('minutes')}</span>
         </label>
       )}
 
-      <h3>{chrome.i18n.getMessage('queueSettings')}</h3>
+      <h3>{getMessage('queueSettings')}</h3>
 
       <label>
-        <span>{chrome.i18n.getMessage('downloadQueueEnabled')}</span>
+        <span>{getMessage('downloadQueueEnabled')}</span>
         <span className="toggle-switch">
           <input
             onChange={handleToggle(client.setDownloadQueueEnabled, settings.downloadQueueEnabled)}
@@ -434,7 +435,7 @@ const ServerOptions = observer(() => {
 
       {settings.downloadQueueEnabled && (
         <label>
-          <span>{chrome.i18n.getMessage('downloadQueueSize')}</span>
+          <span>{getMessage('downloadQueueSize')}</span>
           <input
             type="number"
             min="1"
@@ -446,7 +447,7 @@ const ServerOptions = observer(() => {
       )}
 
       <label>
-        <span>{chrome.i18n.getMessage('seedQueueEnabled')}</span>
+        <span>{getMessage('seedQueueEnabled')}</span>
         <span className="toggle-switch">
           <input
             onChange={handleToggle(client.setSeedQueueEnabled, settings.seedQueueEnabled)}
@@ -459,7 +460,7 @@ const ServerOptions = observer(() => {
 
       {settings.seedQueueEnabled && (
         <label>
-          <span>{chrome.i18n.getMessage('seedQueueSize')}</span>
+          <span>{getMessage('seedQueueSize')}</span>
           <input
             type="number"
             min="1"
@@ -471,7 +472,7 @@ const ServerOptions = observer(() => {
       )}
 
       <label>
-        <span>{chrome.i18n.getMessage('queueStalledEnabled')}</span>
+        <span>{getMessage('queueStalledEnabled')}</span>
         <span className="toggle-switch">
           <input
             onChange={handleToggle(client.setQueueStalledEnabled, settings.queueStalledEnabled)}
@@ -484,7 +485,7 @@ const ServerOptions = observer(() => {
 
       {settings.queueStalledEnabled && (
         <label>
-          <span>{chrome.i18n.getMessage('queueStalledMinutes')}</span>
+          <span>{getMessage('queueStalledMinutes')}</span>
           <input
             type="number"
             min="1"
@@ -492,14 +493,14 @@ const ServerOptions = observer(() => {
             defaultValue={settings.queueStalledMinutes}
             onBlur={handleIntBlur(client.setQueueStalledMinutes)}
           />{' '}
-          <span>{chrome.i18n.getMessage('minutes')}</span>
+          <span>{getMessage('minutes')}</span>
         </label>
       )}
 
-      <h3>{chrome.i18n.getMessage('incompleteDirSettings')}</h3>
+      <h3>{getMessage('incompleteDirSettings')}</h3>
 
       <label>
-        <span>{chrome.i18n.getMessage('incompleteDirEnabled')}</span>
+        <span>{getMessage('incompleteDirEnabled')}</span>
         <span className="toggle-switch">
           <input
             onChange={handleToggle(client.setIncompleteDirEnabled, settings.incompleteDirEnabled)}
@@ -512,18 +513,18 @@ const ServerOptions = observer(() => {
 
       {settings.incompleteDirEnabled && (
         <label>
-          <span>{chrome.i18n.getMessage('incompleteDir')}</span>
+          <span>{getMessage('incompleteDir')}</span>
           <div className="blocklist-url-row">
             <input type="text" value={incompleteDir} onChange={handleIncompleteDirChange} />
             <button type="button" onClick={handleApplyIncompleteDir}>
-              {chrome.i18n.getMessage('DLG_BTN_APPLY')}
+              {getMessage('DLG_BTN_APPLY')}
             </button>
           </div>
         </label>
       )}
 
       <label>
-        <span>{chrome.i18n.getMessage('renamePartialFiles')}</span>
+        <span>{getMessage('renamePartialFiles')}</span>
         <span className="toggle-switch">
           <input
             onChange={handleToggle(client.setRenamePartialFiles, settings.renamePartialFiles)}
@@ -534,10 +535,10 @@ const ServerOptions = observer(() => {
         </span>
       </label>
 
-      <h3>{chrome.i18n.getMessage('networkSettings')}</h3>
+      <h3>{getMessage('networkSettings')}</h3>
 
       <label>
-        <span>{chrome.i18n.getMessage('peerPort')}</span>
+        <span>{getMessage('peerPort')}</span>
         <input
           type="number"
           min="1"
@@ -552,25 +553,21 @@ const ServerOptions = observer(() => {
         <span></span>
         <span>
           <button type="button" onClick={handlePortTest} disabled={portTesting}>
-            {portTesting
-              ? chrome.i18n.getMessage('portTesting')
-              : chrome.i18n.getMessage('portTest')}
+            {portTesting ? getMessage('portTesting') : getMessage('portTest')}
           </button>
           {portTestResult !== null && (
             <span className={portTestResult ? 'port-open' : 'port-closed'}>
               {' '}
               {/* Colour alone is not a status indicator */}
               <span aria-hidden="true">{portTestResult ? '✓' : '✗'}</span>{' '}
-              {portTestResult
-                ? chrome.i18n.getMessage('portOpen')
-                : chrome.i18n.getMessage('portClosed')}
+              {portTestResult ? getMessage('portOpen') : getMessage('portClosed')}
             </span>
           )}
         </span>
       </label>
 
       <label>
-        <span>{chrome.i18n.getMessage('portForwardingEnabled')}</span>
+        <span>{getMessage('portForwardingEnabled')}</span>
         <span className="toggle-switch">
           <input
             onChange={handleToggle(client.setPortForwardingEnabled, settings.portForwardingEnabled)}
@@ -582,16 +579,16 @@ const ServerOptions = observer(() => {
       </label>
 
       <label>
-        <span>{chrome.i18n.getMessage('encryption')}</span>
+        <span>{getMessage('encryption')}</span>
         <select value={settings.encryption} onChange={handleEncryptionChange}>
-          <option value="required">{chrome.i18n.getMessage('encryptionRequired')}</option>
-          <option value="preferred">{chrome.i18n.getMessage('encryptionPreferred')}</option>
-          <option value="tolerated">{chrome.i18n.getMessage('encryptionTolerated')}</option>
+          <option value="required">{getMessage('encryptionRequired')}</option>
+          <option value="preferred">{getMessage('encryptionPreferred')}</option>
+          <option value="tolerated">{getMessage('encryptionTolerated')}</option>
         </select>
       </label>
 
       <label>
-        <span>{chrome.i18n.getMessage('dhtEnabled')}</span>
+        <span>{getMessage('dhtEnabled')}</span>
         <span className="toggle-switch">
           <input
             onChange={handleToggle(client.setDhtEnabled, settings.dhtEnabled)}
@@ -603,7 +600,7 @@ const ServerOptions = observer(() => {
       </label>
 
       <label>
-        <span>{chrome.i18n.getMessage('pexEnabled')}</span>
+        <span>{getMessage('pexEnabled')}</span>
         <span className="toggle-switch">
           <input
             onChange={handleToggle(client.setPexEnabled, settings.pexEnabled)}
@@ -615,7 +612,7 @@ const ServerOptions = observer(() => {
       </label>
 
       <label>
-        <span>{chrome.i18n.getMessage('lpdEnabled')}</span>
+        <span>{getMessage('lpdEnabled')}</span>
         <span className="toggle-switch">
           <input
             onChange={handleToggle(client.setLpdEnabled, settings.lpdEnabled)}
@@ -627,7 +624,7 @@ const ServerOptions = observer(() => {
       </label>
 
       <label>
-        <span>{chrome.i18n.getMessage('utpEnabled')}</span>
+        <span>{getMessage('utpEnabled')}</span>
         <span className="toggle-switch">
           <input
             onChange={handleToggle(client.setUtpEnabled, settings.utpEnabled)}
@@ -638,10 +635,10 @@ const ServerOptions = observer(() => {
         </span>
       </label>
 
-      <h3>{chrome.i18n.getMessage('altSpeedSchedule')}</h3>
+      <h3>{getMessage('altSpeedSchedule')}</h3>
 
       <label>
-        <span>{chrome.i18n.getMessage('altSpeedTimeEnabled')}</span>
+        <span>{getMessage('altSpeedTimeEnabled')}</span>
         <span className="toggle-switch">
           <input
             onChange={handleToggle(client.setAltSpeedTimeEnabled, settings.altSpeedTimeEnabled)}
@@ -655,7 +652,7 @@ const ServerOptions = observer(() => {
       {settings.altSpeedTimeEnabled && (
         <>
           <label>
-            <span>{chrome.i18n.getMessage('altSpeedTimeBegin')}</span>
+            <span>{getMessage('altSpeedTimeBegin')}</span>
             <input
               type="time"
               value={minutesToTime(settings.altSpeedTimeBegin)}
@@ -664,7 +661,7 @@ const ServerOptions = observer(() => {
           </label>
 
           <label>
-            <span>{chrome.i18n.getMessage('altSpeedTimeEnd')}</span>
+            <span>{getMessage('altSpeedTimeEnd')}</span>
             <input
               type="time"
               value={minutesToTime(settings.altSpeedTimeEnd)}
@@ -673,7 +670,7 @@ const ServerOptions = observer(() => {
           </label>
 
           <label>
-            <span>{chrome.i18n.getMessage('altSpeedTimeDays')}</span>
+            <span>{getMessage('altSpeedTimeDays')}</span>
             <div className="day-checkboxes">
               {ALT_SPEED_DAYS.map(({ bit, key }) => (
                 <label key={key} className="day-checkbox">
@@ -682,7 +679,7 @@ const ServerOptions = observer(() => {
                     checked={(settings.altSpeedTimeDay & bit) !== 0}
                     onChange={handleDayToggle(bit)}
                   />
-                  <span>{chrome.i18n.getMessage(key)}</span>
+                  <span>{getMessage(key)}</span>
                 </label>
               ))}
             </div>
@@ -690,10 +687,10 @@ const ServerOptions = observer(() => {
         </>
       )}
 
-      <h3>{chrome.i18n.getMessage('scriptSettings')}</h3>
+      <h3>{getMessage('scriptSettings')}</h3>
 
       <label>
-        <span>{chrome.i18n.getMessage('scriptTorrentDoneEnabled')}</span>
+        <span>{getMessage('scriptTorrentDoneEnabled')}</span>
         <span className="toggle-switch">
           <input
             onChange={handleToggle(
@@ -709,11 +706,11 @@ const ServerOptions = observer(() => {
 
       {settings.scriptTorrentDoneEnabled && (
         <label>
-          <span>{chrome.i18n.getMessage('scriptTorrentDoneFilename')}</span>
+          <span>{getMessage('scriptTorrentDoneFilename')}</span>
           <div className="blocklist-url-row">
             <input type="text" value={scriptFilename} onChange={handleScriptFilenameChange} />
             <button type="button" onClick={handleApplyScriptFilename}>
-              {chrome.i18n.getMessage('DLG_BTN_APPLY')}
+              {getMessage('DLG_BTN_APPLY')}
             </button>
           </div>
         </label>
@@ -723,7 +720,7 @@ const ServerOptions = observer(() => {
       {settings.features.scriptTorrentAdded && (
         <>
           <label>
-            <span>{chrome.i18n.getMessage('scriptTorrentAddedEnabled')}</span>
+            <span>{getMessage('scriptTorrentAddedEnabled')}</span>
             <span className="toggle-switch">
               <input
                 onChange={handleToggle(
@@ -739,7 +736,7 @@ const ServerOptions = observer(() => {
 
           {settings.scriptTorrentAddedEnabled && (
             <label>
-              <span>{chrome.i18n.getMessage('scriptTorrentAddedFilename')}</span>
+              <span>{getMessage('scriptTorrentAddedFilename')}</span>
               <div className="blocklist-url-row">
                 <input
                   type="text"
@@ -747,14 +744,14 @@ const ServerOptions = observer(() => {
                   onChange={handleScriptAddedFilenameChange}
                 />
                 <button type="button" onClick={handleApplyScriptAddedFilename}>
-                  {chrome.i18n.getMessage('DLG_BTN_APPLY')}
+                  {getMessage('DLG_BTN_APPLY')}
                 </button>
               </div>
             </label>
           )}
 
           <label>
-            <span>{chrome.i18n.getMessage('scriptTorrentDoneSeedingEnabled')}</span>
+            <span>{getMessage('scriptTorrentDoneSeedingEnabled')}</span>
             <span className="toggle-switch">
               <input
                 onChange={handleToggle(
@@ -770,7 +767,7 @@ const ServerOptions = observer(() => {
 
           {settings.scriptTorrentDoneSeedingEnabled && (
             <label>
-              <span>{chrome.i18n.getMessage('scriptTorrentDoneSeedingFilename')}</span>
+              <span>{getMessage('scriptTorrentDoneSeedingFilename')}</span>
               <div className="blocklist-url-row">
                 <input
                   type="text"
@@ -778,7 +775,7 @@ const ServerOptions = observer(() => {
                   onChange={handleScriptDoneSeedingFilenameChange}
                 />
                 <button type="button" onClick={handleApplyScriptDoneSeedingFilename}>
-                  {chrome.i18n.getMessage('DLG_BTN_APPLY')}
+                  {getMessage('DLG_BTN_APPLY')}
                 </button>
               </div>
             </label>
@@ -786,10 +783,10 @@ const ServerOptions = observer(() => {
         </>
       )}
 
-      <h3>{chrome.i18n.getMessage('blocklist')}</h3>
+      <h3>{getMessage('blocklist')}</h3>
 
       <label>
-        <span>{chrome.i18n.getMessage('blocklistEnable')}</span>
+        <span>{getMessage('blocklistEnable')}</span>
         <span className="toggle-switch">
           <input
             onChange={handleToggle(client.setBlocklistEnabled, settings.blocklistEnabled)}
@@ -801,24 +798,24 @@ const ServerOptions = observer(() => {
       </label>
 
       <label>
-        <span>{chrome.i18n.getMessage('blocklistUrl')}</span>
+        <span>{getMessage('blocklistUrl')}</span>
         <div className="blocklist-url-row">
           <input type="text" value={url} onChange={handleUrlChange} placeholder="https://..." />
           <button type="button" onClick={handleApplyUrl}>
-            {chrome.i18n.getMessage('DLG_BTN_APPLY')}
+            {getMessage('DLG_BTN_APPLY')}
           </button>
         </div>
       </label>
 
       <label>
         <span>
-          {chrome.i18n.getMessage('blocklistRules')}: {settings.blocklistSize.toLocaleString()}
+          {getMessage('blocklistRules')}: {settings.blocklistSize.toLocaleString(getLocale())}
         </span>
       </label>
 
       <label>
         <button type="button" onClick={handleUpdate} disabled={updating}>
-          {updating ? '...' : chrome.i18n.getMessage('blocklistUpdateNow')}
+          {updating ? '...' : getMessage('blocklistUpdateNow')}
         </button>
       </label>
     </div>

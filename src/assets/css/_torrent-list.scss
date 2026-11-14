@@ -182,7 +182,7 @@ div.torrent-list-layer table tr.selected td.actions div.btns > button {
 
 div.torrent-list-layer table tr.selected td.actions div.btns > a,
 div.torrent-list-layer table tr.selected td.actions div.btns > button {
-  filter: invert(100%);
+  filter: var(--icon-filter);
 }
 
 div.torrent-list-layer table td.actions div.btns > .start {
@@ -213,7 +213,11 @@ div.torrent-list-layer table tr.even td.actions {
 }
 
 div.torrent-list-layer table tr.selected td.actions {
-  background-color: var(--primary-color);
+  background-color: var(--selected-row-bg);
+}
+
+div.torrent-list-layer table th.actions {
+  background-color: var(--input-bg);
 }
 
 // Torrent name badges (metadata loading, etc.)
@@ -230,5 +234,44 @@ div.torrent-list-layer table tr.selected td.actions {
 
   &.metadata {
     background-color: var(--warning-color, #e6a23c);
+  }
+}
+
+.torrent-name-target:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+}
+
+.torrent-name-tooltip {
+  max-width: min(400px, calc(100vw - 24px));
+  max-height: calc(100vh - 24px);
+  overflow: auto;
+  padding: 10px 12px;
+  background: var(--card-bg);
+  color: var(--text-color);
+  border: 1px solid var(--panel-border);
+  border-radius: $radius-sm;
+  box-shadow: var(--shadow-md);
+  font-size: $font-size-sm;
+  overflow-wrap: anywhere;
+
+  .torrent-tooltip-info {
+    white-space: pre-wrap;
+  }
+
+  .torrent-tooltip-space {
+    border-top: 1px solid var(--border-color);
+    margin-top: 8px;
+    padding-top: 8px;
+    font-weight: 600;
+  }
+
+  .torrent-tooltip-hint {
+    margin-top: 4px;
+    color: var(--text-secondary);
+  }
+
+  .red {
+    color: var(--toolbar-red);
   }
 }

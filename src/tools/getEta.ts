@@ -1,6 +1,6 @@
-const timeAgoList: string[] = JSON.parse(chrome.i18n.getMessage('timeOutList'));
-
+import { getMessage } from './i18n';
 const getEta = (eta: number): string => {
+  const timeAgoList: string[] = JSON.parse(getMessage('timeOutList'));
   // Transmission sentinels: -1 = not available / infinite, -2 = unknown
   if (eta === -1) return '∞';
   if (eta < 0) return '?';

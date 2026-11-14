@@ -1,3 +1,4 @@
+import { getMessage } from '../tools/i18n';
 import getLogger from '../tools/getLogger';
 import type { TorrentId } from '../types';
 import readBlobAsArrayBuffer from '../tools/readBlobAsArrayBuffer';
@@ -648,7 +649,7 @@ class TorrentService {
         if (err.code === 'TRANSMISSION_ERROR') {
           this.notifier.torrentErrorNotify(err.message);
         } else {
-          this.notifier.torrentErrorNotify(chrome.i18n.getMessage('unexpectedError'));
+          this.notifier.torrentErrorNotify(getMessage('unexpectedError'));
         }
         throw err;
       });
@@ -708,13 +709,13 @@ class TorrentService {
         return downloadFileFromUrl(url)
           .catch((err) => {
             if (err.code === 'FILE_SIZE_EXCEEDED') {
-              this.notifier.torrentErrorNotify(chrome.i18n.getMessage('fileSizeError'));
+              this.notifier.torrentErrorNotify(getMessage('fileSizeError'));
               throw err;
             }
             // Magnet links can't be downloaded; pass the URI straight to
             // Transmission's torrent-add (filename) like the context-menu flow does.
             if (!/^(https?|magnet):/.test(url)) {
-              this.notifier.torrentErrorNotify(chrome.i18n.getMessage('unexpectedError'));
+              this.notifier.torrentErrorNotify(getMessage('unexpectedError'));
               throw err;
             }
             if (err.code !== 'LINK_IS_NOT_SUPPORTED') {

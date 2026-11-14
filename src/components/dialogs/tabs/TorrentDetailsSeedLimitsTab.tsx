@@ -1,3 +1,4 @@
+import { getMessage } from '../../../tools/i18n';
 import React, { useEffect, useState } from 'react';
 
 /**
@@ -82,20 +83,20 @@ const TorrentDetailsSeedLimitsTab = ({
     {hasDetails ? (
       <div className="seed-limits-form">
         <div className="seed-limit-row">
-          <label>{chrome.i18n.getMessage('DT_SEED_RATIO_MODE')}</label>
+          <label>{getMessage('DT_SEED_RATIO_MODE')}</label>
           <select
             value={seedRatioMode}
             onChange={(e) => onSeedRatioModeChange(Number(e.target.value))}
           >
-            <option value={0}>{chrome.i18n.getMessage('DT_USE_GLOBAL')}</option>
-            <option value={1}>{chrome.i18n.getMessage('DT_CUSTOM')}</option>
-            <option value={2}>{chrome.i18n.getMessage('DT_UNLIMITED')}</option>
+            <option value={0}>{getMessage('DT_USE_GLOBAL')}</option>
+            <option value={1}>{getMessage('DT_CUSTOM')}</option>
+            <option value={2}>{getMessage('DT_UNLIMITED')}</option>
           </select>
         </div>
 
         {seedRatioMode === 1 && (
           <div className="seed-limit-row">
-            <label>{chrome.i18n.getMessage('DT_SEED_RATIO_LIMIT')}</label>
+            <label>{getMessage('DT_SEED_RATIO_LIMIT')}</label>
             <NumberField
               min="0"
               step="0.1"
@@ -106,27 +107,27 @@ const TorrentDetailsSeedLimitsTab = ({
         )}
 
         <div className="seed-limit-row">
-          <label>{chrome.i18n.getMessage('DT_SEED_IDLE_MODE')}</label>
+          <label>{getMessage('DT_SEED_IDLE_MODE')}</label>
           <select
             value={seedIdleMode}
             onChange={(e) => onSeedIdleModeChange(Number(e.target.value))}
           >
-            <option value={0}>{chrome.i18n.getMessage('DT_USE_GLOBAL')}</option>
-            <option value={1}>{chrome.i18n.getMessage('DT_CUSTOM')}</option>
-            <option value={2}>{chrome.i18n.getMessage('DT_UNLIMITED')}</option>
+            <option value={0}>{getMessage('DT_USE_GLOBAL')}</option>
+            <option value={1}>{getMessage('DT_CUSTOM')}</option>
+            <option value={2}>{getMessage('DT_UNLIMITED')}</option>
           </select>
         </div>
 
         {seedIdleMode === 1 && (
           <div className="seed-limit-row">
-            <label>{chrome.i18n.getMessage('DT_SEED_IDLE_LIMIT')}</label>
+            <label>{getMessage('DT_SEED_IDLE_LIMIT')}</label>
             <NumberField min="0" step="1" value={seedIdleLimit} onChange={onSeedIdleLimitChange} />
           </div>
         )}
 
         <div className="torrent-details-buttons">
           <button onClick={onApplySeedLimits} disabled={seedSaving}>
-            {chrome.i18n.getMessage('DT_APPLY')}
+            {getMessage('DT_APPLY')}
           </button>
         </div>
       </div>

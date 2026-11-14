@@ -5,20 +5,20 @@
 // Colors - Primary (Modern grey)
 $primary-color: #6b7280;
 $primary-hover: #4b5563;
-$primary-light: #f3f4f6;
+$primary-light: #e4ebf3;
 
 // Colors - Background
-$bg-color: #f8fafc;
+$bg-color: #edf1f5;
 $card-bg: #ffffff;
-$input-bg: #f1f5f9;
+$input-bg: #e2e8f0;
 $input-focus-bg: #ffffff;
 
 // Colors - Text
 $text-color: #1e293b;
-$text-secondary: #64748b;
+$text-secondary: #475569;
 
 // Colors - Borders
-$border-color: #e2e8f0;
+$border-color: #cbd5e1;
 
 // Colors - Status
 $success-color: #22c55e;
@@ -74,6 +74,10 @@ $folder-colors: (
   --text-color: #{$text-color};
   --text-secondary: #{$text-secondary};
   --border-color: #{$border-color};
+  --panel-bg: #dbe3ec;
+  --panel-border: #94a3b8;
+  --row-border: #dfe6ee;
+  --selected-row-bg: #dbeafe;
   --primary-color: #{$primary-color};
   --primary-hover: #{$primary-hover};
   --primary-light: #{$primary-light};
@@ -83,6 +87,12 @@ $folder-colors: (
   --shadow-sm: #{$shadow-sm};
   --shadow-md: #{$shadow-md};
   --icon-filter: none;
+  --toolbar-blue: #1d4ed8;
+  --toolbar-teal: #0f766e;
+  --toolbar-purple: #7e22ce;
+  --toolbar-green: #15803d;
+  --toolbar-red: #b91c1c;
+  --toolbar-amber: #a16207;
   // Referenced across the stylesheets but never defined until now, so their
   // fallbacks (or nothing at all) rendered in both themes
   --warning-color: #b45309;
@@ -104,6 +114,10 @@ $folder-colors: (
   --text-color: #c1c2c5;
   --text-secondary: #909296;
   --border-color: #4d5157;
+  --panel-bg: #202226;
+  --panel-border: #606773;
+  --row-border: #343840;
+  --selected-row-bg: #2a4057;
   --primary-color: #909296;
   --primary-hover: #adb5bd;
   --primary-light: #2c2e33;
@@ -113,6 +127,12 @@ $folder-colors: (
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
   --icon-filter: invert(0.75);
+  --toolbar-blue: #74c0fc;
+  --toolbar-teal: #5eead4;
+  --toolbar-purple: #d8b4fe;
+  --toolbar-green: #51cf66;
+  --toolbar-red: #ff8787;
+  --toolbar-amber: #ffd43b;
   --warning-color: #f0b849;
   --text-muted: #909296;
   --focus-ring: #74c0fc;
@@ -131,6 +151,10 @@ $folder-colors: (
     --text-color: #c1c2c5;
     --text-secondary: #909296;
     --border-color: #4d5157;
+    --panel-bg: #202226;
+    --panel-border: #606773;
+    --row-border: #343840;
+    --selected-row-bg: #2a4057;
     --primary-color: #909296;
     --primary-hover: #adb5bd;
     --primary-light: #2c2e33;
@@ -140,6 +164,12 @@ $folder-colors: (
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
     --icon-filter: invert(0.75);
+    --toolbar-blue: #74c0fc;
+    --toolbar-teal: #5eead4;
+    --toolbar-purple: #d8b4fe;
+    --toolbar-green: #51cf66;
+    --toolbar-red: #ff8787;
+    --toolbar-amber: #ffd43b;
     --warning-color: #f0b849;
     --text-muted: #909296;
     --focus-ring: #74c0fc;

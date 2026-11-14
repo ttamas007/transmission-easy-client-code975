@@ -1,3 +1,4 @@
+import { getMessage } from '../../tools/i18n';
 import React, { useCallback, useState, FormEvent, ChangeEvent } from 'react';
 import { observer } from 'mobx-react';
 import Dialog from './Dialog';
@@ -53,14 +54,14 @@ const MoveDialog = observer(({ dialogStore }: MoveDialogProps) => {
 
       if (!location) {
         showError(
-          chrome.i18n.getMessage('OV_FL_ERROR') || 'Failed to move torrent',
+          getMessage('OV_FL_ERROR') || 'Failed to move torrent',
           new Error('No destination selected')
         );
         return;
       }
 
       client?.torrentSetLocation(dialogStore.torrentIds, location).catch((err) => {
-        showError(chrome.i18n.getMessage('OV_FL_ERROR') || 'Failed to move torrent', err);
+        showError(getMessage('OV_FL_ERROR') || 'Failed to move torrent', err);
       });
 
       dialogStore.close();
@@ -79,7 +80,7 @@ const MoveDialog = observer(({ dialogStore }: MoveDialogProps) => {
   if (showCustomLocation) {
     customLocation = (
       <div className="nf-subItem">
-        <label>{chrome.i18n.getMessage('moveNewPath')}</label>
+        <label>{getMessage('moveNewPath')}</label>
         <input type="text" name="location" defaultValue={dialogStore.directory} autoFocus />
       </div>
     );
@@ -97,12 +98,8 @@ const MoveDialog = observer(({ dialogStore }: MoveDialogProps) => {
             onChange={handleChange}
           />
           <div className="nf-subItem">
-            <input type="submit" value={chrome.i18n.getMessage('DLG_BTN_APPLY')} />
-            <input
-              onClick={handleClose}
-              type="button"
-              value={chrome.i18n.getMessage('DLG_BTN_CANCEL')}
-            />
+            <input type="submit" value={getMessage('DLG_BTN_APPLY')} />
+            <input onClick={handleClose} type="button" value={getMessage('DLG_BTN_CANCEL')} />
           </div>
         </form>
       </div>

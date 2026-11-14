@@ -1,3 +1,4 @@
+import { getMessage } from '../../tools/i18n';
 import React, { useEffect } from 'react';
 import Spinner from '../Spinner';
 import ErrorBoundary from '../ErrorBoundary';
@@ -48,9 +49,9 @@ const DialogLoader = ({ type, dialogStore }: DialogLoaderProps) => {
         // useDialog handler, so without this button its store entry would
         // live forever (and keep swallowing Escape)
         <div className="dialog-error">
-          <p>{chrome.i18n.getMessage('OV_FL_ERROR') || 'Failed to load dialog'}</p>
+          <p>{getMessage('OV_FL_ERROR') || 'Failed to load dialog'}</p>
           <button type="button" onClick={() => store?.close?.()}>
-            {chrome.i18n.getMessage('DLG_BTN_CANCEL') || 'Close'}
+            {getMessage('DLG_BTN_CANCEL') || 'Close'}
           </button>
         </div>
       }

@@ -44,76 +44,79 @@ interface TorrentNameProps {
   name: string;
   width: number;
   title?: string;
+  nativeTitle?: boolean;
 }
 
-const TorrentName = React.memo<TorrentNameProps>(({ name: rawName, width, title }) => {
-  // Torrent names are attacker-controlled: a U+202E override in the name
-  // spoofs the displayed file extension (.exe rendered as .png)
-  const name = stripBidiControls(rawName);
-  const [movebleClassName, setMovebleClassName] = useState<string | null>(null);
-  const [shouldUpdateCalc, setShouldUpdateCalc] = useState(true);
-  const refSpan = useRef<HTMLSpanElement>(null);
-  const prevNameRef = useRef(name);
-  const prevWidthRef = useRef(width);
-  const acquiredClassRef = useRef<string | null>(null);
+const TorrentName = React.memo<TorrentNameProps>(
+  ({ name: rawName, width, title, nativeTitle = true }) => {
+    // Torrent names are attacker-controlled: a U+202E override in the name
+    // spoofs the displayed file extension (.exe rendered as .png)
+    const name = stripBidiControls(rawName);
+    const [movebleClassName, setMovebleClassName] = useState<string | null>(null);
+    const [shouldUpdateCalc, setShouldUpdateCalc] = useState(true);
+    const refSpan = useRef<HTMLSpanElement>(null);
+    const prevNameRef = useRef(name);
+    const prevWidthRef = useRef(width);
+    const acquiredClassRef = useRef<string | null>(null);
 
-  // Reset calculation flag when name or width changes
-  useEffect(() => {
-    if (prevNameRef.current !== name || prevWidthRef.current !== width) {
-      setShouldUpdateCalc(true);
-      prevNameRef.current = name;
-      prevWidthRef.current = width;
+    // Reset calculation flag when name or width changes
+    useEffect(() => {
+      if (prevNameRef.current !== name || prevWidthRef.current !== width) {
+        setShouldUpdateCalc(true);
+        prevNameRef.current = name;
+        prevWidthRef.current = width;
+      }
+    }, [name, width]);
+
+    // Releases the previous class when it changes, and on unmount. This is the
+    // ONLY release path: releasing in the handler too double-decremented the
+    // shared refcount and deleted a <style> other rows were still using.
+    useEffect(() => {
+      return () => releaseStyle(movebleClassName);
+    }, [movebleClassName]);
+
+    const handleMouseEnter = useCallback(() => {
+      setShouldUpdateCalc(false);
+
+      const spanWidth = refSpan.current?.offsetWidth || 0;
+      if (spanWidth < width) {
+        // Clear the guard too: the effect cleanup is about to release this class,
+        // so leaving the ref set would block ever re-acquiring it
+        acquiredClassRef.current = null;
+        setMovebleClassName(null);
+        return;
+      }
+
+      // Round elWidth to reduce unique style combinations
+      let elWidth = Math.ceil(spanWidth / 50) * 50;
+      if (elWidth < 100) elWidth = 100;
+
+      const moveName = `mv_${width}_${elWidth}`;
+      // Acquire once per distinct class: re-hovering the same bucket would
+      // otherwise bump the refcount with no matching release
+      if (moveName === acquiredClassRef.current) return;
+      getOrCreateStyle(moveName, width, elWidth);
+      acquiredClassRef.current = moveName;
+      setMovebleClassName(moveName);
+    }, [width]);
+
+    const classList = ['title'];
+    if (!shouldUpdateCalc && movebleClassName) {
+      classList.push(movebleClassName);
     }
-  }, [name, width]);
 
-  // Releases the previous class when it changes, and on unmount. This is the
-  // ONLY release path: releasing in the handler too double-decremented the
-  // shared refcount and deleted a <style> other rows were still using.
-  useEffect(() => {
-    return () => releaseStyle(movebleClassName);
-  }, [movebleClassName]);
-
-  const handleMouseEnter = useCallback(() => {
-    setShouldUpdateCalc(false);
-
-    const spanWidth = refSpan.current?.offsetWidth || 0;
-    if (spanWidth < width) {
-      // Clear the guard too: the effect cleanup is about to release this class,
-      // so leaving the ref set would block ever re-acquiring it
-      acquiredClassRef.current = null;
-      setMovebleClassName(null);
-      return;
-    }
-
-    // Round elWidth to reduce unique style combinations
-    let elWidth = Math.ceil(spanWidth / 50) * 50;
-    if (elWidth < 100) elWidth = 100;
-
-    const moveName = `mv_${width}_${elWidth}`;
-    // Acquire once per distinct class: re-hovering the same bucket would
-    // otherwise bump the refcount with no matching release
-    if (moveName === acquiredClassRef.current) return;
-    getOrCreateStyle(moveName, width, elWidth);
-    acquiredClassRef.current = moveName;
-    setMovebleClassName(moveName);
-  }, [width]);
-
-  const classList = ['title'];
-  if (!shouldUpdateCalc && movebleClassName) {
-    classList.push(movebleClassName);
+    return (
+      <div className={classList.join(' ')}>
+        <span
+          ref={refSpan}
+          onMouseEnter={shouldUpdateCalc ? handleMouseEnter : undefined}
+          title={nativeTitle ? (title ? stripBidiControls(title) : name) : undefined}
+        >
+          {name}
+        </span>
+      </div>
+    );
   }
-
-  return (
-    <div className={classList.join(' ')}>
-      <span
-        ref={refSpan}
-        onMouseEnter={shouldUpdateCalc ? handleMouseEnter : undefined}
-        title={title ? stripBidiControls(title) : name}
-      >
-        {name}
-      </span>
-    </div>
-  );
-});
+);
 
 export default TorrentName;

@@ -1,3 +1,4 @@
+import { getMessage } from '../../tools/i18n';
 import React, { useCallback, FormEvent } from 'react';
 import { observer } from 'mobx-react';
 import Dialog from './Dialog';
@@ -53,7 +54,7 @@ const PutUrlDialog = observer(({ dialogStore }: PutUrlDialogProps) => {
       }
 
       client?.sendFiles(urls, directory?.path ?? undefined).catch((err) => {
-        showError(chrome.i18n.getMessage('OV_FL_ERROR') || 'Failed to add torrent', err);
+        showError(getMessage('OV_FL_ERROR') || 'Failed to add torrent', err);
       });
 
       dialogStore.close();
@@ -68,17 +69,13 @@ const PutUrlDialog = observer(({ dialogStore }: PutUrlDialogProps) => {
       <div className="nf-notifi">
         <form onSubmit={handleSubmit}>
           <div className="nf-subItem">
-            <label>{chrome.i18n.getMessage('Paste_a_torrent_URL')}</label>
+            <label>{getMessage('Paste_a_torrent_URL')}</label>
             <input type="text" name="url" autoFocus required />
           </div>
           <DirectorySelect folders={folders} />
           <div className="nf-subItem">
-            <input type="submit" value={chrome.i18n.getMessage('DLG_BTN_OK')} />
-            <input
-              onClick={handleClose}
-              type="button"
-              value={chrome.i18n.getMessage('DLG_BTN_CANCEL')}
-            />
+            <input type="submit" value={getMessage('DLG_BTN_OK')} />
+            <input onClick={handleClose} type="button" value={getMessage('DLG_BTN_CANCEL')} />
           </div>
         </form>
       </div>

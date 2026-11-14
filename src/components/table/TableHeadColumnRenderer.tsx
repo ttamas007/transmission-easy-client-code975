@@ -1,3 +1,4 @@
+import { getMessage } from '../../tools/i18n';
 import React, { useCallback, ChangeEvent } from 'react';
 import { observer } from 'mobx-react';
 import { Column } from './TableHeadColumn';
@@ -70,18 +71,14 @@ const TableHeadColumnRenderer = observer((props: TableHeadColumnRendererProps) =
           checked={isSelectedAll}
           onChange={handleSelectAll}
           type="checkbox"
-          aria-label={chrome.i18n.getMessage('selectAll')}
+          aria-label={getMessage('selectAll')}
         />
       </div>
     );
   } else if (isFixedColumn) {
     body = <div />;
   } else {
-    body = (
-      <div>
-        {chrome.i18n.getMessage(column.lang + '_SHORT') || chrome.i18n.getMessage(column.lang)}
-      </div>
-    );
+    body = <div>{getMessage(column.lang + '_SHORT') || getMessage(column.lang)}</div>;
   }
 
   let arrow: React.ReactNode = null;
@@ -90,7 +87,7 @@ const TableHeadColumnRenderer = observer((props: TableHeadColumnRendererProps) =
   }
 
   const onClick = column.order ? handleSort : undefined;
-  const title = isFixedColumn ? '' : chrome.i18n.getMessage(column.lang);
+  const title = isFixedColumn ? '' : getMessage(column.lang);
 
   let ariaSort: 'ascending' | 'descending' | 'none' | undefined;
   if (column.order !== 0) {

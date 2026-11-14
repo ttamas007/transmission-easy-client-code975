@@ -1,3 +1,4 @@
+import { getMessage } from '../../tools/i18n';
 import React, { ReactNode } from 'react';
 import * as ContextMenu from '@radix-ui/react-context-menu';
 import { observer } from 'mobx-react';
@@ -103,7 +104,7 @@ const SpeedMenuContent = observer(({ type }: SpeedMenuContentProps) => {
     <ContextMenu.Content className="context-menu">
       <ContextMenu.Item className="context-menu-item" onSelect={handleUnlimited}>
         {settings && !speedLimitEnabled && <span className="context-menu-check">●</span>}
-        {chrome.i18n.getMessage('MENU_UNLIMITED')}
+        {getMessage('MENU_UNLIMITED')}
       </ContextMenu.Item>
 
       {settings && (

@@ -1,3 +1,4 @@
+import { getMessage } from '../../../tools/i18n';
 import React from 'react';
 import type { TorrentDetailData } from '../../../bg/TorrentService';
 import type { MouseEvent } from 'react';
@@ -52,23 +53,23 @@ const TorrentDetailsTrackersTab = ({
         <thead>
           <tr>
             <th>
-              <div>{chrome.i18n.getMessage('DT_TRACKER_URL')}</div>
+              <div>{getMessage('DT_TRACKER_URL')}</div>
               <div className="resize-el" {...getTrackerResizeProps('url')} />
             </th>
             <th>
-              <div>{chrome.i18n.getMessage('DT_TRACKER_TIER')}</div>
+              <div>{getMessage('DT_TRACKER_TIER')}</div>
               <div className="resize-el" {...getTrackerResizeProps('tier')} />
             </th>
             <th>
-              <div>{chrome.i18n.getMessage('DT_TRACKER_SEEDS')}</div>
+              <div>{getMessage('DT_TRACKER_SEEDS')}</div>
               <div className="resize-el" {...getTrackerResizeProps('seeds')} />
             </th>
             <th>
-              <div>{chrome.i18n.getMessage('DT_TRACKER_PEERS')}</div>
+              <div>{getMessage('DT_TRACKER_PEERS')}</div>
               <div className="resize-el" {...getTrackerResizeProps('peers')} />
             </th>
             <th>
-              <div>{chrome.i18n.getMessage('DT_TRACKER_STATUS')}</div>
+              <div>{getMessage('DT_TRACKER_STATUS')}</div>
               <div className="resize-el" {...getTrackerResizeProps('status')} />
             </th>
           </tr>
@@ -91,8 +92,8 @@ const TorrentDetailsTrackersTab = ({
 
     {details && canEditTrackers && (
       <div className="tracker-list-edit">
-        <label>{chrome.i18n.getMessage('DT_TRACKER_LIST')}</label>
-        <div className="tracker-list-help">{chrome.i18n.getMessage('DT_TRACKER_LIST_HELP')}</div>
+        <label>{getMessage('DT_TRACKER_LIST')}</label>
+        <div className="tracker-list-help">{getMessage('DT_TRACKER_LIST_HELP')}</div>
         <textarea
           className="tracker-list-textarea"
           value={trackerListText}
@@ -100,7 +101,7 @@ const TorrentDetailsTrackersTab = ({
         />
         <div className="torrent-details-buttons">
           <button onClick={onApplyTrackers} disabled={trackerSaving}>
-            {chrome.i18n.getMessage('DT_APPLY')}
+            {getMessage('DT_APPLY')}
           </button>
         </div>
       </div>

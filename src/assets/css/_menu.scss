@@ -10,8 +10,8 @@
   height: 40px;
   align-items: center;
   flex-shrink: 0;
-  background: var(--card-bg);
-  border-bottom: 1px solid var(--border-color);
+  background: var(--panel-bg);
+  border-bottom: 1px solid var(--panel-border);
   padding: 0 8px;
   gap: 4px;
 
@@ -53,50 +53,52 @@
   button.btn {
     @include icon-button;
     background-color: transparent;
-  }
+    filter: none;
+    padding: 0;
 
-  .refresh {
-    background-image: url("../img/refresh.svg");
-    background-size: 20px;
+    .toolbar-icon {
+      display: block;
+      width: 20px;
+      height: 20px;
+      pointer-events: none;
+    }
 
-    &.btn-loading {
-      background-image: none;
+    .toolbar-icon-positive {
+      stroke: var(--toolbar-green);
     }
   }
 
+  .refresh {
+    color: var(--toolbar-blue);
+  }
+
   a.wui {
-    background-image: url("../img/wui.svg");
-    background-size: 20px;
+    color: var(--toolbar-teal);
   }
 
   .start_all {
-    background-image: url("../img/play_all.svg");
-    background-size: 20px;
+    color: var(--toolbar-green);
   }
 
   .pause_all {
-    background-image: url("../img/pause_all.svg");
-    background-size: 20px;
+    color: var(--toolbar-red);
   }
 
   .add_file {
-    background-image: url("../img/add.svg");
-    background-size: 20px;
+    color: var(--toolbar-blue);
   }
 
   .add_magnet {
-    background-image: url("../img/magnet.svg");
-    background-size: 20px;
+    color: var(--toolbar-purple);
   }
 
   .alt_speed {
-    background-image: url("../img/alt_speed.svg");
-    background-size: 20px;
+    color: var(--toolbar-amber);
 
     &.active {
-      background-color: rgba($primary-color, 0.15);
-      border-color: $primary-color;
-      filter: invert(45%) sepia(5%) saturate(500%) hue-rotate(180deg);
+      background-color: var(--selected-row-bg);
+      border-color: var(--toolbar-amber);
+      box-shadow: inset 0 -2px 0 var(--toolbar-amber);
     }
   }
 
@@ -133,17 +135,20 @@
     }
 
     a.search-icon {
-      background-image: url("../img/search.svg");
-      background-size: 18px;
+      color: var(--toolbar-blue);
       flex-shrink: 0;
     }
 
     a.clear-icon {
-      background-image: url("../img/close.svg");
-      background-size: 16px;
+      color: var(--toolbar-red);
       flex-shrink: 0;
       width: 24px;
       height: 24px;
+
+      .toolbar-icon {
+        width: 16px;
+        height: 16px;
+      }
     }
   }
 }

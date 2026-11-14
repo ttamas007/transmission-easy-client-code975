@@ -194,6 +194,25 @@ describe('BackupRestoreOptions', () => {
     });
   });
 
+  it('does not warn about connection changes when restoring the unsaved connection defaults', async () => {
+    areas.local = { configVersion: 2 };
+    await renderLoaded();
+    (document.querySelector('textarea') as HTMLTextAreaElement).value = JSON.stringify({
+      configVersion: 2,
+      ssl: false,
+      authenticationRequired: false,
+    });
+
+    await click(screen.getByText('toRestore'));
+
+    await waitFor(() => {
+      expect(areas.local.ssl).toBe(false);
+      expect(areas.local.authenticationRequired).toBe(false);
+    });
+    expect(window.confirm).toHaveBeenCalledTimes(1);
+    expect(document.querySelector('.red')).toBeNull();
+  });
+
   it('shows the error when restoring invalid JSON', async () => {
     areas.local = { configVersion: 2 };
     await renderLoaded();

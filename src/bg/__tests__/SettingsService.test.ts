@@ -4,7 +4,11 @@ import type TransmissionTransport from '../TransmissionTransport';
 
 function createService(rpcVersion = 0) {
   const sendAction = vi.fn();
-  const transport = { sendAction, rpcVersion } as unknown as TransmissionTransport;
+  const transport = {
+    sendAction,
+    rpcVersion,
+    url: 'http://nas.local/transmission/rpc',
+  } as unknown as TransmissionTransport;
   const applySettings = vi.fn();
   const service = new SettingsService(transport, applySettings);
   return { service, sendAction, transport, applySettings };
@@ -23,6 +27,96 @@ const LEGACY_SESSION = {
   seedRatioLimit: 2,
   seedRatioLimited: true,
 };
+
+describe('SettingsService.getFreeSpace', () => {
+  it('summarizes only running torrents and returns hostnames without credentials or passkeys', async () => {
+    const { service, sendAction } = createService();
+    const announce = 'https://user:password@tracker.example/announce?passkey=secret';
+    sendAction.mockResolvedValue({
+      arguments: {
+        torrents: [
+          { status: 0, trackers: [{ announce: 'https://paused.example/announce' }] },
+          { status: 6, trackers: [{ announce }, { announce }] },
+          { status: 4, trackers: [{ announce }] },
+          { status: 5, trackers: [] },
+        ],
+      },
+    });
+    await expect(
+      service.getActiveTrackerHosts('http://nas.local/transmission/rpc')
+    ).resolves.toEqual({
+      hosts: [{ host: 'tracker.example', count: 2 }],
+      withoutTracker: 1,
+    });
+    expect(sendAction).toHaveBeenCalledWith({
+      method: 'torrent-get',
+      arguments: { fields: ['status', 'trackers'] },
+    });
+  });
+
+  it('rejects tracker requests for another connection and malformed torrent states', async () => {
+    const { service, sendAction } = createService();
+    await expect(service.getActiveTrackerHosts('http://other/rpc')).rejects.toThrow(
+      'connectionChanged'
+    );
+    expect(sendAction).not.toHaveBeenCalled();
+    sendAction.mockResolvedValue({ arguments: { torrents: [{ status: '6' }] } });
+    await expect(
+      service.getActiveTrackerHosts('http://nas.local/transmission/rpc')
+    ).rejects.toThrow('activeTrackersInvalid');
+  });
+
+  it('derives the session start from daemon uptime, never from extension startup', async () => {
+    const { service, sendAction } = createService();
+    const now = 1700000000000;
+    const clock = vi.spyOn(Date, 'now').mockReturnValue(now);
+    try {
+      sendAction.mockResolvedValue({
+        arguments: { 'current-stats': { secondsActive: 3600, downloadedBytes: 123 } },
+      });
+      expect((await service.getSessionStats()).sessionStartedAt).toBe(now - 3600000);
+      sendAction.mockResolvedValue({ arguments: { 'current-stats': { downloadedBytes: 123 } } });
+      expect((await service.getSessionStats()).sessionStartedAt).toBeUndefined();
+    } finally {
+      clock.mockRestore();
+    }
+  });
+  it.each(['size-bytes', 'size_bytes'])(
+    'queries the requested Docker path and accepts a real zero (%s)',
+    async (key) => {
+      const { service, sendAction } = createService();
+      sendAction.mockResolvedValue({ arguments: { path: '/media/series', [key]: 0 } });
+      await expect(service.getFreeSpace('/media/series')).resolves.toEqual({
+        path: '/media/series',
+        sizeBytes: 0,
+        totalSize: undefined,
+      });
+      expect(sendAction).toHaveBeenCalledWith({
+        method: 'free-space',
+        arguments: { path: '/media/series' },
+      });
+    }
+  );
+
+  it.each([-1, NaN, '100', undefined])(
+    'rejects invalid or unknown free space (%s)',
+    async (value) => {
+      const { service, sendAction } = createService();
+      sendAction.mockResolvedValue({ arguments: { path: '/media/series', 'size-bytes': value } });
+      await expect(service.getFreeSpace('/media/series')).rejects.toThrow(
+        'invalidFreeSpaceResponse'
+      );
+    }
+  );
+
+  it('rejects a stale connection without sending a request to the wrong server', async () => {
+    const { service, sendAction } = createService();
+    await expect(service.getFreeSpace('/media/series', 'http://other.local/rpc')).rejects.toThrow(
+      'freeSpaceConnectionChanged'
+    );
+    expect(sendAction).not.toHaveBeenCalled();
+  });
+});
 
 const MODERN_SESSION = {
   rpc_version: 18,
@@ -73,6 +167,75 @@ describe('SettingsService.updateSettings', () => {
     expect(normalized.downloadSpeedLimit).toBe(100);
     expect(normalized.downloadDir).toBe('/downloads');
     expect(normalized.seedRatioLimit).toBe(2);
+  });
+});
+
+describe('SettingsService.getDownloadDirectories', () => {
+  it('lists the container default first and deduplicates all torrent destinations', async () => {
+    const { service, sendAction } = createService(17);
+    sendAction
+      .mockResolvedValueOnce({ arguments: { 'download-dir': '/downloads/' } })
+      .mockResolvedValueOnce({
+        arguments: {
+          torrents: [
+            { downloadDir: '/downloads/Films/' },
+            { downloadDir: '/downloads' },
+            { downloadDir: '/downloads/Films' },
+            { downloadDir: '/archive' },
+            { downloadDir: '/' },
+          ],
+        },
+      });
+
+    await expect(service.getDownloadDirectories()).resolves.toEqual({
+      defaultDirectory: '/downloads',
+      directories: ['/downloads', '/', '/archive', '/downloads/Films'],
+    });
+    expect(sendAction.mock.calls).toEqual([
+      [{ method: 'session-get', arguments: { fields: ['download-dir'] } }],
+      [{ method: 'torrent-get', arguments: { fields: ['downloadDir'] } }],
+    ]);
+  });
+
+  it('accepts snake_case responses', async () => {
+    const { service, sendAction } = createService(18);
+    sendAction
+      .mockResolvedValueOnce({ arguments: { download_dir: '/downloads' } })
+      .mockResolvedValueOnce({ arguments: { torrents: [{ download_dir: '/media' }] } });
+
+    await expect(service.getDownloadDirectories()).resolves.toEqual({
+      defaultDirectory: '/downloads',
+      directories: ['/downloads', '/media'],
+    });
+  });
+
+  it('offers the default even when no torrents have been added', async () => {
+    const { service, sendAction } = createService(17);
+    sendAction
+      .mockResolvedValueOnce({ arguments: { 'download-dir': '/downloads' } })
+      .mockResolvedValueOnce({ arguments: { torrents: [] } });
+    await expect(service.getDownloadDirectories()).resolves.toEqual({
+      defaultDirectory: '/downloads',
+      directories: ['/downloads'],
+    });
+  });
+
+  it('propagates RPC failures instead of returning a partial directory list', async () => {
+    const { service, sendAction } = createService(17);
+    sendAction
+      .mockResolvedValueOnce({ arguments: { 'download-dir': '/downloads' } })
+      .mockRejectedValueOnce(new Error('HTTP 401'));
+    await expect(service.getDownloadDirectories()).rejects.toThrow('HTTP 401');
+  });
+
+  it('rejects malformed torrent directory data', async () => {
+    const { service, sendAction } = createService(17);
+    sendAction
+      .mockResolvedValueOnce({ arguments: { 'download-dir': '/downloads' } })
+      .mockResolvedValueOnce({ arguments: { torrents: [{}] } });
+    await expect(service.getDownloadDirectories()).rejects.toThrow(
+      'Missing torrent download directory'
+    );
   });
 });
 

@@ -6,6 +6,7 @@
  */
 
 import type { TorrentId } from './index';
+import type { SeedTimeLimitInput } from './seedTimeLimit';
 
 // Discriminated union of all message types
 export type BgMessage =
@@ -30,6 +31,9 @@ export type BgMessage =
   | UpdateSettingsMessage
   | SendFilesMessage
   | GetFreeSpaceMessage
+  | GetDownloadDirectoriesMessage
+  | GetActiveTrackerHostsMessage
+  | SeedTimeLimitMessage
   // Torrent modifications
   | RenameMessage
   | TorrentSetLocationMessage
@@ -56,6 +60,11 @@ export interface GetBgStoreDeltaMessage {
 
 export interface GetConfigStoreMessage {
   action: 'getConfigStore';
+}
+
+export interface GetActiveTrackerHostsMessage {
+  action: 'getActiveTrackerHosts';
+  serverUrl: string;
 }
 
 // Torrent list updates
@@ -181,7 +190,17 @@ export interface SendFilesMessage {
 export interface GetFreeSpaceMessage {
   action: 'getFreeSpace';
   path: string;
+  serverUrl?: string;
 }
+
+export interface GetDownloadDirectoriesMessage {
+  action: 'getDownloadDirectories';
+}
+
+export type SeedTimeLimitMessage =
+  | { action: 'getSeedTimeLimitTrackers' }
+  | { action: 'removeSeedTimeLimit'; tracker: string }
+  | { action: 'previewSeedTimeLimit' | 'setSeedTimeLimit'; rule: SeedTimeLimitInput };
 
 // Torrent modifications
 export interface RenameMessage {

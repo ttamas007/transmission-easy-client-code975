@@ -1,5 +1,6 @@
+import { getMessage } from '../../tools/i18n';
 import React, { ChangeEvent } from 'react';
-import TorrentName from '../TorrentName';
+import TorrentNameTooltip from '../TorrentNameTooltip';
 import ProgressBar from '../ProgressBar';
 import type { Torrent } from '../../types/stores';
 
@@ -10,6 +11,7 @@ export interface TorrentColumnCtx {
   handleStop: () => void;
   isStarting: boolean;
   isStopping: boolean;
+  serverUrl?: string;
 }
 
 type ColumnRenderer = (ctx: TorrentColumnCtx, width: number) => React.ReactNode;
@@ -26,11 +28,11 @@ const torrentColumnRenderers: Record<string, ColumnRenderer> = {
     </td>
   ),
 
-  name: ({ torrent }, width) => {
+  name: ({ torrent, serverUrl }, width) => {
     // Build a rich tooltip with key torrent info
     const tipLines: string[] = [torrent.name];
     if (torrent.isPrivate) {
-      tipLines.push(`[${chrome.i18n.getMessage('DT_PRIVATE')}]`);
+      tipLines.push(`[${getMessage('DT_PRIVATE')}]`);
     }
     if (torrent.directory) {
       tipLines.push(torrent.directory);
@@ -39,9 +41,7 @@ const torrentColumnRenderers: Record<string, ColumnRenderer> = {
       tipLines.push(torrent.hash);
     }
     if (torrent.sizeWhenDoneStr && torrent.sizeWhenDoneStr !== torrent.sizeStr) {
-      tipLines.push(
-        `${chrome.i18n.getMessage('OV_COL_SIZE_WHEN_DONE')}: ${torrent.sizeWhenDoneStr}`
-      );
+      tipLines.push(`${getMessage('OV_COL_SIZE_WHEN_DONE')}: ${torrent.sizeWhenDoneStr}`);
     }
     const title = tipLines.join('\n');
 
@@ -51,7 +51,7 @@ const torrentColumnRenderers: Record<string, ColumnRenderer> = {
       metaBadge = (
         <span
           className="torrent-badge metadata"
-          title={`${chrome.i18n.getMessage('DT_METADATA')} ${(torrent.metadataPercentComplete * 100).toFixed(0)}%`}
+          title={`${getMessage('DT_METADATA')} ${(torrent.metadataPercentComplete * 100).toFixed(0)}%`}
         >
           M
         </span>
@@ -60,7 +60,13 @@ const torrentColumnRenderers: Record<string, ColumnRenderer> = {
     return (
       <td key="name" className="name">
         {metaBadge}
-        <TorrentName name={torrent.name} width={width - (metaBadge ? 18 : 0)} title={title} />
+        <TorrentNameTooltip
+          name={torrent.name}
+          width={width - (metaBadge ? 18 : 0)}
+          title={title}
+          directory={torrent.directory}
+          serverUrl={serverUrl}
+        />
       </td>
     );
   },
@@ -81,7 +87,7 @@ const torrentColumnRenderers: Record<string, ColumnRenderer> = {
     const sizeWhenDone = torrent.sizeWhenDoneStr;
     const title =
       sizeWhenDone !== torrent.sizeStr
-        ? `${torrent.sizeStr} (${chrome.i18n.getMessage('OV_COL_SIZE_WHEN_DONE')}: ${sizeWhenDone})`
+        ? `${torrent.sizeStr} (${getMessage('OV_COL_SIZE_WHEN_DONE')}: ${sizeWhenDone})`
         : torrent.sizeStr;
     return (
       <td key="size" className="size">
@@ -123,7 +129,7 @@ const torrentColumnRenderers: Record<string, ColumnRenderer> = {
     }
     return (
       <td key="status" className="status">
-        <div title={torrent.stateText}>
+        <div title={torrent.stateTooltip}>
           {errorIcon}
           {torrent.stateText}
         </div>
@@ -166,7 +172,7 @@ const torrentColumnRenderers: Record<string, ColumnRenderer> = {
   eta: ({ torrent }) => {
     const etaIdleStr = torrent.etaIdleStr;
     const title = etaIdleStr
-      ? `${torrent.etaStr} (${chrome.i18n.getMessage('DT_ETA_IDLE')}: ${etaIdleStr})`
+      ? `${torrent.etaStr} (${getMessage('DT_ETA_IDLE')}: ${etaIdleStr})`
       : torrent.etaStr;
     return (
       <td key="eta" className="eta">
@@ -240,16 +246,16 @@ const torrentColumnRenderers: Record<string, ColumnRenderer> = {
       <div className="btns">
         <button
           onClick={handleStart}
-          title={chrome.i18n.getMessage('ML_START')}
-          aria-label={chrome.i18n.getMessage('ML_START')}
+          title={getMessage('ML_START')}
+          aria-label={getMessage('ML_START')}
           className={`start${isStarting ? ' btn-loading' : ''}`}
           type="button"
           disabled={isStarting}
         />
         <button
           onClick={handleStop}
-          title={chrome.i18n.getMessage('ML_STOP')}
-          aria-label={chrome.i18n.getMessage('ML_STOP')}
+          title={getMessage('ML_STOP')}
+          aria-label={getMessage('ML_STOP')}
           className={`stop${isStopping ? ' btn-loading' : ''}`}
           type="button"
           disabled={isStopping}

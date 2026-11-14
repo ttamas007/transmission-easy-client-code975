@@ -1,3 +1,4 @@
+import { getMessage } from '../../tools/i18n';
 import React, { useRef, useEffect, useCallback, useMemo } from 'react';
 import { observer } from 'mobx-react';
 import type { Column } from './TableHeadColumn';
@@ -132,14 +133,14 @@ const FileListTable = observer(() => {
             <a
               onClick={handleUpdate}
               className="update"
-              title={chrome.i18n.getMessage('refresh')}
-              aria-label={chrome.i18n.getMessage('refresh')}
+              title={getMessage('refresh')}
+              aria-label={getMessage('refresh')}
             />
             <a
               onClick={handleClose}
               className="close"
-              title={chrome.i18n.getMessage('DLG_BTN_CLOSE')}
-              aria-label={chrome.i18n.getMessage('DLG_BTN_CLOSE')}
+              title={getMessage('DLG_BTN_CLOSE')}
+              aria-label={getMessage('DLG_BTN_CLOSE')}
             />
           </div>
         </div>

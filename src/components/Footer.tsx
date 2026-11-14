@@ -1,8 +1,14 @@
+import { getMessage } from '../tools/i18n';
 import React, { useCallback, MouseEvent } from 'react';
 import { observer } from 'mobx-react';
 import SpeedContextMenu from './menu/SpeedMenu';
 import SpaceWatcher from './SpaceWatcher';
 import useRootStore from '../hooks/useRootStore';
+import FooterActiveTrackers from './FooterActiveTrackers';
+import { formatBytes } from '../tools/format';
+import { getLocale } from '../tools/i18n';
+import stripBidiControls from '../tools/stripBidiControls';
+import showError from '../tools/showError';
 
 const Footer = observer(() => {
   const rootStore = useRootStore();
@@ -49,11 +55,6 @@ const Footer = observer(() => {
     downloadSpeedStr: '',
     uploadSpeedStr: '',
   };
-  const { downloadedStr, uploadedStr } = client.sessionTotalsStr ?? {
-    downloadedStr: '',
-    uploadedStr: '',
-  };
-
   let downloadLimit: React.ReactNode = null;
   let uploadLimit: React.ReactNode = null;
   const settings = client.settings;
@@ -64,7 +65,11 @@ const Footer = observer(() => {
         ? settings.altDownloadSpeedLimitStr
         : settings.downloadSpeedLimitStr;
       downloadLimit = (
-        <span onClick={handleResetDownloadSpeed} className="limit dl">
+        <span
+          onClick={handleResetDownloadSpeed}
+          className="limit dl"
+          title={`${getMessage('footerSpeedHint')}\n${getMessage('footerLimitClickHint')}`}
+        >
           {speedStr}
         </span>
       );
@@ -74,7 +79,11 @@ const Footer = observer(() => {
         ? settings.altUploadSpeedLimitStr
         : settings.uploadSpeedLimitStr;
       uploadLimit = (
-        <span onClick={handleResetUploadSpeed} className="limit up">
+        <span
+          onClick={handleResetUploadSpeed}
+          className="limit up"
+          title={`${getMessage('footerSpeedHint')}\n${getMessage('footerLimitClickHint')}`}
+        >
           {speedStr}
         </span>
       );
@@ -84,11 +93,7 @@ const Footer = observer(() => {
   let openInTab: React.ReactNode = null;
   if (rootStore.isPopup) {
     openInTab = (
-      <div
-        onClick={handleOpenTab}
-        className="openInTab"
-        title={chrome.i18n.getMessage('openInTab')}
-      />
+      <div onClick={handleOpenTab} className="openInTab" title={getMessage('openInTab')} />
     );
   }
 
@@ -97,28 +102,67 @@ const Footer = observer(() => {
     spaceWatcher = <SpaceWatcher />;
   }
 
-  const torrentCounts = client.torrentCountsStr;
+  const paused = Array.from(client.torrents.values())
+    .filter((t) => t.isStopped)
+    .sort((a, b) => a.name.localeCompare(b.name, getLocale()));
+  const pausedTitle = [
+    ...(paused.length
+      ? paused.slice(0, 5).map((t) => stripBidiControls(t.name))
+      : [getMessage('footerPausedEmpty')]),
+    ...(paused.length > 5 ? [getMessage('footerMore', String(paused.length - 5))] : []),
+    getMessage('footerPausedHint'),
+  ].join('\n');
+  const sessionTitle = (direction: 'Downloaded' | 'Uploaded') =>
+    [
+      getMessage(`footerSession${direction}`),
+      typeof settings?.sessionStartedAt === 'number'
+        ? getMessage(
+            'footerSessionSince',
+            new Date(settings.sessionStartedAt).toLocaleString(getLocale())
+          )
+        : getMessage('footerSessionDateUnknown'),
+      typeof settings?.[`session${direction}`] === 'number'
+        ? getMessage('footerSessionNote')
+        : getMessage('footerSessionMissing'),
+    ].join('\n');
+  const showPaused = () => {
+    config.setSearchQuery('');
+    config.setSelectedLabel('PAUSED', true).catch((error: Error) => {
+      showError(getMessage('OV_FL_ERROR'), error);
+    });
+  };
 
   return (
     <div className="status-panel" role="contentinfo">
       {spaceWatcher}
-      {torrentCounts && (
-        <span className="torrent-counts" title={torrentCounts}>
-          {torrentCounts}
-        </span>
+      {client.torrents.size > 0 && (
+        <div className="torrent-counts">
+          <FooterActiveTrackers count={client.activeCount} serverUrl={config.url} />
+          <button type="button" className="footer-paused" title={pausedTitle} onClick={showPaused}>
+            {getMessage('footerPaused', String(client.pausedCount))}
+          </button>
+        </div>
       )}
-      <span className="session-totals" title={chrome.i18n.getMessage('sessionTotals')}>
-        <span className="total-dl">{downloadedStr}</span>
-        <span className="total-up">{uploadedStr}</span>
+      <span className="session-totals">
+        <span className="total-dl" title={sessionTitle('Downloaded')}>
+          {typeof settings?.sessionDownloaded === 'number'
+            ? formatBytes(settings.sessionDownloaded)
+            : '-'}
+        </span>
+        <span className="total-up" title={sessionTitle('Uploaded')}>
+          {typeof settings?.sessionUploaded === 'number'
+            ? formatBytes(settings.sessionUploaded)
+            : '-'}
+        </span>
       </span>
       <SpeedContextMenu type="download">
-        <span className="speed download" aria-live="polite">
+        <span className="speed download" aria-live="polite" title={getMessage('footerSpeedHint')}>
           {downloadSpeedStr}
           {downloadLimit}
         </span>
       </SpeedContextMenu>
       <SpeedContextMenu type="upload">
-        <span className="speed upload" aria-live="polite">
+        <span className="speed upload" aria-live="polite" title={getMessage('footerSpeedHint')}>
           {uploadSpeedStr}
           {uploadLimit}
         </span>

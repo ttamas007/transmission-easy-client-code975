@@ -72,9 +72,9 @@
 
 // Card style
 @mixin card {
-  background: $card-bg;
+  background: var(--card-bg);
   border-radius: $radius;
-  box-shadow: $shadow-md;
+  box-shadow: var(--shadow-md);
 }
 
 // Scrollable container

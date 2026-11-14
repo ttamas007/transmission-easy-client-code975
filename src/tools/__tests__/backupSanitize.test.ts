@@ -1,7 +1,62 @@
 import { describe, expect, it } from 'vitest';
 import { getConnectionChanges, sanitizeRestoreConfig } from '../backupSanitize';
+import { DEFAULT_SEED_TIME_LIMIT } from '../../types/seedTimeLimit';
 
 describe('sanitizeRestoreConfig', () => {
+  it('restores seed preferences disabled, never its active revision or local exclusion state', () => {
+    const { config, droppedKeys } = sanitizeRestoreConfig({
+      seedTimeLimit: {
+        ...DEFAULT_SEED_TIME_LIMIT,
+        enabled: true,
+        includeExisting: true,
+        tracker: 'tracker.example.org',
+        revision: 'previous-activation',
+      },
+      _seedTimeLimitState: { excluded: ['hash'] },
+    });
+    expect(config.seedTimeLimits).toEqual([
+      expect.objectContaining({
+        enabled: false,
+        includeExisting: false,
+        tracker: 'tracker.example.org',
+        revision: '',
+      }),
+    ]);
+    expect(config).not.toHaveProperty('seedTimeLimit');
+    expect(droppedKeys).toEqual(['_seedTimeLimitState']);
+  });
+
+  it('restores every tracker disabled and gives the plural list precedence over the legacy key', () => {
+    const rule = {
+      ...DEFAULT_SEED_TIME_LIMIT,
+      enabled: true,
+      includeExisting: true,
+      tracker: 'first.example.org',
+      revision: 'old',
+    };
+    const { config } = sanitizeRestoreConfig({
+      seedTimeLimit: rule,
+      seedTimeLimits: [rule, { ...rule, tracker: 'second.example.org', hours: 72 }],
+    });
+    expect(config.seedTimeLimits).toEqual([
+      { ...rule, enabled: false, includeExisting: false, revision: '' },
+      {
+        ...rule,
+        tracker: 'second.example.org',
+        hours: 72,
+        enabled: false,
+        includeExisting: false,
+        revision: '',
+      },
+    ]);
+    expect(
+      sanitizeRestoreConfig({ seedTimeLimit: rule, seedTimeLimits: [] }).config.seedTimeLimits
+    ).toEqual([]);
+    expect(sanitizeRestoreConfig({ seedTimeLimits: [rule, rule] }).droppedKeys).toEqual([
+      'seedTimeLimits',
+    ]);
+  });
+
   it('keeps known config keys, including credentials (cloud backup is intentional)', () => {
     const { config, droppedKeys } = sanitizeRestoreConfig({
       hostname: 'nas.local',

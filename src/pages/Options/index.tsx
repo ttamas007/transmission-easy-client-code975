@@ -1,3 +1,4 @@
+import { getMessage } from '../../tools/i18n';
 import '../../assets/css/options.scss';
 import React, { useEffect } from 'react';
 import RootStore from '../../stores/RootStore';
@@ -14,6 +15,8 @@ import NotifyOptions from './NotifyOptions';
 import CtxOptions from './CtxOptions';
 import BackupRestoreOptions from './BackupRestoreOptions';
 import ServerOptions from './ServerOptions';
+import SeedTimeLimitOptions from './SeedTimeLimitOptions';
+import { getLanguage } from '../../tools/i18n';
 
 // Before React renders, so an explicit theme doesn't flash the OS one first
 applyStoredTheme();
@@ -42,39 +45,42 @@ const Options = observer(() => {
   if (rootStore.state !== 'done') {
     return (
       <div className="startup-error" role="alert">
-        <p>{chrome.i18n.getMessage('OV_FL_ERROR')}</p>
+        <p>{getMessage('OV_FL_ERROR')}</p>
         <button type="button" onClick={() => rootStore.retryInit()}>
-          {chrome.i18n.getMessage('errorRetry')}
+          {getMessage('errorRetry')}
         </button>
       </div>
     );
   }
 
   return (
-    <div className="container">
+    <div className="container" key={getLanguage()}>
       <div className="search_panel">
-        <h1>{chrome.i18n.getMessage('appName')}</h1>
+        <h1>{getMessage('appName')}</h1>
       </div>
       <HashRouter>
         <div className="content">
           <div className="left menu">
             <NavLink to="/" className={({ isActive }) => (isActive ? 'active' : '')} end>
-              {chrome.i18n.getMessage('optClient')}
+              {getMessage('optClient')}
             </NavLink>
             <NavLink to="/main" className={({ isActive }) => (isActive ? 'active' : '')}>
-              {chrome.i18n.getMessage('optMain')}
+              {getMessage('optMain')}
             </NavLink>
             <NavLink to="/notify" className={({ isActive }) => (isActive ? 'active' : '')}>
-              {chrome.i18n.getMessage('optNotify')}
+              {getMessage('optNotify')}
             </NavLink>
             <NavLink to="/ctx" className={({ isActive }) => (isActive ? 'active' : '')}>
-              {chrome.i18n.getMessage('optCtx')}
+              {getMessage('optCtx')}
             </NavLink>
             <NavLink to="/server" className={({ isActive }) => (isActive ? 'active' : '')}>
-              {chrome.i18n.getMessage('optServer')}
+              {getMessage('optServer')}
             </NavLink>
             <NavLink to="/backup" className={({ isActive }) => (isActive ? 'active' : '')}>
-              {chrome.i18n.getMessage('backupRestore')}
+              {getMessage('backupRestore')}
+            </NavLink>
+            <NavLink to="/seed-time-limit" className={({ isActive }) => (isActive ? 'active' : '')}>
+              {getMessage('seedTimeLimit')}
             </NavLink>
           </div>
           <div className="right">
@@ -85,6 +91,7 @@ const Options = observer(() => {
               <Route path="/ctx" element={<CtxOptions />} />
               <Route path="/server" element={<ServerOptions />} />
               <Route path="/backup" element={<BackupRestoreOptions />} />
+              <Route path="/seed-time-limit" element={<SeedTimeLimitOptions />} />
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>
           </div>
