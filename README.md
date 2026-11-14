@@ -30,6 +30,9 @@ guarantees. Mixed-host tracker lists are conservatively excluded.
 Cloud backup uses `chrome.storage.sync` and can include server addresses and
 passwords without additional extension-side encryption. Do not publish backups.
 
+See the [Privacy Policy](privacy.md) for data handling, permissions, optional
+Chrome synchronization, security limitations and deletion controls.
+
 Validation: the earlier full regression run passed 583 tests across 46 files.
 Version 3.4.3 passed 22 focused tests, TypeScript and scoped lint checks,
 a production build and simulated-browser checks. These do not replace testing
