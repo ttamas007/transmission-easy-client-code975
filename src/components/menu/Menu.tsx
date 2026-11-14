@@ -284,6 +284,18 @@ const Menu = observer(() => {
         <li className="graph">{graph}</li>
         <SearchBox />
         <LabelSelect />
+        <li>
+          <a
+            href={chrome.runtime.getURL('options.html#/about')}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={getMessage('about')}
+            aria-label={getMessage('about')}
+            className="btn about"
+          >
+            <ToolbarIcon name="about" />
+          </a>
+        </li>
       </ul>
 
       {dropLayer}

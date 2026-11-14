@@ -53,6 +53,12 @@ const shapes = {
     </>
   ),
   clear: <path d="m6 6 12 12M6 18 18 6" />,
+  about: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 11v6M12 7h.01" />
+    </>
+  ),
 };
 
 export default function ToolbarIcon({ name }: { name: keyof typeof shapes }) {

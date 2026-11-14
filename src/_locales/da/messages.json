@@ -1245,5 +1245,29 @@
     },
     "torrentErrorLookup": {
         "message": "Couldn't look up '$1': $2 ($3)"
+    },
+    "about": {
+        "message": "About"
+    },
+    "aboutVersion": {
+        "message": "Version"
+    },
+    "aboutLineage": {
+        "message": "This is the code975 fork of mthcore Transmission Easy Client 3.4.0."
+    },
+    "aboutForkAuthor": {
+        "message": "code975 fork author and maintainer"
+    },
+    "aboutUpstreamAuthor": {
+        "message": "Upstream fork author"
+    },
+    "aboutOriginalAuthor": {
+        "message": "Original project author"
+    },
+    "aboutSource": {
+        "message": "code975 fork source on GitHub"
+    },
+    "scriptSettingsHint": {
+        "message": "These are optional server-side scripts run by Transmission, not Chrome. In Docker, enter the path inside the container; the file must exist and be executable by the Transmission user. Leave disabled if you do not use a custom script. In Transmission 4.0.6, the seeding-completed event is triggered by the daemon’s own ratio or idle limit, not the extension’s seed-time limit or manual pausing."
     }
 }

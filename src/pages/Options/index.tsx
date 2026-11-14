@@ -16,6 +16,7 @@ import CtxOptions from './CtxOptions';
 import BackupRestoreOptions from './BackupRestoreOptions';
 import ServerOptions from './ServerOptions';
 import SeedTimeLimitOptions from './SeedTimeLimitOptions';
+import AboutOptions from './AboutOptions';
 import { getLanguage } from '../../tools/i18n';
 
 // Before React renders, so an explicit theme doesn't flash the OS one first
@@ -82,6 +83,9 @@ const Options = observer(() => {
             <NavLink to="/seed-time-limit" className={({ isActive }) => (isActive ? 'active' : '')}>
               {getMessage('seedTimeLimit')}
             </NavLink>
+            <NavLink to="/about" className={({ isActive }) => (isActive ? 'active' : '')}>
+              {getMessage('about')}
+            </NavLink>
           </div>
           <div className="right">
             <Routes>
@@ -92,6 +96,7 @@ const Options = observer(() => {
               <Route path="/server" element={<ServerOptions />} />
               <Route path="/backup" element={<BackupRestoreOptions />} />
               <Route path="/seed-time-limit" element={<SeedTimeLimitOptions />} />
+              <Route path="/about" element={<AboutOptions />} />
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>
           </div>

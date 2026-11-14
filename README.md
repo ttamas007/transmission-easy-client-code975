@@ -10,7 +10,7 @@ A browser extension that adds a Transmission WebUI directly in your web browser.
 This version is a fork of **mthcore's Transmission Easy Client v3.4.0**,
 maintained by [ttamas007](https://github.com/ttamas007).
 It targets unpacked installation in modern Chrome. The current extension version
-is **3.4.1**, named **Transmission Easy Client code975** to distinguish this fork.
+is **3.4.2**, named **Transmission Easy Client code975** to distinguish this fork.
 
 - Hungarian/English UI selector in **Options > Main > Language**, Hungarian by default.
 - Localized common torrent errors, preserving paths, error codes and unknown server messages.
@@ -71,7 +71,7 @@ you want to retain its stored settings. This installation has no automatic updat
 ## Supported Languages
 
 This fork's application UI supports **Hungarian and English**. All 24 inherited
-Chrome locale catalogs are retained with the same 396 keys and compatible
+Chrome locale catalogs are retained with the same 404 keys and compatible
 placeholders; new entries in legacy languages use English fallback text.
 
 ## Installation
@@ -145,6 +145,13 @@ The built extension will be in the `./dist` folder.
 ## Changelog
 
 > See [RELEASE_NOTES.md](RELEASE_NOTES.md) for the full release history.
+
+### code975 3.4.2 (November 14, 2026)
+
+- Added About in the torrent toolbar and options menu, with the running version
+  and GitHub-linked credits for ttamas007, mthcore and Feverqwe.
+- Added Hungarian/English explanations for server-side Transmission scripts.
+  Docker paths refer to the container; scripts are never executed by Chrome.
 
 ### code975 3.4.1 (November 14, 2026)
 

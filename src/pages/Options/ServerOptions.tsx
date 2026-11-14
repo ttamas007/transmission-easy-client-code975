@@ -688,6 +688,7 @@ const ServerOptions = observer(() => {
       )}
 
       <h3>{getMessage('scriptSettings')}</h3>
+      <p className="hint">{getMessage('scriptSettingsHint')}</p>
 
       <label>
         <span>{getMessage('scriptTorrentDoneEnabled')}</span>

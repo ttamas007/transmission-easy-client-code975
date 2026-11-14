@@ -1,5 +1,25 @@
 # Release Notes - Transmission Easy Client
 
+## code975 3.4.2 (November 14, 2026)
+
+- Added **About / Névjegy** to the torrent toolbar and options navigation.
+- Shows the running extension version, code975 name, and GitHub-linked credits:
+  current fork author/maintainer **ttamas007**, upstream fork author **mthcore**,
+  and original project author **Feverqwe**.
+- Explicitly identifies this as a fork of mthcore Transmission Easy Client 3.4.0
+  and links to all three source repositories.
+- Added Hungarian/English explanations beside the server-side script settings.
+  Scripts run under Transmission, using executable paths inside its Docker
+  container. They do not run in Chrome.
+- Clarified that Transmission 4.0.6's seeding-completed hook follows its own
+  ratio/idle limits, not manual pausing or this extension's seed-time rules.
+  No script setting is enabled or changed by this update.
+- Validation: 13 focused tests, TypeScript and scoped lint checks, production
+  build, and simulated-browser checks of both About entry points, HU/EN credits,
+  GitHub links, toolbar fit and script explanations.
+- Chrome ZIP SHA-256:
+  `9016afc9e106507fb15a82fc7865e57be1122efbccd2d30f0dfc5127f344f9fc`
+
 ## code975 3.4.1 (November 14, 2026)
 
 - Extension manifest, npm package and lockfile versions raised to **3.4.1**.

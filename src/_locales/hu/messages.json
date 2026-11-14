@@ -1245,5 +1245,29 @@
     },
     "torrentErrorLookup": {
         "message": "Nem sikerült feloldani a címet: '$1': $2 ($3)"
+    },
+    "about": {
+        "message": "Névjegy"
+    },
+    "aboutVersion": {
+        "message": "Verzió"
+    },
+    "aboutLineage": {
+        "message": "Ez az mthcore Transmission Easy Client 3.4.0 változatának code975 forkja."
+    },
+    "aboutForkAuthor": {
+        "message": "A code975 fork készítője és karbantartója"
+    },
+    "aboutUpstreamAuthor": {
+        "message": "Az alapul szolgáló fork készítője"
+    },
+    "aboutOriginalAuthor": {
+        "message": "Az eredeti projekt készítője"
+    },
+    "aboutSource": {
+        "message": "A code975 fork forrása a GitHubon"
+    },
+    "scriptSettingsHint": {
+        "message": "Ezek opcionális, szerveroldali parancsfájlok: a Transmission futtatja őket, nem a Chrome. Dockerben a konténeren belüli elérési utat add meg; a fájlnak léteznie kell és futtathatónak kell lennie a Transmission felhasználója számára. Ha nem használsz saját szkriptet, hagyd kikapcsolva. A seedelés befejezésének eseménye Transmission 4.0.6-ban a daemon saját arány- vagy inaktivitási korlátjához kötődik, nem a bővítmény seedidőkorlátjához vagy a kézi szüneteltetéshez."
     }
 }
