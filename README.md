@@ -7,7 +7,9 @@ A browser extension that adds a Transmission WebUI directly in your web browser.
 
 ## This fork
 
-This fork targets unpacked installation in modern Chrome. The extension manifest
+This version is a fork of **mthcore's Transmission Easy Client v3.4.0**,
+maintained by [ttamas007](https://github.com/ttamas007).
+It targets unpacked installation in modern Chrome. The extension manifest
 version remains 3.4.0; GitHub release tags distinguish this fork's packages.
 
 - Hungarian/English UI selector in **Options > Main > Language**, Hungarian by default.
@@ -200,4 +202,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Credits
 
 - Original project by [Feverqwe](https://github.com/Feverqwe)
-- Fork maintained by [mthcore](https://github.com/mthcore)
+- Upstream Transmission Easy Client v3.4.0 fork by [mthcore](https://github.com/mthcore)
+- This fork maintained by [ttamas007](https://github.com/ttamas007), based on
+  [mthcore/Transmission-Easy-Client](https://github.com/mthcore/Transmission-Easy-Client)

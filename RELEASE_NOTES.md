@@ -5,6 +5,12 @@
 Based on mthcore v3.4.0. The extension manifest version remains **3.4.0**;
 the GitHub release tag identifies this fork's distribution.
 
+### Credits
+
+- Current fork maintainer: [ttamas007](https://github.com/ttamas007).
+- Upstream fork: [mthcore/Transmission-Easy-Client](https://github.com/mthcore/Transmission-Easy-Client), v3.4.0.
+- Original project: [Feverqwe/Transmission](https://github.com/Feverqwe/Transmission).
+
 ### Added
 
 - **Tracker seed-time limits** - independent, opt-in rules with editable hours
