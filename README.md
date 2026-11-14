@@ -145,6 +145,14 @@ The built extension will be in the `./dist` folder.
 
 > See [RELEASE_NOTES.md](RELEASE_NOTES.md) for the full release history.
 
+### Chrome fork 3.4.0-fork.1 (November 14, 2026)
+
+- Hungarian/English UI and common torrent-error translations.
+- Tracker seed-time rules, known destination picker and destination free space.
+- Richer footer, paused filtering, dated session counters and clearer themes/icons.
+- SSL/authentication OFF defaults without changing saved settings.
+- Public source and licensed Chrome ZIP; 583 tests and simulated-browser checks.
+
 ### Version 3.4.0 (August 2026)
 
 - **Deep audit: three review passes, ~150 verified bug fixes** — see

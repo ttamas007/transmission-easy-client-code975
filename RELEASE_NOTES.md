@@ -1,5 +1,85 @@
 # Release Notes - Transmission Easy Client
 
+## Chrome fork 3.4.0-fork.1 (November 14, 2026)
+
+Based on mthcore v3.4.0. The extension manifest version remains **3.4.0**;
+the GitHub release tag identifies this fork's distribution.
+
+### Added
+
+- **Tracker seed-time limits** - independent, opt-in rules with editable hours
+  (48 hours by default), optional inclusion of existing torrents, and an active
+  rule list with editing and individual deletion. Rules use Transmission's
+  cumulative `secondsSeeding` and only stop torrents; they never delete data.
+  Existing-torrent exclusions survive browser restarts. Mixed-host tracker lists
+  are conservatively excluded, and restoring a backup disables the rules.
+  Chrome must remain running; checks are periodic, not exact-time guarantees.
+- **Known destination directories** - a picker populated from the daemon's
+  default directory and existing torrent destinations. These are paths as seen
+  inside Transmission/Docker, not a general filesystem browser. Manual entry
+  remains available.
+- **Per-destination free space** - delayed hover/focus tooltips on torrent names,
+  with shared per-server/path caching for up to one minute. Requests are
+  on demand, not an initial scan of every torrent. Errors remain visible and
+  retryable; actual zero free space is valid. The footer still identifies free
+  space for the daemon's default destination.
+- **Richer footer** - active torrent count tooltips list tracker hostnames and
+  counts without announce URLs, credentials or passkeys. Queries are lazy and
+  cached for up to one minute; multi-tracker torrents may appear in several rows.
+  Paused count tooltips show the first five names alphabetically and the
+  remaining count. Clicking selects the paused filter and clears the search,
+  including stopped torrents otherwise hidden by finished/seeding preferences.
+- **Session-counter context** - separate download/upload tooltips show the
+  approximate daemon-session start derived from its uptime. Counters remain
+  Transmission's session totals, reset on daemon restart, and have no separate
+  local reset menu. Missing statistics display `-`, not torrent lifetime totals.
+  Speed and limit tooltips explain the existing right-click controls.
+- **Application language selector** - Hungarian and English in
+  **Options > Main > Language**, Hungarian by default. Saved selection is
+  reflected across open extension contexts, translated units and dates.
+  All 24 inherited Chrome catalogs retain matching sets of 396 keys and
+  compatible placeholders; new legacy-language entries use English fallback.
+
+### Improved
+
+- **Light/dark appearance** - clearer toolbar, footer, table headers, row
+  separators and selection; a stable 34-pixel footer; better-separated dialogs.
+  Double-click file lists follow the selected theme, including empty areas and
+  long destination paths. Colorful, theme-aware SVG toolbar icons preserve the
+  original button order and actions.
+- **Torrent status explanations** - verification, download and seed queues are
+  distinct; stopped completed torrents explicitly say paused. Queued magnets
+  are not mistaken for active metadata downloads. "Stalled" now reads
+  "no data transfer", with an explanation that this is not necessarily an error
+  and does not imply seed time has stopped accumulating.
+- **Localized torrent diagnostics** - common missing-data/file, corrupt-piece,
+  checksum, disk-space, permission, file-operation, tracker, authentication,
+  connection and HTTP errors follow the chosen Hungarian/English UI language.
+  Paths, piece numbers and error codes are preserved; unknown tracker-specific
+  messages remain verbatim. Tooltips include tracker warnings without turning
+  them into red error icons. Stored server diagnostics are not rewritten.
+- **Connection defaults** - SSL/HTTPS and authentication default to OFF, without
+  overwriting saved connection settings. Enable them when required by the server.
+- **Publication** - public GitHub repository with upstream history and attribution
+  retained, Chrome ZIP release with the MIT license included, and installation,
+  update and cloud-backup privacy instructions. No automatic extension updates
+  are configured; local credentials and backups are not included.
+
+### Validation and distribution
+
+- **583 automated tests across 46 test files**, TypeScript checks, scoped ESLint
+  checks and a successful production build with two bundle-size warnings.
+- Simulated-browser checks cover language switching, error messages, footer
+  previews/filtering, tracker-cache failures/retries, free-space tooltips and
+  themes. No live-daemon or installed-extension test is claimed.
+- All **53 release files**, including `LICENSE`, match the unpacked package;
+  the GitHub-downloaded ZIP checksum was verified against the local copy.
+- Chrome ZIP SHA-256:
+  `34a274fe28a9c2ea2682002d7c872f7da19102b748d40213c5a137124726ab71`
+- Installation/update: extract into a permanent directory, load unpacked via
+  `chrome://extensions`; replace files in the same directory and click **Reload**
+  for updates. Do not remove/reinstall if you want to preserve stored settings.
+
 ## Version 3.4.0 (August 2026)
 
 **Deep audit: three review passes, ~150 verified bug fixes.** Every finding was
