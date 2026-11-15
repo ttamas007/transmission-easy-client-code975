@@ -1,5 +1,20 @@
 # Release Notes - Transmission Easy Client
 
+## code975 3.4.4 (November 15, 2026)
+
+- Initialize the authentication and SSL switches from saved settings after
+  configuration loads, including when the connection page first renders while
+  settings are still loading.
+- A new configuration still defaults to authentication and SSL disabled.
+  Existing saved values are not automatically changed. Choose the settings
+  appropriate for the server and click Apply to save them.
+- Validation: 44 focused connection, storage, configuration-loading and
+  transport tests; TypeScript and scoped lint checks; production build.
+  Browser-restart behavior against a live Transmission server remains to be
+  verified by the user.
+- Chrome ZIP SHA-256:
+  `805e89e5cb2c93df2b6ac76ec624ba15ed9ceef14b2ddb4a34dee614173ce382`
+
 ## code975 3.4.3 (November 14, 2026)
 
 - Added frontend validation to all three script-path fields: empty, relative,

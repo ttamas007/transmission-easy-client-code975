@@ -10,7 +10,7 @@ A browser extension that adds a Transmission WebUI directly in your web browser.
 This version is a fork of **mthcore's Transmission Easy Client v3.4.0**,
 maintained by [ttamas007](https://github.com/ttamas007).
 It targets unpacked installation in modern Chrome. The current extension version
-is **3.4.3**, named **Transmission Easy Client code975** to distinguish this fork.
+is **3.4.4**, named **Transmission Easy Client code975** to distinguish this fork.
 
 - Hungarian/English UI selector in **Options > Main > Language**, Hungarian by default.
 - Localized common torrent errors, preserving paths, error codes and unknown server messages.
@@ -34,8 +34,8 @@ See the [Privacy Policy](privacy.md) for data handling, permissions, optional
 Chrome synchronization, security limitations and deletion controls.
 
 Validation: the earlier full regression run passed 583 tests across 46 files.
-Version 3.4.3 passed 22 focused tests, TypeScript and scoped lint checks,
-a production build and simulated-browser checks. These do not replace testing
+Version 3.4.4 passed 44 focused connection and authentication tests, TypeScript
+and scoped lint checks, and a production build. These do not replace testing
 against a real daemon.
 
 ### Chrome installation and updates
@@ -170,6 +170,13 @@ or changed automatically.
 ## Changelog
 
 > See [RELEASE_NOTES.md](RELEASE_NOTES.md) for the full release history.
+
+### code975 3.4.4 (November 15, 2026)
+
+- Initialize the authentication and SSL switches only after saved connection
+  settings load; keep both disabled for a new configuration.
+- Changes are saved on Apply. Authentication must be enabled to send the
+  configured username and password to a server that requires them.
 
 ### code975 3.4.3 (November 14, 2026)
 

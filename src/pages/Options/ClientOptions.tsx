@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import { useLocation } from 'react-router-dom';
 import useRootStore from '../../hooks/useRootStore';
 import callApi from '../../tools/callApi';
+import type { IConfigStore } from '../../stores/ConfigStore';
 
 interface FormElements extends HTMLFormControlsCollection {
   login: HTMLInputElement;
@@ -23,20 +24,31 @@ interface ClientFormElement extends HTMLFormElement {
 type ClientStatus = 'pending' | 'done' | 'error' | null;
 
 const ClientOptions = observer(() => {
-  const rootStore = useRootStore();
-  const configStore = rootStore.config;
+  const configStore = useRootStore().config;
+
+  if (!configStore) {
+    return (
+      <div className="page client">
+        <div className="loading-inline" />
+      </div>
+    );
+  }
+
+  return <ClientOptionsForm configStore={configStore} />;
+});
+
+const ClientOptionsForm = observer(({ configStore }: { configStore: IConfigStore }) => {
   const location = useLocation();
   const refPage = useRef<HTMLDivElement>(null);
 
   const [clientStatus, setClientStatus] = useState<ClientStatus>(null);
   const [clientStatusText, setClientStatusText] = useState('');
-  const [sslChecked, setSslChecked] = useState(configStore?.ssl ?? false);
-  const [authChecked, setAuthChecked] = useState(configStore?.authenticationRequired ?? false);
+  const [sslChecked, setSslChecked] = useState(configStore.ssl);
+  const [authChecked, setAuthChecked] = useState(configStore.authenticationRequired);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     async (e) => {
       e.preventDefault();
-      if (!configStore) return;
       const form = e.currentTarget as ClientFormElement;
       const login = form.elements.login.value;
       const password = form.elements.password.value;
@@ -110,14 +122,6 @@ const ClientOptions = observer(() => {
     },
     [configStore, location]
   );
-
-  if (!configStore) {
-    return (
-      <div ref={refPage} className="page client">
-        <div className="loading-inline" />
-      </div>
-    );
-  }
 
   let status: ReactNode = null;
   if (clientStatus) {
